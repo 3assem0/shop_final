@@ -57,7 +57,7 @@ const Auth = () => {
         .from('admin_credentials')
         .select('email, password_hash')
         .eq('email', email)
-        .single();
+        .maybeSingle();
 
       if (queryError || !adminCredentials) {
         toast({
@@ -80,24 +80,53 @@ const Auth = () => {
         return;
       }
 
-      // Sign in with Supabase Auth using the validated credentials
-      const { error } = await supabase.auth.signInWithPassword({
+      // Create a temporary admin user in Supabase Auth for session management
+      const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/admin/dashboard`
+        }
       });
 
-      if (error) {
-        toast({
-          title: "Sign In Failed",
-          description: error.message,
-          variant: "destructive",
+      // If user already exists, sign them in
+      if (signUpError?.message?.includes('already registered')) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
         });
-      } else {
-        toast({
-          title: "Welcome back!",
-          description: "Successfully signed in to admin dashboard.",
+
+        if (signInError) {
+          toast({
+            title: "Sign In Failed",
+            description: signInError.message,
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+      } else if (signUpError) {
+        // Try signing in directly if signup fails for other reasons
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
         });
+
+        if (signInError) {
+          toast({
+            title: "Sign In Failed",
+            description: signInError.message,
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
       }
+
+      toast({
+        title: "Welcome back!",
+        description: "Successfully signed in to admin dashboard.",
+      });
     } catch (error: any) {
       toast({
         title: "Error",
