@@ -27,6 +27,7 @@ export const ProductManager = ({ isAddMode = false }: ProductManagerProps) => {
     description: "",
     price: "",
     category: "",
+    color: "",
     in_stock: true,
     image_files: [] as File[]
   });
@@ -81,7 +82,8 @@ export const ProductManager = ({ isAddMode = false }: ProductManagerProps) => {
         .insert([{
           ...productData,
           image_urls,
-          price: parseFloat(productData.price)
+          price: parseFloat(productData.price),
+          color: productData.color || null
         }])
         .select()
         .single();
@@ -122,7 +124,8 @@ export const ProductManager = ({ isAddMode = false }: ProductManagerProps) => {
         .update({
           ...productData,
           image_urls,
-          price: parseFloat(productData.price)
+          price: parseFloat(productData.price),
+          color: productData.color || null
         })
         .eq('id', id)
         .select()
@@ -183,6 +186,7 @@ export const ProductManager = ({ isAddMode = false }: ProductManagerProps) => {
       description: "",
       price: "",
       category: "",
+      color: "",
       in_stock: true,
       image_files: []
     });
@@ -195,6 +199,7 @@ export const ProductManager = ({ isAddMode = false }: ProductManagerProps) => {
       description: product.description || "",
       price: product.price.toString(),
       category: product.category,
+      color: product.color || "",
       in_stock: product.in_stock,
       image_files: []
     });
@@ -218,6 +223,7 @@ export const ProductManager = ({ isAddMode = false }: ProductManagerProps) => {
       description: formData.description,
       price: formData.price,
       category: formData.category,
+      color: formData.color,
       in_stock: formData.in_stock
     };
 
@@ -315,22 +321,32 @@ export const ProductManager = ({ isAddMode = false }: ProductManagerProps) => {
 
                   <div>
                     <Label htmlFor="category">Category *</Label>
-                    <Select 
-                      value={formData.category} 
-                      onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Clothing">Clothing</SelectItem>
-                        <SelectItem value="Accessories">Accessories</SelectItem>
-                        <SelectItem value="Home Decor">Home Decor</SelectItem>
-                        <SelectItem value="Jewelry">Jewelry</SelectItem>
-                        <SelectItem value="Bags">Bags</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input
+                      id="category"
+                      value={formData.category}
+                      onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                      placeholder="Enter custom category"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="color">Color</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="color"
+                      type="color"
+                      value={formData.color}
+                      onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
+                      className="w-20"
+                    />
+                    <Input
+                      value={formData.color}
+                      onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
+                      placeholder="Or enter color value"
+                      className="flex-1"
+                    />
                   </div>
                 </div>
 
@@ -467,22 +483,32 @@ export const ProductManager = ({ isAddMode = false }: ProductManagerProps) => {
 
             <div>
               <Label htmlFor="category">Category *</Label>
-              <Select 
-                value={formData.category} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Clothing">Clothing</SelectItem>
-                  <SelectItem value="Accessories">Accessories</SelectItem>
-                  <SelectItem value="Home Decor">Home Decor</SelectItem>
-                  <SelectItem value="Jewelry">Jewelry</SelectItem>
-                  <SelectItem value="Bags">Bags</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input
+                id="category"
+                value={formData.category}
+                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                placeholder="Enter custom category"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="color">Color</Label>
+            <div className="flex gap-2">
+              <Input
+                id="color"
+                type="color"
+                value={formData.color}
+                onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
+                className="w-20"
+              />
+              <Input
+                value={formData.color}
+                onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
+                placeholder="Or enter color value"
+                className="flex-1"
+              />
             </div>
           </div>
 
@@ -595,6 +621,17 @@ export const ProductManager = ({ isAddMode = false }: ProductManagerProps) => {
                     <Badge variant="secondary">{product.category}</Badge>
                     <span className="font-bold text-primary">${product.price}</span>
                   </div>
+                  
+                  {product.color && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">Color:</span>
+                      <div 
+                        className="w-4 h-4 rounded-full border border-border" 
+                        style={{ backgroundColor: product.color }}
+                        title={product.color}
+                      />
+                    </div>
+                  )}
                   
                   {product.description && (
                     <p className="text-sm text-muted-foreground line-clamp-2">

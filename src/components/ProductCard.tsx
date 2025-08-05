@@ -15,8 +15,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const handleInstagramOrder = () => {
     const message = `Hi! I'm interested in ordering "${product.name}" for $${product.price}. Can you provide more details?`;
-    const instagramUrl = `https://www.instagram.com/direct/new/?text=${encodeURIComponent(message)}`;
-    window.open(instagramUrl, '_blank');
+    window.open('https://ig.me/m/mohair_handmadecrochet', '_blank');
   };
 
   return (
@@ -78,6 +77,17 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
               {product.description}
             </p>
+          )}
+          
+          {product.color && (
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-sm text-muted-foreground">Color:</span>
+              <div 
+                className="w-6 h-6 rounded-full border-2 border-border" 
+                style={{ backgroundColor: product.color }}
+                title={product.color}
+              />
+            </div>
           )}
           
           <div className="flex items-center justify-between">

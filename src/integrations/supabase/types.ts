@@ -14,9 +14,31 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_credentials: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          password_hash: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          password_hash: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          password_hash?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           category: string
+          color: string | null
           created_at: string
           description: string | null
           id: string
@@ -28,6 +50,7 @@ export type Database = {
         }
         Insert: {
           category: string
+          color?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -39,6 +62,7 @@ export type Database = {
         }
         Update: {
           category?: string
+          color?: string | null
           created_at?: string
           description?: string | null
           id?: string

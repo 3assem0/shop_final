@@ -14,7 +14,7 @@ export const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a 
-                href="https://instagram.com" 
+                href="https://www.instagram.com/mohair_handmadecrochet?igsh=NXl5M2dvbDVpaXV5" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-primary transition-colors"
@@ -22,7 +22,7 @@ export const Footer = () => {
                 <Instagram className="h-6 w-6" />
               </a>
               <a 
-                href="mailto:hello@mohairhandmade.com"
+                href="mailto:mohair.handmade11@gmail.com"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 <Mail className="h-6 w-6" />
@@ -36,19 +36,31 @@ export const Footer = () => {
             <ul className="space-y-2">
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Home</a></li>
               <li><a href="#products" className="text-muted-foreground hover:text-primary transition-colors">Products</a></li>
-              <li><a href="#about" className="text-muted-foreground hover:text-primary transition-colors">About</a></li>
-              <li><a href="#contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</a></li>
             </ul>
           </div>
 
-          {/* Customer Care */}
+          {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4">Customer Care</h4>
+            <h4 className="font-semibold mb-4">Contact</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Shipping Info</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Care Instructions</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Custom Orders</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Returns</a></li>
+              <li>
+                <a 
+                  href="https://ig.me/m/mohair_handmadecrochet" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Instagram Messages
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="mailto:mohair.handmade11@gmail.com"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Email
+                </a>
+              </li>
             </ul>
           </div>
         </div>
