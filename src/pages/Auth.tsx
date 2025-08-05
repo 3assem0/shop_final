@@ -21,7 +21,7 @@ const Auth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Set up auth state listener
+    // Set up auth state listener to handle session changes and redirection
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
@@ -34,7 +34,7 @@ const Auth = () => {
       }
     );
 
-    // Check for existing session
+    // Check for an existing session on component mount
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -44,100 +44,51 @@ const Auth = () => {
       }
     });
 
+    // Clean up the subscription when the component unmounts
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate]); // navigate is a dependency to ensure useEffect reacts to changes if navigate function itself changes, though it's usually stable.
 
   const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault(); // Prevent default form submission behavior
+    setLoading(true); // Set loading state to true during the sign-in process
 
     try {
-      // Check credentials against database
-      const { data: adminCredentials, error: queryError } = await supabase
-        .from('admin_credentials')
-        .select('email, password_hash')
-        .eq('email', email)
-        .maybeSingle();
-
-      if (queryError || !adminCredentials) {
-        toast({
-          title: "Sign In Failed",
-          description: "Invalid email or password.",
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
-      // Simple password check (in production, use proper hashing)
-      if (adminCredentials.password_hash !== password) {
-        toast({
-          title: "Sign In Failed",
-          description: "Invalid email or password.",
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
-      // Create a temporary admin user in Supabase Auth for session management
-      const { error: signUpError } = await supabase.auth.signUp({
+      // Directly attempt to sign in using Supabase's built-in authentication.
+      // Supabase handles password hashing and verification against its auth.users table.
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/admin/dashboard`
-        }
       });
 
-      // If user already exists, sign them in
-      if (signUpError?.message?.includes('already registered')) {
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
+      if (signInError) {
+        // If there's an error during sign-in (e.g., invalid credentials, user not found)
+        toast({
+          title: "Sign In Failed",
+          description: signInError.message || "Invalid email or password.", // Display Supabase's error message or a generic one
+          variant: "destructive",
         });
-
-        if (signInError) {
-          toast({
-            title: "Sign In Failed",
-            description: signInError.message,
-            variant: "destructive",
-          });
-          setLoading(false);
-          return;
-        }
-      } else if (signUpError) {
-        // Try signing in directly if signup fails for other reasons
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (signInError) {
-          toast({
-            title: "Sign In Failed",
-            description: signInError.message,
-            variant: "destructive",
-          });
-          setLoading(false);
-          return;
-        }
+        setLoading(false); // Reset loading state
+        return; // Stop further execution
       }
 
+      // If sign-in is successful, the onAuthStateChange listener will detect the new session
+      // and handle the navigation to '/admin/dashboard'.
       toast({
         title: "Welcome back!",
         description: "Successfully signed in to admin dashboard.",
       });
+
     } catch (error: any) {
+      // Catch any unexpected errors that might occur outside of the Supabase call
       toast({
         title: "Error",
-        description: "An unexpected error occurred.",
+        description: "An unexpected error occurred during sign-in.",
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setLoading(false); // Ensure loading state is always reset
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-card to-secondary flex items-center justify-center p-4">
