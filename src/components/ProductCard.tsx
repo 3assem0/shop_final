@@ -14,8 +14,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleInstagramOrder = () => {
-    const message = `Hi! I'm interested in ordering "${product.name}" for $${product.price}. Can you provide more details?`;
-    window.open('https://ig.me/m/mohair_handmadecrochet', '_blank');
+  // This line already opens the desired Instagram link in a new tab.
+  window.open('https://ig.me/m/mohair_handmadecrochet', '_blank');
   };
 
   return (
