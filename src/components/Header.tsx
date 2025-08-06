@@ -8,22 +8,9 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 flex h-16 items-center justify-between">
-        {/* Logo and Title */}
-        {/* Added flex-shrink-0 to prevent this section from shrinking and cutting off content */}
-        <div className="flex items-center flex-shrink-0"> 
-          <img
-            src="assets/logo.png" // Updated path to your provided logo image
-            alt="Mohair Logo"
-            // Increased size slightly more for better visibility and to account for potential transparent padding in the image
-            className="w-14 h-14 object-contain" 
-          />
-          {/* Added ml-3 for spacing between the logo and the title */}
-          <h1 className="text-2xl font-bold text-primary font-handmade ml-3 whitespace-nowrap">Mohair Handmade</h1>
-        </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+      <div className="container mx-auto px-4 flex h-16 items-center">
+        {/* Desktop Navigation - Left */}
+        <nav className="hidden md:flex items-center space-x-8 flex-1">
           <a href="#" className="text-foreground hover:text-primary transition-colors">
             Home
           </a>
@@ -35,8 +22,18 @@ export const Header = () => {
           </a>
         </nav>
 
-        {/* Actions */}
-        <div className="flex items-center space-x-4">
+        {/* Logo and Title - Center */}
+        <div className="flex items-center justify-center flex-shrink-0 mx-8"> 
+          <img
+            src="assets/logo.png"
+            alt="Mohair Logo"
+            className="w-16 h-16 object-contain" 
+          />
+          <h1 className="text-2xl font-bold text-primary font-handmade ml-6 whitespace-nowrap">Mohair Handmade</h1>
+        </div>
+
+        {/* Actions - Right */}
+        <div className="flex items-center space-x-4 flex-1 justify-end">
           <Button variant="ghost" size="icon" className="relative">
             <ShoppingBag className="h-5 w-5" />
             {cartCount > 0 && (
