@@ -10,8 +10,11 @@ export const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-primary">Mohair Handmade</h1>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-lg">M</span>
+          </div>
+          <h1 className="text-2xl font-bold text-primary font-handmade">Mohair Handmade</h1>
         </div>
 
         {/* Desktop Navigation */}

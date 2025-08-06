@@ -1,9 +1,9 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MessageCircle, Heart } from "lucide-react";
+import { MessageCircle, Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import { Product } from "@/types/product";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +13,35 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Auto-advance images every 7 seconds
+  useEffect(() => {
+    if (product.image_urls && product.image_urls.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prev) => 
+          prev === product.image_urls.length - 1 ? 0 : prev + 1
+        );
+      }, 7000);
+      
+      return () => clearInterval(interval);
+    }
+  }, [product.image_urls]);
+
+  const nextImage = () => {
+    if (product.image_urls && product.image_urls.length > 1) {
+      setCurrentImageIndex((prev) => 
+        prev === product.image_urls.length - 1 ? 0 : prev + 1
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (product.image_urls && product.image_urls.length > 1) {
+      setCurrentImageIndex((prev) => 
+        prev === 0 ? product.image_urls.length - 1 : prev - 1
+      );
+    }
+  };
+
   const handleInstagramOrder = () => {
   // This line already opens the desired Instagram link in a new tab.
   window.open('https://ig.me/m/mohair_handmadecrochet', '_blank');
@@ -21,7 +50,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 animate-scale-in craft-shadow">
       <CardContent className="p-0">
-        <div className="relative overflow-hidden rounded-t-lg">
+        <div className="relative overflow-hidden rounded-t-lg group/image">
           {product.image_urls && product.image_urls.length > 0 ? (
             <div className="relative">
               <img
@@ -30,17 +59,38 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
               />
               {product.image_urls.length > 1 && (
-                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
-                  {product.image_urls.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentImageIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        index === currentImageIndex ? 'bg-primary' : 'bg-white/50'
-                      }`}
-                    />
-                  ))}
-                </div>
+                <>
+                  {/* Navigation arrows */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white opacity-0 group-hover/image:opacity-100 transition-opacity h-8 w-8"
+                    onClick={prevImage}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white opacity-0 group-hover/image:opacity-100 transition-opacity h-8 w-8"
+                    onClick={nextImage}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                  
+                  {/* Dots indicator */}
+                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                    {product.image_urls.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-2 h-2 rounded-full transition-colors ${
+                          index === currentImageIndex ? 'bg-primary' : 'bg-white/50'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           ) : (
@@ -91,8 +141,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           )}
           
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold text-primary">
-              ${product.price.toFixed(2)}
+            <span className="text-2xl font-bold text-primary font-craft">
+              {product.price.toFixed(2)} EGP
             </span>
           </div>
         </div>
