@@ -8,7 +8,7 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 flex h-16 items-center">
+      <div className="container mx-auto px-4 flex h-20 items-center">
         {/* Desktop Navigation - Left */}
         <nav className="hidden md:flex items-center space-x-8 flex-1">
           <a href="#" className="text-foreground hover:text-primary transition-colors">
@@ -23,13 +23,17 @@ export const Header = () => {
         </nav>
 
         {/* Logo and Title - Center */}
-        <div className="flex items-center justify-center flex-shrink-0 mx-8"> 
-          <img
-            src="/assets/logo.png"
-            alt="Mohair Logo"
-            className="w-16 h-10 object-contain" 
-          />
-          <h1 className="text-2xl font-bold text-primary font-handmade ml-6 whitespace-nowrap">Mohair Handmade</h1>
+        <div className="flex items-center justify-center flex-shrink-0 mx-8 py-2 gap-6"> 
+          <div className="flex items-center justify-center py-1">
+            <img
+              src="/assets/logo.png"
+              alt="Mohair Logo"
+              className="w-20 h-12 object-contain" 
+            />
+          </div>
+          <div className="flex items-center justify-center py-1">
+            <h1 className="text-2xl font-bold text-primary font-handmade whitespace-nowrap">Mohair Handmade</h1>
+          </div>
         </div>
 
         {/* Actions - Right */}
