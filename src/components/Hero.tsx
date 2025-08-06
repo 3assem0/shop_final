@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-
 export const Hero = () => {
-  return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+  return <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-background via-card to-secondary" />
       
       <div className="container mx-auto px-4 relative z-10">
@@ -21,17 +19,15 @@ export const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
-              size="lg" 
-              className="craft-shadow group"
-              onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <Button size="lg" className="craft-shadow group" onClick={() => document.getElementById('products')?.scrollIntoView({
+            behavior: 'smooth'
+          })}>
               Shop Collection
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             
             <Button variant="outline" size="lg" asChild>
-              <a href="#about">Our Story</a>
+              
             </Button>
           </div>
         </div>
@@ -40,6 +36,5 @@ export const Hero = () => {
       {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl animate-pulse" />
       <div className="absolute bottom-20 right-10 w-32 h-32 bg-accent/10 rounded-full blur-xl animate-pulse delay-1000" />
-    </section>
-  );
+    </section>;
 };
