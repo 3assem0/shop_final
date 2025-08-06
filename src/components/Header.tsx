@@ -10,15 +10,16 @@ export const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between">
         {/* Logo and Title */}
-        <div className="flex items-center"> {/* Removed gap-3 from here to apply margin directly to title */}
+        {/* Added flex-shrink-0 to prevent this section from shrinking and cutting off content */}
+        <div className="flex items-center flex-shrink-0"> 
           <img
             src="assets/logo.png" // Updated path to your provided logo image
             alt="Mohair Logo"
-            // Increased size slightly and ensured object-contain for clear visibility
-            className="w-12 h-12 object-contain" 
+            // Increased size slightly more for better visibility and to account for potential transparent padding in the image
+            className="w-14 h-14 object-contain" 
           />
           {/* Added ml-3 for spacing between the logo and the title */}
-          <h1 className="text-2xl font-bold text-primary font-handmade ml-3">Mohair Handmade</h1>
+          <h1 className="text-2xl font-bold text-primary font-handmade ml-3 whitespace-nowrap">Mohair Handmade</h1>
         </div>
 
         {/* Desktop Navigation */}
