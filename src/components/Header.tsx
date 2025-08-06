@@ -14,7 +14,7 @@ export const Header = () => {
         <img
            src="assets/mohair-logo.png"
            alt="Mohair Logo"
-           className="w-15 h-15 object-contain rounded-full"/>
+           className="w-14 h-14 object-contain rounded-full"/>
         <h1 className="text-2xl font-bold text-primary font-handmade">Mohair Handmade</h1>
         </div>
 
