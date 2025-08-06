@@ -28,7 +28,7 @@ export const Header = () => {
             <img
               src="/assets/logo.png"
               alt="Mohair Logo"
-              className="w-20 h-12 object-contain" 
+              className="w-20 h-10 object-contain" 
             />
           </div>
           <div className="flex items-center justify-center py-1">
