@@ -25,9 +25,9 @@ export const Header = () => {
         {/* Logo and Title - Center */}
         <div className="flex items-center justify-center flex-shrink-0 mx-8"> 
           <img
-            src="assets/mohair-logo.png"
+            src="assets/logo.png"
             alt="Mohair Logo"
-            className="w-16 h-16 object-contain" 
+            className="w-10 h-10 object-contain" 
           />
           <h1 className="text-2xl font-bold text-primary font-handmade ml-6 whitespace-nowrap">Mohair Handmade</h1>
         </div>
