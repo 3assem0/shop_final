@@ -12,9 +12,9 @@ export const Header = () => {
         {/* Logo */}
         <div className="flex items-center gap-3">
         <img
-           src="assets/mohair-logo.png"
+           src="assets/logo.png"
            alt="Mohair Logo"
-           className="w-14 h-14 object-contain rounded-full"/>
+           className="w-10 h-10 object-contain rounded-full"/>
         <h1 className="text-2xl font-bold text-primary font-handmade">Mohair Handmade</h1>
         </div>
 
