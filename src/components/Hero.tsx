@@ -36,8 +36,7 @@ export const Hero = () => {
             </Button>
             
             <Button variant="outline" size="lg" asChild>
-              {/* This button seems to be empty, you might want to add content or remove it */}
-              <a>Learn More</a> {/* Example content */}
+              <a href="#contact">Learn More</a>
             </Button>
           </div>
         </div>
