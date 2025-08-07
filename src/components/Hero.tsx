@@ -6,7 +6,7 @@ export const Hero = () => {
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-background via-card to-secondary" />
       
-      <div className="container mx-auto px-4 relative z-10 py-16 md:py-16"> {/* Added vertical padding for overall spacing */}
+      <div className="container mx-auto px-4 relative z-10 py-16 md:py-12"> {/* Added vertical padding for overall spacing */}
         <div className="max-w-4xl mx-auto text-center animate-fade-in">
           {/* Added the logo image here */}
           <img
