@@ -28,7 +28,7 @@ export const Header = () => {
         {/* Removed py-2 and gap-6 from this div. 
             Added flex-1 to push it to the center when combined with other flex-1 elements.
             Using 'items-center' on this div will vertically center its content. */}
-        <div className="flex items-center justify-center flex-shrink-0 flex-1 py-10"> 
+        <div className="flex items-center justify-center flex-shrink-0 flex-1 py-6"> 
           <img
             src="/assets/logo.png" // Ensure this path is correct relative to your public folder
             alt="Mohair Logo"
