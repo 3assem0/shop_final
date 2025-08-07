@@ -144,7 +144,7 @@ export const ProductGrid = () => {
               We create custom pieces! Contact us on Instagram to discuss your vision.
             </p>
             <Button size="lg" variant="outline" asChild>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+              <a href="https://ig.me/m/mohair_handmadecrochet" target="_blank" rel="noopener noreferrer">
                 Message Us
               </a>
             </Button>
