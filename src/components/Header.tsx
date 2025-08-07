@@ -8,66 +8,71 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-2 sm:px-4 flex h-16 sm:h-18 md:h-20 items-center">
+      {/* Changed h-20 to h-16 for a slightly more compact header, and added justify-between to space out items */}
+      <div className="container mx-auto px-4 flex h-16 items-center justify-between">
         {/* Desktop Navigation - Left */}
-        <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 flex-1">
-          <a href="#" className="text-sm xl:text-base text-foreground hover:text-primary transition-colors">
+        {/* Added flex-1 to allow it to take up available space */}
+        <nav className="hidden md:flex items-center space-x-8 flex-1">
+          <a href="#" className="text-foreground hover:text-primary transition-colors">
             Home
           </a>
-          <a href="#products" className="text-sm xl:text-base text-foreground hover:text-primary transition-colors">
+          <a href="#products" className="text-foreground hover:text-primary transition-colors">
             Products
           </a>
-          <a href="#contact" className="text-sm xl:text-base text-foreground hover:text-primary transition-colors">
+          <a href="#contact" className="text-foreground hover:text-primary transition-colors">
             Contact
           </a>
         </nav>
 
-        {/* Logo and Title - Center/Left on mobile */}
-        <div className="flex items-center justify-start lg:justify-center flex-1 lg:flex-shrink-0"> 
+        {/* Logo and Title - Center */}
+        {/* Removed py-2 and gap-6 from this div. 
+            Added flex-1 to push it to the center when combined with other flex-1 elements.
+            Using 'items-center' on this div will vertically center its content. */}
+        <div className="flex items-center justify-center flex-shrink-0 flex-1 py-6"> 
           <img
-            src="/assets/logo.png"
+            src="/assets/logo.png" // Ensure this path is correct relative to your public folder
             alt="Mohair Logo"
-            className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 object-contain"
+            className="w-14 h-14 object-contain" // Adjusted size for better visibility and proportion
           />
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-primary font-handmade ml-2 md:ml-3 truncate sm:whitespace-nowrap">
-            <span className="hidden sm:inline">Mohair Handmade</span>
-            <span className="sm:hidden">Mohair</span>
-          </h1>
+          {/* Added ml-3 for consistent spacing */}
+          <h1 className="text-2xl font-bold text-primary font-handmade ml-3 whitespace-nowrap">Mohair Handmade</h1>
         </div>
 
         {/* Actions - Right */}
-        <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4 flex-shrink-0">
-          <Button variant="ghost" size="sm" className="relative p-2">
-            <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
+        {/* Added flex-1 and justify-end to push actions to the right */}
+        <div className="flex items-center space-x-4 flex-1 justify-end">
+          <Button variant="ghost" size="icon" className="relative">
+            <ShoppingBag className="h-5 w-5" />
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
                 {cartCount}
               </span>
             )}
           </Button>
           
-          <Button variant="ghost" size="sm" className="p-2" asChild>
+          <Button variant="ghost" size="icon" asChild>
             <a href="/admin">
-              <User className="h-4 w-4 sm:h-5 sm:w-5" />
+              <User className="h-5 w-5" />
             </a>
           </Button>
 
           {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="sm" className="lg:hidden p-2">
-                <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
+              {/* Removed 'md:hidden' class to make the button visible on all screen sizes */}
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] sm:w-[300px]">
-              <nav className="flex flex-col space-y-6 mt-8">
-                <a href="#" className="text-lg text-foreground hover:text-primary transition-colors">
+            <SheetContent side="right" className="w-[300px]">
+              <nav className="flex flex-col space-y-4 mt-8">
+                <a href="#" className="text-foreground hover:text-primary transition-colors">
                   Home
                 </a>
-                <a href="#products" className="text-lg text-foreground hover:text-primary transition-colors">
+                <a href="#products" className="text-foreground hover:text-primary transition-colors">
                   Products
                 </a>
-                <a href="#contact" className="text-lg text-foreground hover:text-primary transition-colors">
+                <a href="#contact" className="text-foreground hover:text-primary transition-colors">
                   Contact
                 </a>
               </nav>
