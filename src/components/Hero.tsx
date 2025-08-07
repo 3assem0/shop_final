@@ -10,7 +10,7 @@ export const Hero = () => {
         <div className="max-w-4xl mx-auto text-center animate-fade-in">
           {/* Added the logo image here */}
           <img
-            src="/assests/logo.png" // Ensure this path is correct relative to your public folder
+            src="/assets/logo.png" // Ensure this path is correct relative to your public folder
             alt="Mohair Handmade Logo"
             className="mx-auto mb-8 w-32 md:w-40 h-auto object-contain" // Centered, added bottom margin, and set size
           />
