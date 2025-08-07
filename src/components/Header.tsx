@@ -8,11 +8,21 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      {/* Changed h-20 to h-16 for a slightly more compact header, and added justify-between to space out items */}
-      <div className="container mx-auto px-4 flex h-16 items-center justify-between">
-        {/* Desktop Navigation - Left */}
-        {/* Added flex-1 to allow it to take up available space */}
-        <nav className="hidden md:flex items-center space-x-8 flex-1">
+      <div className="container mx-auto px-4 flex flex-wrap items-center justify-between gap-y-4 py-2 md:py-4">
+        {/* Left: Logo & Title (on small screens logo comes first) */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <img
+            src="/assets/logo.png"
+            alt="Mohair Logo"
+            className="w-12 h-12 object-contain"
+          />
+          <h1 className="text-xl sm:text-2xl font-bold text-primary font-handmade whitespace-nowrap">
+            Mohair Handmade
+          </h1>
+        </div>
+
+        {/* Center: Navigation (hidden on small screens) */}
+        <nav className="hidden md:flex items-center space-x-6 flex-grow justify-center">
           <a href="#" className="text-foreground hover:text-primary transition-colors">
             Home
           </a>
@@ -24,23 +34,8 @@ export const Header = () => {
           </a>
         </nav>
 
-        {/* Logo and Title - Center */}
-        {/* Removed py-2 and gap-6 from this div. 
-            Added flex-1 to push it to the center when combined with other flex-1 elements.
-            Using 'items-center' on this div will vertically center its content. */}
-        <div className="flex items-center justify-center flex-shrink-0 flex-1 py-6"> 
-          <img
-            src="/assets/logo.png" // Ensure this path is correct relative to your public folder
-            alt="Mohair Logo"
-            className="w-14 h-14 object-contain" // Adjusted size for better visibility and proportion
-          />
-          {/* Added ml-3 for consistent spacing */}
-          <h1 className="text-2xl font-bold text-primary font-handmade ml-3 whitespace-nowrap">Mohair Handmade</h1>
-        </div>
-
-        {/* Actions - Right */}
-        {/* Added flex-1 and justify-end to push actions to the right */}
-        <div className="flex items-center space-x-4 flex-1 justify-end">
+        {/* Right: Actions */}
+        <div className="flex items-center gap-3 ml-auto">
           <Button variant="ghost" size="icon" className="relative">
             <ShoppingBag className="h-5 w-5" />
             {cartCount > 0 && (
@@ -49,22 +44,21 @@ export const Header = () => {
               </span>
             )}
           </Button>
-          
+
           <Button variant="ghost" size="icon" asChild>
             <a href="/admin">
               <User className="h-5 w-5" />
             </a>
           </Button>
 
-          {/* Mobile Menu */}
+          {/* Always visible menu icon */}
           <Sheet>
             <SheetTrigger asChild>
-              {/* Removed 'md:hidden' class to make the button visible on all screen sizes */}
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px]">
+            <SheetContent side="right" className="w-[260px] sm:w-[300px]">
               <nav className="flex flex-col space-y-4 mt-8">
                 <a href="#" className="text-foreground hover:text-primary transition-colors">
                   Home
