@@ -59,6 +59,7 @@ export const Header = () => {
           {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
+              {/* Removed 'md:hidden' class to make the button visible on all screen sizes */}
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
               </Button>
