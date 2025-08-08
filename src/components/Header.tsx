@@ -36,13 +36,15 @@ export const Header = () => {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-3 ml-auto">
-          <Button variant="ghost" size="icon" className="relative">
-            <ShoppingBag className="h-5 w-5" />
-            {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
-                {cartCount}
-              </span>
-            )}
+          <Button variant="ghost" size="icon" className="relative" asChild>
+            <a href="#products">
+              <ShoppingBag className="h-5 w-5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </a>
           </Button>
 
           <Button variant="ghost" size="icon" asChild>
