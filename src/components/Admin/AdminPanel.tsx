@@ -99,19 +99,32 @@ const AdminPanel: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      const method = editingIndex >= 0 ? 'PUT' : 'POST';
-      const url = '/api/update-json';
-      const body = editingIndex >= 0
-        ? { ...formData, index: editingIndex }
-        : { ...formData };
-      const response = await fetch(url, {
-        method,
+      let updatedProducts: Product[];
+      if (editingIndex >= 0) {
+        updatedProducts = [...products];
+        updatedProducts[editingIndex] = {
+          ...formData,
+          name: formData.name.trim(),
+          description: formData.description.trim(),
+          price: formData.price.trim(),
+        };
+        showMessage('Product updated successfully!', 'success');
+      } else {
+        updatedProducts = [...products, {
+          ...formData,
+          name: formData.name.trim(),
+          description: formData.description.trim(),
+          price: formData.price.trim(),
+        }];
+        showMessage('Product added successfully!', 'success');
+      }
+      const response = await fetch('/api/update-json', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ newData: updatedProducts })
       });
       const result: ApiResponse = await response.json();
       if (!result.success) throw new Error(result.error || 'Failed to save product');
-      showMessage(editingIndex >= 0 ? 'Product updated successfully!' : 'Product added successfully!', 'success');
       await loadProducts();
       clearForm();
     } catch (err: unknown) {
@@ -160,10 +173,11 @@ const AdminPanel: React.FC = () => {
     }
 
     try {
+      const updatedProducts = products.filter((_, i) => i !== index);
       const response = await fetch('/api/update-json', {
-        method: 'DELETE',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index })
+        body: JSON.stringify({ newData: updatedProducts })
       });
       const result: ApiResponse = await response.json();
       if (!result.success) throw new Error(result.error || 'Failed to delete product');
@@ -215,10 +229,18 @@ const AdminPanel: React.FC = () => {
     }
     
     try {
+      const featuredCount = products.filter(p => p.featured).length;
+      if (!product.featured && featuredCount >= 3) {
+        showMessage('You can only feature up to 3 products in the Hero section.', 'error');
+        return;
+      }
+      const updatedProducts = products.map((p, i) =>
+        i === index ? { ...p, featured: !p.featured } : p
+      );
       const response = await fetch('/api/update-json', {
-        method: 'PATCH',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index, featured: !product.featured })
+        body: JSON.stringify({ newData: updatedProducts })
       });
       const result: ApiResponse = await response.json();
       if (!result.success) throw new Error(result.error || 'Failed to update featured status');
@@ -391,7 +413,7 @@ const AdminPanel: React.FC = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                      className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                       placeholder="Enter product name"
                       required
                     />
@@ -406,7 +428,7 @@ const AdminPanel: React.FC = () => {
                       value={formData.description}
                       onChange={handleInputChange}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                      className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                       placeholder="Enter product description"
                     />
                   </div>
@@ -421,7 +443,7 @@ const AdminPanel: React.FC = () => {
                         name="price"
                         value={formData.price}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                         placeholder="29.99"
                         step="0.01"
                         min="0"
@@ -437,7 +459,7 @@ const AdminPanel: React.FC = () => {
                         name="oldPrice"
                         value={formData.oldPrice}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                         placeholder="39.99"
                       />
                     </div>
@@ -452,7 +474,7 @@ const AdminPanel: React.FC = () => {
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                      className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                       placeholder="e.g., Electronics"
                     />
                   </div>
@@ -467,7 +489,7 @@ const AdminPanel: React.FC = () => {
                         name="color"
                         value={formData.color}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                         placeholder="Blue"
                       />
                     </div>
@@ -498,7 +520,7 @@ const AdminPanel: React.FC = () => {
                         min={1}
                         max={5}
                         step={1}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                       />
                     </div>
                     <div>
@@ -512,7 +534,7 @@ const AdminPanel: React.FC = () => {
                         onChange={handleInputChange}
                         min={0}
                         step={1}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                       />
                     </div>
                   </div>
