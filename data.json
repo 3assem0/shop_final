@@ -10,7 +10,9 @@
     {
       "name": "Product 2",
       "description": "desc2",
-      "price": "200"
+      "price": "200",
+      "featured": false,
+      "image": "blob:https://shop-final-omega.vercel.app/007449db-4784-4491-a6e0-6fc63d0c5af1"
     },
     {
       "name": "Product 3",
@@ -18,5 +20,5 @@
       "price": "300"
     }
   ],
-  "lastUpdated": "2025-09-07T15:07:07.338Z"
+  "lastUpdated": "2025-09-07T15:07:19.888Z"
 }
