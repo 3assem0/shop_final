@@ -162,7 +162,7 @@ export default function Hero() {
     return <div className="text-center py-12 text-red-500">{error}</div>;
   }
   if (!currentProduct) {
-    return <div className="text-center py-12">No products available.</div>;
+    return <div className="text-center text-black py-12">No products available.</div>;
   }
 
   return (
