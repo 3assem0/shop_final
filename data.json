@@ -18,9 +18,9 @@
       "name": "Product 3",
       "description": "desc3",
       "price": "300",
-      "featured": false,
+      "featured": true,
       "image": "blob:https://shop-final-omega.vercel.app/7c72d1a8-b815-4db6-b119-7803c98de76c"
     }
   ],
-  "lastUpdated": "2025-09-07T15:46:36.630Z"
+  "lastUpdated": "2025-09-07T15:46:39.440Z"
 }
