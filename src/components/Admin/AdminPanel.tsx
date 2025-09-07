@@ -9,6 +9,12 @@ interface Product {
   price: string;
   featured?: boolean;
   image?: string; // image URL
+  color?: string;
+  colorHex?: string;
+  category?: string;
+  rating?: number;
+  reviewCount?: number;
+  oldPrice?: string;
 }
 
 interface ProductData {
@@ -40,11 +46,17 @@ const AdminPanel: React.FC = () => {
   
   // Form state
   const [formData, setFormData] = useState<Product>({
-    name: '',
-    description: '',
-    price: '',
-    featured: false,
-    image: ''
+  name: '',
+  description: '',
+  price: '',
+  featured: false,
+  image: '',
+  color: '',
+  colorHex: '#6366f1',
+  category: '',
+  rating: 4,
+  reviewCount: 1,
+  oldPrice: ''
   });
   // Single correct loadProducts definition
   const loadProducts = React.useCallback(async () => {
@@ -105,10 +117,25 @@ const AdminPanel: React.FC = () => {
   }, [searchParams, loadProducts]);
 
 
+  // Cloudinary upload helper
+  const uploadToCloudinary = async (file: File): Promise<string> => {
+    const cloudName = 'dejeaec3b'; // <-- Replace with your Cloudinary cloud name
+    const uploadPreset = 'shopsssss'; // <-- Replace with your unsigned upload preset
+    const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', uploadPreset);
+    const res = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    return data.secure_url;
+  };
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     // Basic validation
     if (!formData.name.trim() || !formData.price.trim()) {
       showMessage('Please fill in all required fields.', 'error');
@@ -126,9 +153,15 @@ const AdminPanel: React.FC = () => {
     setIsSubmitting(true);
 
     let imageUrl = formData.image || '';
-    // Handle image upload (local preview for now)
+    // Upload image to Cloudinary if a new file is selected
     if (imageFile) {
-      imageUrl = URL.createObjectURL(imageFile);
+      try {
+        imageUrl = await uploadToCloudinary(imageFile);
+      } catch (err) {
+        showMessage('Image upload failed. Please try again.', 'error');
+        setIsSubmitting(false);
+        return;
+      }
     }
 
     try {
@@ -137,6 +170,7 @@ const AdminPanel: React.FC = () => {
         // Update existing product
         updatedProducts = [...products];
         updatedProducts[editingIndex] = {
+          ...formData,
           name: formData.name.trim(),
           description: formData.description.trim(),
           price: formData.price.trim(),
@@ -146,6 +180,7 @@ const AdminPanel: React.FC = () => {
       } else {
         // Add new product
         updatedProducts = [...products, {
+          ...formData,
           name: formData.name.trim(),
           description: formData.description.trim(),
           price: formData.price.trim(),
@@ -205,7 +240,13 @@ const AdminPanel: React.FC = () => {
       description: product.description || '',
       price: product.price,
       featured: !!product.featured,
-      image: product.image || ''
+      image: product.image || '',
+      color: product.color || '',
+      colorHex: product.colorHex || '#6366f1',
+      category: product.category || '',
+      rating: product.rating || 4,
+      reviewCount: product.reviewCount || 1,
+      oldPrice: product.oldPrice || ''
     });
     setEditingIndex(index);
     setImageFile(null);
@@ -312,9 +353,9 @@ const AdminPanel: React.FC = () => {
 
   return (
     <div className='bg-white/95 min-h-screen w-full p-10'>
-      <div className='flex items-center justify-center'>
-        <h1>Admin Panel</h1>
-        <p>Manage your products inventory</p>
+      <div className='flex items-center justify-center text-black'>
+        <h1 className='text-black'>Admin Panel</h1>
+        <p className='text-black'>Manage your products inventory</p>
       </div>
 
   <button onClick={goToHome} className={styles.backLink}>
@@ -381,6 +422,77 @@ const AdminPanel: React.FC = () => {
               )}
             </div>
             <div className={styles.formGroup}>
+              <label htmlFor="color">Color Name</label>
+              <input
+                type="text"
+                id="color"
+                name="color"
+                value={formData.color}
+                onChange={handleInputChange}
+                placeholder="e.g., Blue"
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="colorHex">Color Hex</label>
+              <input
+                type="color"
+                id="colorHex"
+                name="colorHex"
+                value={formData.colorHex}
+                onChange={handleInputChange}
+                style={{ width: '50px', height: '30px', padding: 0, border: 'none' }}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="category">Category</label>
+              <input
+                type="text"
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                placeholder="e.g., Electronics"
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="rating">Rating</label>
+              <input
+                type="number"
+                id="rating"
+                name="rating"
+                value={formData.rating}
+                onChange={handleInputChange}
+                min={1}
+                max={5}
+                step={1}
+                placeholder="e.g., 4"
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="reviewCount">Review Count</label>
+              <input
+                type="number"
+                id="reviewCount"
+                name="reviewCount"
+                value={formData.reviewCount}
+                onChange={handleInputChange}
+                min={0}
+                step={1}
+                placeholder="e.g., 10"
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="oldPrice">Old Price</label>
+              <input
+                type="text"
+                id="oldPrice"
+                name="oldPrice"
+                value={formData.oldPrice}
+                onChange={handleInputChange}
+                placeholder="e.g., 39.99"
+              />
+            </div>
+            <div className={styles.formGroup}>
               <label htmlFor="featured">
                 <input
                   type="checkbox"
@@ -438,41 +550,76 @@ const AdminPanel: React.FC = () => {
             {products.length === 0 ? (
               <p className={styles.emptyMessage}>No products added yet.</p>
             ) : (
-              products.map((product, index) => (
-                <div key={index} className={styles.productItem}>
-                  <div className={styles.productHeader}>
-                    <span className={styles.productName}>{product.name}</span>
-                    <span className={styles.productPrice}>${product.price}</span>
-                    {product.featured && (
-                      <span style={{ marginLeft: '10px', color: '#3498db', fontWeight: 600, fontSize: '0.95em' }}>
-                        ⭐ Featured in Hero
-                      </span>
-                    )}
-                  </div>
-                  {product.image && (
-                    <img src={product.image} alt={product.name} style={{ maxWidth: '100px', margin: '8px 0' }} />
-                  )}
-                  {product.description && (
-                    <div className={styles.productDescription}>
-                      {product.description}
+              products.map((product, index) => {
+                const featuredCount = products.filter(p => p.featured).length;
+                const canFeature = product.featured || featuredCount < 3;
+                return (
+                  <div key={index} className={styles.productItem}>
+                    <div className={styles.productHeader}>
+                      <span className={styles.productName}>{product.name}</span>
+                      <span className={styles.productPrice}>${product.price}</span>
+                      {product.featured && (
+                        <span style={{ marginLeft: '10px', color: '#3498db', fontWeight: 600, fontSize: '0.95em' }}>
+                          ⭐ Featured in Hero
+                        </span>
+                      )}
                     </div>
-                  )}
-                  <div className={styles.productActions}>
-                    <button
-                      className={styles.btn + ' ' + styles.btnSecondary}
-                      onClick={() => editProduct(index)}
-                    >
-                      ✏️ Edit
-                    </button>
-                    <button
-                      className={styles.btn + ' ' + styles.btnDanger}
-                      onClick={() => deleteProduct(index)}
-                    >
-                      🗑️ Delete
-                    </button>
+                    {product.image && (
+                      <img src={product.image} alt={product.name} style={{ maxWidth: '100px', margin: '8px 0' }} />
+                    )}
+                    {product.description && (
+                      <div className={styles.productDescription}>
+                        {product.description}
+                      </div>
+                    )}
+                    <div className={styles.formGroup} style={{ marginTop: 8 }}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={!!product.featured}
+                          disabled={!canFeature && !product.featured}
+                          onChange={async (e) => {
+                            const updatedProducts = products.map((p, i) =>
+                              i === index ? { ...p, featured: e.target.checked } : p
+                            );
+                            // Enforce max 3 featured
+                            if (e.target.checked && featuredCount >= 3) {
+                              showMessage('You can only feature up to 3 products in the Hero section.', 'error');
+                              return;
+                            }
+                            setProducts(updatedProducts);
+                            const newData: ProductData = {
+                              products: updatedProducts,
+                              lastUpdated: new Date().toISOString()
+                            };
+                            await fetch('/api/update-json', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ newData })
+                            });
+                          }}
+                          style={{ marginRight: '8px' }}
+                        />
+                        Featured in Hero (max 3)
+                      </label>
+                    </div>
+                    <div className={styles.productActions}>
+                      <button
+                        className={styles.btn + ' ' + styles.btnSecondary}
+                        onClick={() => editProduct(index)}
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        className={styles.btn + ' ' + styles.btnDanger}
+                        onClick={() => deleteProduct(index)}
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>

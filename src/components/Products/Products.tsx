@@ -5,6 +5,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/20/solid';
 import { addToCart } from '@/lib/cart';
 import styles from './Products.module.css';
+import ProductGrid from '../Skiliton/ProductGrid';
 
 interface Product {
   name: string;
@@ -59,18 +60,18 @@ const Products: React.FC = () => {
       if (!data.products || data.products.length === 0) {
         setProducts([]);
       } else {
-        // Transform products to include additional properties for the modal
+        // Use admin data only, no defaults/randoms
         const transformedProducts = data.products.map((product, index) => ({
           ...product,
           id: index + 1,
-          // Default values for modal functionality
-          imageSrc: product.imageSrc || 'https://via.placeholder.com/400x400?text=No+Image',
+          imageSrc: product.imageSrc || product.imageAlt || 'https://via.placeholder.com/400x400?text=No+Image',
           imageAlt: product.imageAlt || `Image of ${product.name}`,
-          color: product.color || 'Default',
+          color: product.color || '',
           colorHex: product.colorHex || '#6366f1',
-          rating: product.rating || 4,
-          reviewCount: product.reviewCount || Math.floor(Math.random() * 50) + 1,
-          category: product.category || 'General',
+          rating: typeof product.rating === 'number' ? product.rating : 4,
+          reviewCount: typeof product.reviewCount === 'number' ? product.reviewCount : 1,
+          category: product.category || '',
+          oldPrice: product.oldPrice || '',
         }));
         setProducts(transformedProducts);
       }
@@ -110,7 +111,7 @@ const Products: React.FC = () => {
     <div className="bg-transparent">
       {/* Product grid */}
       {loading ? (
-        <div className="py-16 text-center">Loading products...</div>
+        <ProductGrid />
       ) : (
         <>
           <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -129,7 +130,7 @@ const Products: React.FC = () => {
                   }}
                 >
                   <img
-                    alt={product.imageAlt}
+                    alt={product.imageAlt || product.name}
                     src={product.imageSrc}
                     className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
                   />
