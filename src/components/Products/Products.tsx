@@ -13,6 +13,7 @@ interface Product {
   price: string;
   // Extended properties for the modal
   id?: number;
+  image?: string;
   imageSrc?: string;
   imageAlt?: string;
   color?: string;
@@ -50,29 +51,31 @@ const Products: React.FC = () => {
       setError(null);
 
       const response = await fetch('/api/get-products');
-      
       if (!response.ok) {
         throw new Error(`Failed to load products: ${response.status} ${response.statusText}`);
       }
 
       const data: ProductData = await response.json();
-      
       if (!data.products || data.products.length === 0) {
         setProducts([]);
       } else {
         // Use admin data only, no defaults/randoms
-        const transformedProducts = data.products.map((product, index) => ({
-          ...product,
-          id: index + 1,
-          imageSrc: product.imageSrc || product.imageAlt || 'https://via.placeholder.com/400x400?text=No+Image',
-          imageAlt: product.imageAlt || `Image of ${product.name}`,
-          color: product.color || '',
-          colorHex: product.colorHex || '#6366f1',
-          rating: typeof product.rating === 'number' ? product.rating : 4,
-          reviewCount: typeof product.reviewCount === 'number' ? product.reviewCount : 1,
-          category: product.category || '',
-          oldPrice: product.oldPrice || '',
-        }));
+        const transformedProducts = data.products.map((product, index) => {
+          // Prefer Cloudinary image, fallback to local, then placeholder
+          const imageUrl = product.image || product.imageSrc || product.imageAlt || 'https://via.placeholder.com/400x400?text=No+Image';
+          return {
+            ...product,
+            id: index + 1,
+            imageSrc: imageUrl,
+            imageAlt: product.imageAlt || `Image of ${product.name}`,
+            color: product.color || '',
+            colorHex: product.colorHex || '#6366f1',
+            rating: typeof product.rating === 'number' ? product.rating : 4,
+            reviewCount: typeof product.reviewCount === 'number' ? product.reviewCount : 1,
+            category: product.category || '',
+            oldPrice: product.oldPrice || '',
+          };
+        });
         setProducts(transformedProducts);
       }
     } catch (err: any) {

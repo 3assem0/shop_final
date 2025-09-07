@@ -353,8 +353,8 @@ const AdminPanel: React.FC = () => {
 
   return (
     <div className='bg-white/95 min-h-screen w-full p-10'>
-      <div className='flex items-center justify-center text-black'>
-        <h1 className='text-black'>Admin Panel</h1>
+      <div className='flex flex-col items-center justify-center text-black'>
+        <h1 className='text-black text-3xl'>Admin Panel</h1>
         <p className='text-black'>Manage your products inventory</p>
       </div>
 

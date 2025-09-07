@@ -20,12 +20,10 @@ export default function Hero() {
   const [dragOffset, setDragOffset] = useState(0);
   const containerRef = useRef(null);
   const autoPlayRef = useRef(null);
-
-  // Product data from API
+  // Add missing state for products, loading, error
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -42,7 +40,7 @@ export default function Hero() {
             discount: p.discount || '',
             title: p.title || p.name || '',
             description: p.description || '',
-            image: p.imageSrc || p.image || '/Classic_T-shirt.webp',
+            image: p.image || p.imageSrc || '/Classic_T-shirt.webp',
             buttonText: p.buttonText || 'Shop Now',
             price: p.price,
             oldPrice: p.oldPrice,
@@ -159,7 +157,19 @@ export default function Hero() {
     return <div className="text-center py-12">Loading products...</div>;
   }
   if (error) {
+  if (loading) {
+    return <div className="text-center py-12">Loading products...</div>;
+  }
+  if (error) {
     return <div className="text-center py-12 text-red-500">{error}</div>;
+  }
+  if (!products.length) {
+    return <div className="text-center text-black py-12">No featured products available.</div>;
+  }
+
+  // Only use up to 3 featured products
+  const featured = products.slice(0, 3);
+
   }
   if (!currentProduct) {
     return <div className="text-center text-black py-12">No products available.</div>;
