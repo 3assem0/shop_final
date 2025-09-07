@@ -4,7 +4,7 @@
       "name": "Product 1",
       "description": "desx1",
       "price": "100",
-      "featured": false,
+      "featured": true,
       "image": "blob:https://shop-final-omega.vercel.app/d9575b41-0c80-4796-b13f-93c7f3aad2b7"
     },
     {
@@ -22,5 +22,5 @@
       "image": "blob:https://shop-final-omega.vercel.app/7c72d1a8-b815-4db6-b119-7803c98de76c"
     }
   ],
-  "lastUpdated": "2025-09-07T15:07:48.954Z"
+  "lastUpdated": "2025-09-07T15:46:29.765Z"
 }
