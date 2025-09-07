@@ -31,8 +31,14 @@
       "description": "desc3",
       "price": "300",
       "featured": true,
-      "image": "blob:https://shop-final-omega.vercel.app/7c72d1a8-b815-4db6-b119-7803c98de76c"
+      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260036/vy1a27lkxyricjmoh86b.jpg",
+      "color": "",
+      "colorHex": "#6366f1",
+      "category": "",
+      "rating": 4,
+      "reviewCount": 1,
+      "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-07T15:47:08.834Z"
+  "lastUpdated": "2025-09-07T15:47:18.979Z"
 }
