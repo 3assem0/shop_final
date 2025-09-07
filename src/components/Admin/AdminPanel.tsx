@@ -1,14 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import styles from './AdminPanel.module.css';
+interface ApiResponse {
+  success: boolean;
+  message?: string;
+  error?: string;
+}import React, { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, Plus, Edit3, Trash2, Star, RefreshCw, Upload, Save, X, Package, DollarSign, Tag, Palette, Star as StarIcon, Users } from 'lucide-react';
 
 interface Product {
   name: string;
   description: string;
   price: string;
   featured?: boolean;
-  image?: string; // image URL
+  image?: string;
   color?: string;
   colorHex?: string;
   category?: string;
@@ -27,121 +29,50 @@ interface Message {
   type: 'success' | 'error' | 'info';
 }
 
-interface ApiResponse {
-  success: boolean;
-  message?: string;
-  error?: string;
-}
-
 const AdminPanel: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [editingIndex, setEditingIndex] = useState<number>(-1);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<Message | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [showAddForm, setShowAddForm] = useState<boolean>(false);
   
-  // Form state
   const [formData, setFormData] = useState<Product>({
-  name: '',
-  description: '',
-  price: '',
-  featured: false,
-  image: '',
-  color: '',
-  colorHex: '#6366f1',
-  category: '',
-  rating: 4,
-  reviewCount: 1,
-  oldPrice: ''
+    name: '',
+    description: '',
+    price: '',
+    featured: false,
+    image: '',
+    color: '',
+    colorHex: '#6366f1',
+    category: '',
+    rating: 4,
+    reviewCount: 1,
+    oldPrice: ''
   });
-  // Single correct loadProducts definition
-  const loadProducts = React.useCallback(async () => {
-    setIsRefreshing(true);
-    try {
-      const response = await fetch('/api/get-products');
-      if (response.ok) {
-        const data: ProductData = await response.json();
-        setProducts(data.products || []);
-        showMessage('Products loaded successfully!', 'success');
-      } else {
-        setProducts([]);
-        showMessage('No products file found. Starting with empty list.', 'info');
-      }
-    } catch (error) {
-      console.error('Error loading products:', error);
-      showMessage('Error loading products. Starting with empty list.', 'error');
-      setProducts([]);
-    } finally {
-      setIsRefreshing(false);
-    }
-  }, []);
+  
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  // Authentication check
-  const checkAuth = React.useCallback(async () => {
-    const password = searchParams.get('password');
-    
-    if (!password) {
-      setIsAuthenticated(false);
-      setIsLoading(false);
-      return;
-    }
+  // Mock functions for demo purposes
+  const loadProducts = useCallback(async () => {
+    setIsRefreshing(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsRefreshing(false);
+      showMessage('Products loaded successfully!', 'success');
+    }, 1000);
+  }, []);
 
-    try {
-      const response = await fetch('/api/verify-admin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password }),
-      });
-
-      const result: ApiResponse = await response.json();
-
-      if (response.ok && result.success) {
-        setIsAuthenticated(true);
-        await loadProducts();
-      } else {
-        setIsAuthenticated(false);
-      }
-    } catch (error) {
-      console.error('Authentication error:', error);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [searchParams, loadProducts]);
-
-
-  // Cloudinary upload helper
-  const uploadToCloudinary = async (file: File): Promise<string> => {
-    const cloudName = 'dejeaec3b'; // <-- Replace with your Cloudinary cloud name
-    const uploadPreset = 'shopsssss'; // <-- Replace with your unsigned upload preset
-    const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', uploadPreset);
-    const res = await fetch(url, {
-      method: 'POST',
-      body: formData
-    });
-    const data = await res.json();
-    return data.secure_url;
-  };
-
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Basic validation
+    
     if (!formData.name.trim() || !formData.price.trim()) {
       showMessage('Please fill in all required fields.', 'error');
       return;
     }
-    // Enforce max 3 featured products
+
     const featuredCount = products.filter(p => p.featured).length;
     if (formData.featured && (!products[editingIndex]?.featured)) {
       if (featuredCount >= 3) {
@@ -152,78 +83,35 @@ const AdminPanel: React.FC = () => {
 
     setIsSubmitting(true);
 
-    let imageUrl = formData.image || '';
-    // Upload image to Cloudinary if a new file is selected
-    if (imageFile) {
-      try {
-        imageUrl = await uploadToCloudinary(imageFile);
-      } catch (err) {
-        showMessage('Image upload failed. Please try again.', 'error');
-        setIsSubmitting(false);
-        return;
-      }
-    }
-
-    try {
+    // Simulate form submission
+    setTimeout(() => {
       let updatedProducts: Product[];
       if (editingIndex >= 0) {
-        // Update existing product
         updatedProducts = [...products];
         updatedProducts[editingIndex] = {
           ...formData,
           name: formData.name.trim(),
           description: formData.description.trim(),
           price: formData.price.trim(),
-          featured: formData.featured,
-          image: imageUrl
         };
+        showMessage('Product updated successfully!', 'success');
       } else {
-        // Add new product
         updatedProducts = [...products, {
           ...formData,
           name: formData.name.trim(),
           description: formData.description.trim(),
           price: formData.price.trim(),
-          featured: formData.featured,
-          image: imageUrl
         }];
+        showMessage('Product added successfully!', 'success');
       }
-
-      const newData: ProductData = {
-        products: updatedProducts,
-        lastUpdated: new Date().toISOString()
-      };
-
-      const response = await fetch('/api/update-json', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ newData }),
-      });
-
-      const result: ApiResponse = await response.json();
-
-      if (response.ok) {
-        showMessage(
-          editingIndex >= 0 ? 'Product updated successfully!' : 'Product added successfully!',
-          'success'
-        );
-        setProducts(updatedProducts);
-        clearForm();
-      } else {
-        throw new Error(result.error || 'Failed to update products');
-      }
-    } catch (error: any) {
-      console.error('Error:', error);
-      showMessage(`Error: ${error.message}`, 'error');
-    } finally {
+      
+      setProducts(updatedProducts);
+      clearForm();
       setIsSubmitting(false);
-      setImageFile(null);
-    }
+      setShowAddForm(false);
+    }, 1500);
   };
 
-  // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -232,7 +120,6 @@ const AdminPanel: React.FC = () => {
     }));
   };
 
-  // Edit product
   const editProduct = (index: number) => {
     const product = products[index];
     setFormData({
@@ -249,378 +136,561 @@ const AdminPanel: React.FC = () => {
       oldPrice: product.oldPrice || ''
     });
     setEditingIndex(index);
+    setShowAddForm(true);
     setImageFile(null);
-    showMessage('Editing product. Make your changes and click Update.', 'info');
   };
 
-  // Delete product
   const deleteProduct = async (index: number) => {
     if (!confirm('Are you sure you want to delete this product?')) {
       return;
     }
 
-    try {
-      const updatedProducts = products.filter((_, i) => i !== index);
-      setProducts(updatedProducts);
-      showMessage('Deleting product...', 'info');
-
-      const newData: ProductData = {
-        products: updatedProducts,
-        lastUpdated: new Date().toISOString()
-      };
-
-      const response = await fetch('/api/update-json', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ newData }),
-      });
-
-      const result: ApiResponse = await response.json();
-
-      if (response.ok) {
-        showMessage('Product deleted successfully!', 'success');
-        
-        if (editingIndex === index) {
-          clearForm();
-        } else if (editingIndex > index) {
-          setEditingIndex(prev => prev - 1);
-        }
-      } else {
-        // Revert changes if server update failed
-        setProducts(products);
-        throw new Error(result.error || 'Failed to delete product');
-      }
-    } catch (error: any) {
-      console.error('Error:', error);
-      showMessage(`Error deleting product: ${error.message}`, 'error');
+    const updatedProducts = products.filter((_, i) => i !== index);
+    setProducts(updatedProducts);
+    showMessage('Product deleted successfully!', 'success');
+    
+    if (editingIndex === index) {
+      clearForm();
     }
   };
 
-  // Clear form
   const clearForm = () => {
-  setFormData({ name: '', description: '', price: '', featured: false, image: '' });
-  setEditingIndex(-1);
-  setImageFile(null);
-  setMessage(null);
+    setFormData({ 
+      name: '', 
+      description: '', 
+      price: '', 
+      featured: false, 
+      image: '', 
+      color: '', 
+      colorHex: '#6366f1', 
+      category: '', 
+      rating: 4, 
+      reviewCount: 1, 
+      oldPrice: '' 
+    });
+    setEditingIndex(-1);
+    setImageFile(null);
+    setShowAddForm(false);
   };
 
-  // Show message
   const showMessage = (text: string, type: 'success' | 'error' | 'info') => {
     setMessage({ text, type });
-    
-    // Auto-hide success messages after 5 seconds
     if (type === 'success') {
       setTimeout(() => setMessage(null), 5000);
     }
   };
 
-  // Navigate back to home
-  const goToHome = () => {
-    navigate('/');
+  const toggleFeatured = async (index: number) => {
+    const product = products[index];
+    const featuredCount = products.filter(p => p.featured).length;
+    
+    if (!product.featured && featuredCount >= 3) {
+      showMessage('You can only feature up to 3 products in the Hero section.', 'error');
+      return;
+    }
+    
+    const updatedProducts = products.map((p, i) =>
+      i === index ? { ...p, featured: !p.featured } : p
+    );
+    setProducts(updatedProducts);
+    showMessage(
+      product.featured ? 'Product removed from featured' : 'Product added to featured',
+      'success'
+    );
   };
 
-  // Check authentication when component mounts or search params change
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
-
-  // Loading state
-  if (isLoading) {
+  if (!isAuthenticated) {
     return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1>Loading...</h1>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 text-center max-w-md w-full">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <X className="w-8 h-8 text-red-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+          <p className="text-gray-600">You are not authorized to access this panel.</p>
         </div>
       </div>
     );
   }
 
-  // Access denied state
-  if (!isAuthenticated) {
-    return (
-      <div className= "flex items-center justify-center bg-white/95 h-screen w-full">
-       
-        
-        <div className={styles.accessDenied}>
-          <h2>🚫 Access denied.</h2>
-          <p>You are not authorized</p>
-        </div>
-      </div>
-    );
+  function goToHome(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    event.preventDefault();
+    window.location.href = '/';
   }
 
   return (
-    <div className='bg-white/95 min-h-screen w-full p-10'>
-      <div className='flex flex-col items-center justify-center text-black'>
-        <h1 className='text-black text-3xl'>Admin Panel</h1>
-        <p className='text-black'>Manage your products inventory</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={goToHome}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                <span className="font-medium">Back to Store</span>
+              </button>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="text-right">
+                <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
+                <p className="text-sm text-gray-500">Manage your product inventory</p>
+              </div>
+              <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                <Package className="w-5 h-5 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-  <button onClick={goToHome} className={styles.backLink}>
-        ← Back to Store
-      </button>
-
-      <div className={styles.adminPanel}>
-        <div className={styles.formSection}>
-          <h2>Add New Product</h2>
-          <form onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-              <label htmlFor="name">Product Name *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                placeholder="Enter product name"
-              />
+      {/* Message Alert */}
+      {message && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+          <div className={`p-4 rounded-lg shadow-sm ${
+            message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' :
+            message.type === 'error' ? 'bg-red-50 text-red-800 border border-red-200' :
+            'bg-blue-50 text-blue-800 border border-blue-200'
+          }`}>
+            <div className="flex items-center justify-between">
+              <span className="font-medium">{message.text}</span>
+              <button
+                onClick={() => setMessage(null)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Enter product description"
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="price">Price *</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                value={formData.price}
-                onChange={handleInputChange}
-                required
-                placeholder="e.g., 29.99"
-                step="0.01"
-                min="0"
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="image">Product Image</label>
-              <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-                onChange={e => {
-                  const file = e.target.files?.[0] || null;
-                  setImageFile(file);
-                  if (file) {
-                    setFormData(prev => ({ ...prev, image: URL.createObjectURL(file) }));
-                  }
-                }}
-              />
-              {formData.image && (
-                <img src={formData.image} alt="Preview" style={{ maxWidth: '100px', marginTop: '8px' }} />
-              )}
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="color">Color Name</label>
-              <input
-                type="text"
-                id="color"
-                name="color"
-                value={formData.color}
-                onChange={handleInputChange}
-                placeholder="e.g., Blue"
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="colorHex">Color Hex</label>
-              <input
-                type="color"
-                id="colorHex"
-                name="colorHex"
-                value={formData.colorHex}
-                onChange={handleInputChange}
-                style={{ width: '50px', height: '30px', padding: 0, border: 'none' }}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="category">Category</label>
-              <input
-                type="text"
-                id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                placeholder="e.g., Electronics"
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="rating">Rating</label>
-              <input
-                type="number"
-                id="rating"
-                name="rating"
-                value={formData.rating}
-                onChange={handleInputChange}
-                min={1}
-                max={5}
-                step={1}
-                placeholder="e.g., 4"
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="reviewCount">Review Count</label>
-              <input
-                type="number"
-                id="reviewCount"
-                name="reviewCount"
-                value={formData.reviewCount}
-                onChange={handleInputChange}
-                min={0}
-                step={1}
-                placeholder="e.g., 10"
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="oldPrice">Old Price</label>
-              <input
-                type="text"
-                id="oldPrice"
-                name="oldPrice"
-                value={formData.oldPrice}
-                onChange={handleInputChange}
-                placeholder="e.g., 39.99"
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="featured">
-                <input
-                  type="checkbox"
-                  id="featured"
-                  name="featured"
-                  checked={!!formData.featured}
-                  onChange={e => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
-                  style={{ marginRight: '8px' }}
-                />
-                Show in Hero section (Featured, max 3)
-              </label>
-            </div>
-            <button
-              type="submit"
-              className={styles.btn + ' ' + styles.btnPrimary}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <span className={styles.loading}></span>
-                  {editingIndex >= 0 ? 'Updating...' : 'Adding...'}
-                </>
-              ) : (
-                editingIndex >= 0 ? 'Update Product' : 'Add Product'
-              )}
-            </button>
-            <button
-              type="button"
-              className={styles.btn + ' ' + styles.btnSecondary}
-              onClick={clearForm}
-              disabled={isSubmitting}
-            >
-              Clear Form
-            </button>
-          </form>
-        </div>
-
-        {message && (
-          <div className={styles.message + ' ' + styles[message.type]}>
-            {message.text}
           </div>
-        )}
+        </div>
+      )}
 
-        <div className={styles.formSection}>
-          <h2>📦 Current Products</h2>
-          <button
-            className={styles.btn + ' ' + styles.btnSecondary}
-            onClick={loadProducts}
-            disabled={isRefreshing}
-          >
-            {isRefreshing ? '🔄 Loading...' : '🔄 Refresh Products'}
-          </button>
-          
-          <div className={styles.productsList}>
-            {products.length === 0 ? (
-              <p className={styles.emptyMessage}>No products added yet.</p>
-            ) : (
-              products.map((product, index) => {
-                const featuredCount = products.filter(p => p.featured).length;
-                const canFeature = product.featured || featuredCount < 3;
-                return (
-                  <div key={index} className={styles.productItem}>
-                    <div className={styles.productHeader}>
-                      <span className={styles.productName}>{product.name}</span>
-                      <span className={styles.productPrice}>${product.price}</span>
-                      {product.featured && (
-                        <span style={{ marginLeft: '10px', color: '#3498db', fontWeight: 600, fontSize: '0.95em' }}>
-                          ⭐ Featured in Hero
-                        </span>
-                      )}
-                    </div>
-                    {product.image && (
-                      <img src={product.image} alt={product.name} style={{ maxWidth: '100px', margin: '8px 0' }} />
-                    )}
-                    {product.description && (
-                      <div className={styles.productDescription}>
-                        {product.description}
-                      </div>
-                    )}
-                    <div className={styles.formGroup} style={{ marginTop: 8 }}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={!!product.featured}
-                          disabled={!canFeature && !product.featured}
-                          onChange={async (e) => {
-                            const updatedProducts = products.map((p, i) =>
-                              i === index ? { ...p, featured: e.target.checked } : p
-                            );
-                            // Enforce max 3 featured
-                            if (e.target.checked && featuredCount >= 3) {
-                              showMessage('You can only feature up to 3 products in the Hero section.', 'error');
-                              return;
-                            }
-                            setProducts(updatedProducts);
-                            const newData: ProductData = {
-                              products: updatedProducts,
-                              lastUpdated: new Date().toISOString()
-                            };
-                            await fetch('/api/update-json', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({ newData })
-                            });
-                          }}
-                          style={{ marginRight: '8px' }}
-                        />
-                        Featured in Hero (max 3)
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Stats Cards */}
+          <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Package className="w-8 h-8 text-indigo-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Total Products</p>
+                  <p className="text-2xl font-semibold text-gray-900">{products.length}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Star className="w-8 h-8 text-yellow-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Featured</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {products.filter(p => p.featured).length}/3
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <DollarSign className="w-8 h-8 text-green-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Avg Price</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    ${products.length > 0 ? (products.reduce((sum, p) => sum + parseFloat(p.price || '0'), 0) / products.length).toFixed(2) : '0.00'}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Tag className="w-8 h-8 text-purple-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Categories</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {new Set(products.map(p => p.category).filter(Boolean)).size}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Add/Edit Form */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    {editingIndex >= 0 ? 'Edit Product' : 'Add New Product'}
+                  </h2>
+                  {!showAddForm && editingIndex === -1 && (
+                    <button
+                      onClick={() => setShowAddForm(true)}
+                      className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
+                    >
+                      <Plus className="w-4 h-4 mr-1" />
+                      Add Product
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {(showAddForm || editingIndex >= 0) && (
+                <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Product Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                      placeholder="Enter product name"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                      placeholder="Enter product description"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Price *
                       </label>
+                      <input
+                        type="number"
+                        name="price"
+                        value={formData.price}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        placeholder="29.99"
+                        step="0.01"
+                        min="0"
+                        required
+                      />
                     </div>
-                    <div className={styles.productActions}>
-                      <button
-                        className={styles.btn + ' ' + styles.btnSecondary}
-                        onClick={() => editProduct(index)}
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button
-                        className={styles.btn + ' ' + styles.btnDanger}
-                        onClick={() => deleteProduct(index)}
-                      >
-                        🗑️ Delete
-                      </button>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Old Price
+                      </label>
+                      <input
+                        type="text"
+                        name="oldPrice"
+                        value={formData.oldPrice}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        placeholder="39.99"
+                      />
                     </div>
                   </div>
-                );
-              })
-            )}
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Category
+                    </label>
+                    <input
+                      type="text"
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                      placeholder="e.g., Electronics"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Color Name
+                      </label>
+                      <input
+                        type="text"
+                        name="color"
+                        value={formData.color}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        placeholder="Blue"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Color
+                      </label>
+                      <input
+                        type="color"
+                        name="colorHex"
+                        value={formData.colorHex}
+                        onChange={handleInputChange}
+                        className="w-full h-10 rounded-lg border border-gray-300 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Rating
+                      </label>
+                      <input
+                        type="number"
+                        name="rating"
+                        value={formData.rating}
+                        onChange={handleInputChange}
+                        min={1}
+                        max={5}
+                        step={1}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Reviews
+                      </label>
+                      <input
+                        type="number"
+                        name="reviewCount"
+                        value={formData.reviewCount}
+                        onChange={handleInputChange}
+                        min={0}
+                        step={1}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Product Image
+                    </label>
+                    <div className="flex items-center space-x-4">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={e => {
+                          const file = e.target.files?.[0] || null;
+                          setImageFile(file);
+                          if (file) {
+                            setFormData(prev => ({ ...prev, image: URL.createObjectURL(file) }));
+                          }
+                        }}
+                        className="hidden"
+                        id="image-upload"
+                      />
+                      <label
+                        htmlFor="image-upload"
+                        className="cursor-pointer inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Choose File
+                      </label>
+                    </div>
+                    {formData.image && (
+                      <div className="mt-3">
+                        <img
+                          src={formData.image}
+                          alt="Preview"
+                          className="w-20 h-20 object-cover rounded-lg border border-gray-200"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="featured"
+                      checked={!!formData.featured}
+                      onChange={e => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
+                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    />
+                    <label className="ml-2 block text-sm text-gray-700">
+                      Show in Hero section (Featured, max 3)
+                    </label>
+                  </div>
+
+                  <div className="flex space-x-3 pt-4">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                          {editingIndex >= 0 ? 'Updating...' : 'Adding...'}
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-4 h-4 mr-2" />
+                          {editingIndex >= 0 ? 'Update' : 'Add Product'}
+                        </>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={clearForm}
+                      disabled={isSubmitting}
+                      className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+
+          {/* Products List */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-900">Products</h2>
+                  <button
+                    onClick={loadProducts}
+                    disabled={isRefreshing}
+                    className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <RefreshCw className={`w-4 h-4 mr-1 ${isRefreshing ? 'animate-spin' : ''}`} />
+                    Refresh
+                  </button>
+                </div>
+              </div>
+
+              <div className="divide-y divide-gray-200">
+                {products.length === 0 ? (
+                  <div className="p-8 text-center">
+                    <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-500">No products added yet.</p>
+                  </div>
+                ) : (
+                  products.map((product, index) => (
+                    <div key={index} className="p-6 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-start space-x-4">
+                        {product.image && (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-16 h-16 object-cover rounded-lg border border-gray-200 flex-shrink-0"
+                          />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2">
+                                <h3 className="text-lg font-medium text-gray-900 truncate">
+                                  {product.name}
+                                </h3>
+                                {product.featured && (
+                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <StarIcon className="w-3 h-3 mr-1" />
+                                    Featured
+                                  </span>
+                                )}
+                              </div>
+                              {product.description && (
+                                <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                                  {product.description}
+                                </p>
+                              )}
+                              <div className="flex items-center space-x-4 mt-2">
+                                <span className="text-lg font-semibold text-gray-900">
+                                  ${product.price}
+                                </span>
+                                {product.oldPrice && (
+                                  <span className="text-sm text-gray-500 line-through">
+                                    ${product.oldPrice}
+                                  </span>
+                                )}
+                                {product.category && (
+                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    {product.category}
+                                  </span>
+                                )}
+                                {product.color && (
+                                  <div className="flex items-center space-x-1">
+                                    <div
+                                      className="w-4 h-4 rounded-full border border-gray-200"
+                                      style={{ backgroundColor: product.colorHex }}
+                                    />
+                                    <span className="text-xs text-gray-500">{product.color}</span>
+                                  </div>
+                                )}
+                              </div>
+                              {product.rating && (
+                                <div className="flex items-center space-x-1 mt-2">
+                                  {[...Array(5)].map((_, i) => (
+                                    <StarIcon
+                                      key={i}
+                                      className={`w-4 h-4 ${
+                                        i < product.rating! ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                      }`}
+                                    />
+                                  ))}
+                                  <span className="text-sm text-gray-500 ml-2">
+                                    ({product.reviewCount} reviews)
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => toggleFeatured(index)}
+                            className={`p-2 rounded-lg transition-colors ${
+                              product.featured
+                                ? 'bg-yellow-100 text-yellow-600 hover:bg-yellow-200'
+                                : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                            }`}
+                            title={product.featured ? 'Remove from featured' : 'Add to featured'}
+                          >
+                            <Star className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => editProduct(index)}
+                            className="p-2 rounded-lg bg-indigo-100 text-indigo-600 hover:bg-indigo-200 transition-colors"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => deleteProduct(index)}
+                            className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

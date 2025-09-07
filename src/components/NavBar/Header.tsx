@@ -219,10 +219,17 @@ export const Header = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [query, setQuery] = useState("");
 
-  // Load cart on component mount
+  // Load cart on component mount and listen for cart updates
   useEffect(() => {
     const loadedCart = getCart();
     setCartItems(loadedCart);
+    const handleCartUpdated = () => {
+      setCartItems(getCart());
+    };
+    window.addEventListener('cart-updated', handleCartUpdated);
+    return () => {
+      window.removeEventListener('cart-updated', handleCartUpdated);
+    };
   }, []);
 
   // Calculate cart count

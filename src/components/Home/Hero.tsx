@@ -152,11 +152,9 @@ export default function Hero() {
   };
 
   const currentProduct = products.length > 0 ? products[currentSlide % products.length] : null;
+  // Only use up to 3 featured products
+  const featured = products.slice(0, 3);
 
-  if (loading) {
-    return <div className="text-center py-12">Loading products...</div>;
-  }
-  if (error) {
   if (loading) {
     return <div className="text-center py-12">Loading products...</div>;
   }
@@ -165,11 +163,6 @@ export default function Hero() {
   }
   if (!products.length) {
     return <div className="text-center text-black py-12">No featured products available.</div>;
-  }
-
-  // Only use up to 3 featured products
-  const featured = products.slice(0, 3);
-
   }
   if (!currentProduct) {
     return <div className="text-center text-black py-12">No products available.</div>;
@@ -270,49 +263,31 @@ export default function Hero() {
           </div>
 
           {/* Right Column - Two Product Cards */}
+          {/* Right Column - Two Featured Product Cards */}
           <div className="flex flex-col gap-6">
-            
-            {/* MacBook Card */}
-            <div className="bg-white rounded-3xl p-6 shadow-lg flex items-center gap-6 flex-1 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Macbook Pro - 512/16GB
-                </h3>
-                <p className="text-gray-500 text-sm mb-4">limited time offer</p>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold text-red-500">$450</span>
-                  <span className="text-lg text-gray-400 line-through">$500</span>
+            {featured.slice(1).map((product, idx) => (
+              <div key={idx} className="bg-white rounded-3xl p-6 shadow-lg flex items-center gap-6 flex-1 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    {product.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm mb-4">{product.description}</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl font-bold text-red-500">{product.price}</span>
+                    {product.oldPrice && (
+                      <span className="text-lg text-gray-400 line-through">{product.oldPrice}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="w-24 h-24">
+                  <img 
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
+                  />
                 </div>
               </div>
-              <div className="w-24 h-24">
-                <img 
-                  src="/Classic_T-shirt.webp" 
-                  alt="MacBook Pro" 
-                  className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
-                />
-              </div>
-            </div>
-
-            {/* iPhone Card */}
-            <div className="bg-white rounded-3xl p-6 shadow-lg flex items-center gap-6 flex-1 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  iPhone 16 Pro - 8/128GB
-                </h3>
-                <p className="text-gray-500 text-sm mb-4">limited time offer</p>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold text-red-500">$600</span>
-                  <span className="text-lg text-gray-400 line-through">$899</span>
-                </div>
-              </div>
-              <div className="w-24 h-24">
-                <img 
-                  src="/Classic_T-shirt.webp" 
-                  alt="iPhone 16 Pro" 
-                  className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
-                />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
