@@ -106,81 +106,46 @@ const Products: React.FC = () => {
     handleProductClick(product);
   };
 
-  if (loading) {
-    return (
-      <div className={styles['products-container']}>
-        <div className={styles['products-header']}>
-          <h1>🛍️</h1>
-          <p>Discover amazing products curated just for you</p>
-        </div>
-  <div className={styles['loading']}>
-          <p>Loading products...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles['products-container']}>
-        <div className={styles['products-header']}>
-          <h1>🛍️</h1>
-          <p>Discover amazing products curated just for you</p>
-        </div>
-  <div className={styles['error-message']}>
-          Error loading products: {error}
-        </div>
-      </div>
-    );
-  }
-
-  if (products.length === 0) {
-    return (
-      <div className={styles['products-container']}>
-        <div className={styles['products-header']}>
-          <h1>🛍️</h1>
-          <p>Discover amazing products curated just for you</p>
-        </div>
-  <div className={styles['empty-state']}>
-          <h2>No Products Available</h2>
-          <p>Check back soon for new products!</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className={styles['products-container']}>
-      <div className={styles['products-header']}>
-        <h1>🛍️</h1>
-        <p>Discover amazing products curated just for you</p>
-      </div>
+    <div className="bg-transparent">
+      {/* Product grid */}
+      {loading ? (
+        <div className="py-16 text-center">Loading products...</div>
+      ) : (
+        <>
+          <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+            <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+              Customers also purchased
+            </h2>
 
-  <div className={styles['products-grid']}>
-        {products.map((product) => (
-          <div key={product.id} className={styles['product-card']}>
-            <h3 className={styles['product-name']}>{product.name}</h3>
-            <p className={styles['product-description']}>
-              {product.description || 'No description available.'}
-            </p>
-            <div className={styles['product-price']}>${product.price}</div>
-            <div className={styles['product-actions']}>
-              <button
-                className={styles['btn'] + ' ' + styles['btn-primary']}
-                onClick={() => buyProduct(product)}
-              >
-                Buy Now
-              </button>
-              <button
-                className={styles['btn'] + ' ' + styles['btn-secondary']}
-                onClick={() => viewDetails(product)}
-              >
-                View Details
-              </button>
+            <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="group relative cursor-pointer"
+                  onClick={() => {
+                    setSelectedProduct(product);
+                    setModalOpen(true);
+                  }}
+                >
+                  <img
+                    alt={product.imageAlt}
+                    src={product.imageSrc}
+                    className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
+                  />
+                  <div className="mt-4 flex justify-between">
+                    <div>
+                      <h3 className="text-sm text-gray-700">{product.name}</h3>
+                      <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                    </div>
+                    <p className="text-sm font-medium text-gray-900">{product.price}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
       {/* Product Modal */}
       <Dialog open={modalOpen} onClose={setModalOpen} className="relative z-[57]">
@@ -230,23 +195,21 @@ const Products: React.FC = () => {
                           </span>
                         </div>
 
-                        {selectedProduct.color && (
-                          <div className="mt-3 flex items-center gap-3 text-sm sm:text-base lg:justify-center">
-                            <span className="text-sm text-gray-500 min-w-[56px]">Color</span>
-                            <div
-                              className="h-5 w-5 rounded-full border border-gray-300 shadow-sm flex-shrink-0"
-                              style={{ backgroundColor: selectedProduct.colorHex }}
-                              role="img"
-                              aria-label={`Color ${selectedProduct.color}`}
-                            />
-                            <span className="text-sm font-medium text-gray-700">{selectedProduct.color}</span>
-                          </div>
-                        )}
+                        <div className="mt-3 flex items-center gap-3 text-sm sm:text-base lg:justify-center">
+                          <span className="text-sm text-gray-500 min-w-[56px]">Color</span>
+                          <div
+                            className="h-5 w-5 rounded-full border border-gray-300 shadow-sm flex-shrink-0"
+                            style={{ backgroundColor: selectedProduct.colorHex }}
+                            role="img"
+                            aria-label={`Color ${selectedProduct.color}`}
+                          />
+                          <span className="text-sm font-medium text-gray-700">{selectedProduct.color}</span>
+                        </div>
 
                         <div className="mt-3 flex items-baseline gap-3 lg:justify-center">
-                          <p className="text-xl sm:text-2xl font-bold text-indigo-600">${selectedProduct.price}</p>
+                          <p className="text-xl sm:text-2xl font-bold text-indigo-600">{selectedProduct.price}</p>
                           {selectedProduct.oldPrice && (
-                            <p className="text-xs sm:text-sm line-through text-gray-400">${selectedProduct.oldPrice}</p>
+                            <p className="text-xs sm:text-sm line-through text-gray-400">{selectedProduct.oldPrice}</p>
                           )}
                         </div>
 
@@ -267,12 +230,6 @@ const Products: React.FC = () => {
                             {selectedProduct.reviewCount} review{selectedProduct.reviewCount !== 1 ? 's' : ''}
                           </span>
                         </div>
-
-                        {selectedProduct.description && (
-                          <div className="mt-4">
-                            <p className="text-sm text-gray-600">{selectedProduct.description}</p>
-                          </div>
-                        )}
 
                         <div className="my-3 h-px bg-gray-100" />
 

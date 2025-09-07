@@ -8,6 +8,7 @@ interface Product {
   description: string;
   price: string;
   featured?: boolean;
+  image?: string; // image URL
 }
 
 interface ProductData {
@@ -42,11 +43,34 @@ const AdminPanel: React.FC = () => {
     name: '',
     description: '',
     price: '',
-    featured: false
+    featured: false,
+    image: ''
   });
+  // Single correct loadProducts definition
+  const loadProducts = React.useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      const response = await fetch('/api/get-products');
+      if (response.ok) {
+        const data: ProductData = await response.json();
+        setProducts(data.products || []);
+        showMessage('Products loaded successfully!', 'success');
+      } else {
+        setProducts([]);
+        showMessage('No products file found. Starting with empty list.', 'info');
+      }
+    } catch (error) {
+      console.error('Error loading products:', error);
+      showMessage('Error loading products. Starting with empty list.', 'error');
+      setProducts([]);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, []);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   // Authentication check
-  const checkAuth = useCallback(async () => {
+  const checkAuth = React.useCallback(async () => {
     const password = searchParams.get('password');
     
     if (!password) {
@@ -78,30 +102,8 @@ const AdminPanel: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [searchParams]);
+  }, [searchParams, loadProducts]);
 
-  // Load products from API
-  const loadProducts = async () => {
-    setIsRefreshing(true);
-    try {
-      const response = await fetch('/api/get-products');
-      
-      if (response.ok) {
-        const data: ProductData = await response.json();
-        setProducts(data.products || []);
-        showMessage('Products loaded successfully!', 'success');
-      } else {
-        setProducts([]);
-        showMessage('No products file found. Starting with empty list.', 'info');
-      }
-    } catch (error) {
-      console.error('Error loading products:', error);
-      showMessage('Error loading products. Starting with empty list.', 'error');
-      setProducts([]);
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -112,26 +114,43 @@ const AdminPanel: React.FC = () => {
       showMessage('Please fill in all required fields.', 'error');
       return;
     }
+    // Enforce max 3 featured products
+    const featuredCount = products.filter(p => p.featured).length;
+    if (formData.featured && (!products[editingIndex]?.featured)) {
+      if (featuredCount >= 3) {
+        showMessage('You can only feature up to 3 products in the Hero section.', 'error');
+        return;
+      }
+    }
 
     setIsSubmitting(true);
 
+    let imageUrl = formData.image || '';
+    // Handle image upload (local preview for now)
+    if (imageFile) {
+      imageUrl = URL.createObjectURL(imageFile);
+    }
+
     try {
       let updatedProducts: Product[];
-      
       if (editingIndex >= 0) {
         // Update existing product
         updatedProducts = [...products];
         updatedProducts[editingIndex] = {
           name: formData.name.trim(),
           description: formData.description.trim(),
-          price: formData.price.trim()
+          price: formData.price.trim(),
+          featured: formData.featured,
+          image: imageUrl
         };
       } else {
         // Add new product
         updatedProducts = [...products, {
           name: formData.name.trim(),
           description: formData.description.trim(),
-          price: formData.price.trim()
+          price: formData.price.trim(),
+          featured: formData.featured,
+          image: imageUrl
         }];
       }
 
@@ -165,6 +184,7 @@ const AdminPanel: React.FC = () => {
       showMessage(`Error: ${error.message}`, 'error');
     } finally {
       setIsSubmitting(false);
+      setImageFile(null);
     }
   };
 
@@ -183,9 +203,12 @@ const AdminPanel: React.FC = () => {
     setFormData({
       name: product.name,
       description: product.description || '',
-      price: product.price
+      price: product.price,
+      featured: !!product.featured,
+      image: product.image || ''
     });
     setEditingIndex(index);
+    setImageFile(null);
     showMessage('Editing product. Make your changes and click Update.', 'info');
   };
 
@@ -236,9 +259,10 @@ const AdminPanel: React.FC = () => {
 
   // Clear form
   const clearForm = () => {
-    setFormData({ name: '', description: '', price: '' });
-    setEditingIndex(-1);
-    setMessage(null);
+  setFormData({ name: '', description: '', price: '', featured: false, image: '' });
+  setEditingIndex(-1);
+  setImageFile(null);
+  setMessage(null);
   };
 
   // Show message
@@ -287,8 +311,8 @@ const AdminPanel: React.FC = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className='bg-white/95 min-h-screen w-full p-10'>
+      <div className='flex items-center justify-center'>
         <h1>Admin Panel</h1>
         <p>Manage your products inventory</p>
       </div>
@@ -313,7 +337,6 @@ const AdminPanel: React.FC = () => {
                 placeholder="Enter product name"
               />
             </div>
-            
             <div className={styles.formGroup}>
               <label htmlFor="description">Description</label>
               <textarea
@@ -324,7 +347,6 @@ const AdminPanel: React.FC = () => {
                 placeholder="Enter product description"
               />
             </div>
-            
             <div className={styles.formGroup}>
               <label htmlFor="price">Price *</label>
               <input
@@ -339,7 +361,25 @@ const AdminPanel: React.FC = () => {
                 min="0"
               />
             </div>
-            
+            <div className={styles.formGroup}>
+              <label htmlFor="image">Product Image</label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={e => {
+                  const file = e.target.files?.[0] || null;
+                  setImageFile(file);
+                  if (file) {
+                    setFormData(prev => ({ ...prev, image: URL.createObjectURL(file) }));
+                  }
+                }}
+              />
+              {formData.image && (
+                <img src={formData.image} alt="Preview" style={{ maxWidth: '100px', marginTop: '8px' }} />
+              )}
+            </div>
             <div className={styles.formGroup}>
               <label htmlFor="featured">
                 <input
@@ -350,7 +390,7 @@ const AdminPanel: React.FC = () => {
                   onChange={e => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
                   style={{ marginRight: '8px' }}
                 />
-                Show in Hero section (Featured)
+                Show in Hero section (Featured, max 3)
               </label>
             </div>
             <button
@@ -409,6 +449,9 @@ const AdminPanel: React.FC = () => {
                       </span>
                     )}
                   </div>
+                  {product.image && (
+                    <img src={product.image} alt={product.name} style={{ maxWidth: '100px', margin: '8px 0' }} />
+                  )}
                   {product.description && (
                     <div className={styles.productDescription}>
                       {product.description}

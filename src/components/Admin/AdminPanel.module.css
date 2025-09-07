@@ -1,7 +1,7 @@
 
 
 .adminPanel {
-  background: rgba(255, 255, 255, 0.95);
+  background-color: transparent;
   border-radius: 20px;
   padding: 40px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -25,13 +25,14 @@
 
 .formGroup {
   margin-bottom: 20px;
+  color: black;
 }
 
 .formGroup label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #2c3e50;
+  color: black;
 }
 
 .formGroup input,
@@ -44,6 +45,7 @@
   transition: all 0.3s ease;
   background: white;
   box-sizing: border-box;
+  color: black;
 }
 
 .formGroup input:focus,
@@ -51,12 +53,14 @@
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  color: black;
 }
 
 .formGroup textarea {
   resize: vertical;
   min-height: 100px;
   font-family: inherit;
+  color: black;
 }
 
 .btn {
@@ -76,13 +80,13 @@
 }
 
 .btnPrimary {
-  background: linear-gradient(45deg, #3498db, #2980b9);
+  background-color: rgb(54, 116, 240);
   color: white;
 }
 
 .btnPrimary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 10px 20px rgba(63, 165, 233, 0.679);
 }
 
 .btnSecondary {
@@ -92,18 +96,18 @@
 }
 
 .btnSecondary:hover:not(:disabled) {
-  background-color: rgb(25, 91, 246);
+  background-color: rgb(56, 108, 230);
   color: white;
 }
 
 .btnDanger {
-  background: linear-gradient(45deg, #e74c3c, #c0392b);
+  background-color: tomato;
   color: white;
 }
 
 .btnDanger:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
+  box-shadow: 0 10px 20px rgba(231, 48, 28, 0.673);
 }
 
 .btn:disabled {
