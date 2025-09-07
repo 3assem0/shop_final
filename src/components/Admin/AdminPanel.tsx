@@ -55,16 +55,32 @@ const AdminPanel: React.FC = () => {
   
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  // Mock functions for demo purposes
+  // Load products from backend
   const loadProducts = useCallback(async () => {
     setIsRefreshing(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsRefreshing(false);
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/get-products');
+      if (!response.ok) throw new Error('Failed to load products');
+      const data: ProductData = await response.json();
+      setProducts(data.products || []);
       showMessage('Products loaded successfully!', 'success');
-    }, 1000);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        showMessage(err.message || 'Failed to load products', 'error');
+      } else {
+        showMessage('Failed to load products', 'error');
+      }
+    } finally {
+      setIsRefreshing(false);
+      setIsLoading(false);
+    }
   }, []);
 
+  // Load products on mount
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -82,34 +98,32 @@ const AdminPanel: React.FC = () => {
     }
 
     setIsSubmitting(true);
-
-    // Simulate form submission
-    setTimeout(() => {
-      let updatedProducts: Product[];
-      if (editingIndex >= 0) {
-        updatedProducts = [...products];
-        updatedProducts[editingIndex] = {
-          ...formData,
-          name: formData.name.trim(),
-          description: formData.description.trim(),
-          price: formData.price.trim(),
-        };
-        showMessage('Product updated successfully!', 'success');
-      } else {
-        updatedProducts = [...products, {
-          ...formData,
-          name: formData.name.trim(),
-          description: formData.description.trim(),
-          price: formData.price.trim(),
-        }];
-        showMessage('Product added successfully!', 'success');
-      }
-      
-      setProducts(updatedProducts);
+    try {
+      const method = editingIndex >= 0 ? 'PUT' : 'POST';
+      const url = '/api/update-json';
+      const body = editingIndex >= 0
+        ? { ...formData, index: editingIndex }
+        : { ...formData };
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const result: ApiResponse = await response.json();
+      if (!result.success) throw new Error(result.error || 'Failed to save product');
+      showMessage(editingIndex >= 0 ? 'Product updated successfully!' : 'Product added successfully!', 'success');
+      await loadProducts();
       clearForm();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        showMessage(err.message || 'Failed to save product', 'error');
+      } else {
+        showMessage('Failed to save product', 'error');
+      }
+    } finally {
       setIsSubmitting(false);
       setShowAddForm(false);
-    }, 1500);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -145,12 +159,23 @@ const AdminPanel: React.FC = () => {
       return;
     }
 
-    const updatedProducts = products.filter((_, i) => i !== index);
-    setProducts(updatedProducts);
-    showMessage('Product deleted successfully!', 'success');
-    
-    if (editingIndex === index) {
-      clearForm();
+    try {
+      const response = await fetch('/api/update-json', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index })
+      });
+      const result: ApiResponse = await response.json();
+      if (!result.success) throw new Error(result.error || 'Failed to delete product');
+      showMessage('Product deleted successfully!', 'success');
+      await loadProducts();
+      if (editingIndex === index) clearForm();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        showMessage(err.message || 'Failed to delete product', 'error');
+      } else {
+        showMessage('Failed to delete product', 'error');
+      }
     }
   };
 
@@ -189,14 +214,23 @@ const AdminPanel: React.FC = () => {
       return;
     }
     
-    const updatedProducts = products.map((p, i) =>
-      i === index ? { ...p, featured: !p.featured } : p
-    );
-    setProducts(updatedProducts);
-    showMessage(
-      product.featured ? 'Product removed from featured' : 'Product added to featured',
-      'success'
-    );
+    try {
+      const response = await fetch('/api/update-json', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index, featured: !product.featured })
+      });
+      const result: ApiResponse = await response.json();
+      if (!result.success) throw new Error(result.error || 'Failed to update featured status');
+      showMessage(product.featured ? 'Product removed from featured' : 'Product added to featured', 'success');
+      await loadProducts();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        showMessage(err.message || 'Failed to update featured status', 'error');
+      } else {
+        showMessage('Failed to update featured status', 'error');
+      }
+    }
   };
 
   if (!isAuthenticated) {
@@ -399,7 +433,7 @@ const AdminPanel: React.FC = () => {
                         Old Price
                       </label>
                       <input
-                        type="text"
+                        type="number"
                         name="oldPrice"
                         value={formData.oldPrice}
                         onChange={handleInputChange}

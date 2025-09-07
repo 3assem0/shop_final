@@ -211,9 +211,9 @@ const Products: React.FC = () => {
                         </div>
 
                         <div className="mt-3 flex items-baseline gap-3 lg:justify-center">
-                          <p className="text-xl sm:text-2xl font-bold text-indigo-600">{selectedProduct.price}</p>
+                          <p className="text-xl sm:text-2xl font-bold text-indigo-600">${selectedProduct.price}</p>
                           {selectedProduct.oldPrice && (
-                            <p className="text-xs sm:text-sm line-through text-gray-400">{selectedProduct.oldPrice}</p>
+                            <p className="text-xs sm:text-sm line-through text-gray-400">${selectedProduct.oldPrice}</p>
                           )}
                         </div>
 
