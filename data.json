@@ -6,12 +6,12 @@
       "price": "100",
       "featured": true,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260013/fy0g8agf3g4s6zoxledl.webp",
-      "color": "",
-      "colorHex": "#6366f1",
-      "category": "",
-      "rating": 4,
-      "reviewCount": 1,
-      "oldPrice": ""
+      "color": "red",
+      "colorHex": "#fa0000",
+      "category": "IT & Programming",
+      "rating": "5",
+      "reviewCount": "5",
+      "oldPrice": "3232h"
     },
     {
       "name": "Product 2",
@@ -53,5 +53,5 @@
       "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-07T15:51:38.150Z"
+  "lastUpdated": "2025-09-07T21:40:16.140Z"
 }
