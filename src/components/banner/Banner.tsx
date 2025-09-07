@@ -7,7 +7,7 @@ export default function Banner() {
   if (!showBanner) return null
 
   return (
-    <div className="relative max-w-4xl mx-auto px-6 lg:px-8 isolate flex items-center gap-x-6 overflow-hidden bg-purple-600 py-2.5 rounded-b-lg after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:before:flex-1 transition-all duration-300">
+    <div className="relative max-w-4xl mx-auto px-6 lg:px-8 isolate flex items-center gap-x-6 overflow-hidden bg-[#de0ee1] py-2.5 rounded-b-lg after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:before:flex-1 transition-all duration-300">
       {/* Background shapes */}
       <div
         aria-hidden="true"
@@ -18,7 +18,7 @@ export default function Banner() {
             clipPath:
               'polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)',
           }}
-          className="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-40"
+          className="aspect-[577/310] w-[36.0625rem] bg-[gradient-to-r from-[#a71cd9] to-[#de0ee1]] opacity-40"
         />
       </div>
       <div
@@ -30,7 +30,7 @@ export default function Banner() {
             clipPath:
               'polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)',
           }}
-          className="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-40"
+          className="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#a71cd9] to-[#de0ee1] opacity-40"
         />
       </div>
 

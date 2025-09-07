@@ -2,30 +2,48 @@ import { Instagram, Mail, Heart } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <div className="relative ">
-      <div className="absolute left-0 right-0 top-0 h-px bg-purple-400 z-[41]" />
-    
-
-<div className="text-black bg-transparent   px-[4%] sm:px-[9%] md:px-[14%]  py-8 sm:py-5 md:py-5 z-[50]">
-  <footer className="bg-white rounded-lg shadow-sm m-4 ">
-<div className="w-full mx-auto p-4 md:flex md:items-center md:justify-between">
-       <span className="text-sm text-black sm:text-center flex items-center "><a href="https://" className="hover:underline"><img src="/logo.png" className="w-20" alt="#logo" /></a></span>
-    <span className="text-sm text-black">© 2025 . All Rights Reserved.</span>
-     <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-black sm:mt-0">
-         <li>
-             <a href="#" className="hover:underline me-4 md:me-6">About</a>
-         </li>
-       <li>
-             <a href="#" className="hover:underline me-4 md:me-6">Contact</a>
-         </li>
-         <li>
-             <a href="#" className="hover:underline">Products</a>
-         </li>
-     </ul>
-
-     </div>
-     </footer>
-</div>
-</div>
+    <footer className="p-5 px-20">
+      <div className="w-full md:h-[332px] md:p-11 text-background bg-[#fee0f9] rounded-[12px] flex flex-col justify-between max-md:gap-8">
+        <div className="flex  flex-col justify-between md:flex-row">
+          <div className="md:basis-3/4 max-md:w-full max-w-[1200px]  h-auto block  text-9xl font-handmade font-extrabold text-[#831670] " >
+          MOHAR
+          </div>
+          <ul className="flex flex-col flex-wrap gap-4 max-md:justify-start justify-end mb-2 text-[#831670] text-md">
+              <li className="text-xl font-bold hover:text-[#a23891] "><a href="">Shop</a></li>
+              <li className="hover:text-[#a23891] "><a href="">Clothing</a></li>
+              <li className="hover:text-[#a23891]"><a href="">Bags</a></li>
+            </ul>
+         </div>
+        <div className="flex px-2 justify-between items-center max-md:contents ">
+           
+            <ul className="flex flex-wrap gap-4 max-md:justify-start justify-end mb-2 text-[#831670]  text-md">
+             <li>
+                      <button 
+                        className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2">
+                        Facebook
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92]   transition-all duration-200 group-hover:w-full"></span>
+                      </button>
+                    </li>
+                      <li>
+                      <button 
+                        className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2">
+                        Instgram
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92]   transition-all duration-200 group-hover:w-full"></span>
+                      </button>
+                    </li>
+                      <li>
+                      <button 
+                        className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2">
+                        Whatsapp
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92]   transition-all duration-200 group-hover:w-full"></span>
+                      </button>
+                    </li>
+            </ul>
+      
+          <p className="text-[#831670] ">{new Date().getFullYear()}© — All rights reserved</p>
+           
+        </div>
+      </div>
+    </footer>
   );
 };

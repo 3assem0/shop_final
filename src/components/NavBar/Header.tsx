@@ -273,7 +273,7 @@ export const Header = () => {
     <>
       <header className="fixed top-5 left-0 right-0 z-[55] w-full flex flex-col items-center ">
         <div className="w-full max-w-4xl mx-auto px-6 lg:px-8">
-          <div className="rounded-lg border-b backdrop-blur-sm shadow-sm border-gray-200 dark:border-gray-700 dark:bg-gray-900/95 dark:text-white text-gray-900 bg-white/95">
+          <div className="rounded-lg border-b backdrop-blur-sm shadow-sm border-gray-200  text-[#831670] bg-[#fee0f9]">
             <div className="flex items-center justify-between h-16 px-6 lg:px-8">
               
               {/* Left Section - Logo & Navigation */}
@@ -295,29 +295,29 @@ export const Header = () => {
                   <ul className="flex items-center space-x-8">
                     <li>
                       <button 
-                        className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+                        className="text-[#831670]   font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
                         onClick={() => dispatchCategory("all")}
                       >
                         Products
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-600 dark:bg-purple-400 transition-all duration-200 group-hover:w-full"></span>
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92]  transition-all duration-200 group-hover:w-full"></span>
                       </button>
                     </li>
                     <li>
                       <button 
-                        className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+                        className="text-[#831670]    font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
                         onClick={() => dispatchCategory("Shirts")}
                       >
                         About
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-600 dark:bg-purple-400 transition-all duration-200 group-hover:w-full"></span>
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92]  transition-all duration-200 group-hover:w-full"></span>
                       </button>
                     </li>
                     <li>
                       <button 
-                        className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+                        className="text-[#831670]0    font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
                         onClick={() => dispatchCategory("Stickers")}
                       >
                         Contact
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-600 dark:bg-purple-400 transition-all duration-200 group-hover:w-full"></span>
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
                       </button>
                     </li>
                   </ul>

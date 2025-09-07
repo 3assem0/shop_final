@@ -84,7 +84,7 @@ export default {
         // ✅ your custom fonts
         handmade: ["Dancing Script", "cursive"],
         craft: ["Caveat", "cursive"],
-
+        lexend: ['Lexend', 'sans-serif'],
         // ✅ added from second config
         body: [
           "Inter",

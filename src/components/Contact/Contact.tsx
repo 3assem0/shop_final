@@ -2,39 +2,57 @@ import React from 'react'
 
 export default function Contact() {
   return (
-    <div className="relative bg-transparent dark:bg-[#131313]">
-      {/* Guide Lines - Responsive positioning */}
-      {/* <div className="absolute left-0 right-0 top-0 h-px  bg-purple-500 z-[41]" /> */}
-     
+    <div className="relative bg-transparent ">
+     <section className="bg-[#fbfbfb] ">
+    <div className="container px-6 py-12 mx-auto">
+        <div className="text-center">
+            <p className="font-medium text-[#831670] ">Contact us</p>
 
-      {/* Main Content - Responsive padding that matches guide lines */}
-      <section className="relative px-[5%] sm:px-[10%] md:px-[15%] flex items-center justify-center py-8 sm:py-5 md:py-5 z-[50] ">
-        <div className="w-full border-4 sm:border-6 md:border-8 rounded-2xl sm:rounded-3xl border-purple-700 overflow-hidden">
-          <a 
-            href="mailto:assemayman5900@gmail.com" 
-            className="w-full flex flex-col lg:flex-row items-center justify-between hover:opacity-90 transition-opacity"
-          >
-            {/* Image container - responsive sizing */}
-            <div className="w-full lg:w-auto flex-shrink-0">
-              <img 
-                src="/gif.gif" 
-                alt="Super hero contact animation"
-                loading="lazy"
-                decoding="async"
-                className="w-full h-48 sm:h-64 md:h-80 lg:w-80 xl:w-96 lg:h-full object-cover rounded-xl sm:rounded-2xl"
-              />
-            </div>
-            
-            {/* Text container - responsive typography */}
-            <div className="flex-1 flex items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12">
-              <h1 className="dark:text-[#f4f1f1] text-[#959494] text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl font-bold text-center leading-tight flex items-center justify-center ">
-                Click to contact 
-                <img src="/public/instagram-logo.webp" className='w-20' alt="#insta_logo" />
-              </h1>
-            </div>
-          </a>
+            <h1 className="mt-2 text-2xl font-semibold text-[#fb6f92] md:text-3xl ">Get in touch</h1>
+
+            <p className="mt-3 text-[#831670] ">Our friendly team is always here to chat.</p>
         </div>
-      </section>
+
+        <div className="grid grid-cols-1 gap-12 mt-10 md:grid-cols-2 lg:grid-cols-3">
+            <div className="flex flex-col items-center justify-center text-center">
+                <span className="p-3 text-[#831670] rounded-full bg-[#fee0f9] ">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                    </svg>
+                </span>
+
+                <h2 className="mt-4 text-lg font-medium text-[#831670] ">Email</h2>
+                <p className="mt-2 text-[#831670] ">Our friendly team is here to help.</p>
+                <p className="mt-2 text-[#fb6f92] ">hello@merakiui.com</p>
+            </div>
+
+            <div className="flex flex-col items-center justify-center text-center">
+                <span className="p-3 text-[#831670] rounded-full bg-[#fee0f9] ">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                    </svg>
+                </span>
+                
+                <h2 className="mt-4 text-lg font-medium text-[#831670] ">Office</h2>
+                <p className="mt-2 text-[#831670] ">Come say hello at our office HQ.</p>
+                <p className="mt-2 text-[#fb6f92] ">100 Smith Street Collingwood VIC 3066 AU</p>
+            </div>
+
+            <div className="flex flex-col items-center justify-center text-center">
+                <span className="p-3 text-[#831670] rounded-full bg-[#fee0f9] ">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                    </svg>
+                </span>
+                
+                <h2 className="mt-4 text-lg font-medium text-[#831670] ">Phone</h2>
+                <p className="mt-2 text-[#831670] ">Mon-Fri from 8am to 5pm.</p>
+                <p className="mt-2 text-[#fb6f92] ">+1 (555) 000-0000</p>
+            </div>
+        </div>
+    </div>
+</section>
     </div>
   )
 }

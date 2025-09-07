@@ -234,9 +234,15 @@ const AdminPanel: React.FC = () => {
         showMessage('You can only feature up to 3 products in the Hero section.', 'error');
         return;
       }
+      // Only toggle featured for the selected product
       const updatedProducts = products.map((p, i) =>
         i === index ? { ...p, featured: !p.featured } : p
       );
+      // Safeguard: never send an empty array
+      if (updatedProducts.length === 0) {
+        showMessage('Error: Products array is empty. Aborting update.', 'error');
+        return;
+      }
       const response = await fetch('/api/update-json', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -244,7 +250,7 @@ const AdminPanel: React.FC = () => {
       });
       const result: ApiResponse = await response.json();
       if (!result.success) throw new Error(result.error || 'Failed to update featured status');
-      showMessage(product.featured ? 'Product removed from featured' : 'Product added to featured', 'success');
+      showMessage(!product.featured ? 'Product added to featured' : 'Product removed from featured', 'success');
       await loadProducts();
     } catch (err: unknown) {
       if (err instanceof Error) {
