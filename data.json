@@ -4,7 +4,12 @@
       "name": "Product 1",
       "description": "desx1",
       "price": "100"
+    },
+    {
+      "name": "Product 2",
+      "description": "desc2",
+      "price": "200"
     }
   ],
-  "lastUpdated": "2025-09-07T14:38:20.723Z"
+  "lastUpdated": "2025-09-07T14:38:40.120Z"
 }
