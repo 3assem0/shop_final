@@ -3,7 +3,9 @@
     {
       "name": "Product 1",
       "description": "desx1",
-      "price": "100"
+      "price": "100",
+      "featured": false,
+      "image": "blob:https://shop-final-omega.vercel.app/d9575b41-0c80-4796-b13f-93c7f3aad2b7"
     },
     {
       "name": "Product 2",
@@ -16,5 +18,5 @@
       "price": "300"
     }
   ],
-  "lastUpdated": "2025-09-07T14:38:52.088Z"
+  "lastUpdated": "2025-09-07T15:07:07.338Z"
 }
