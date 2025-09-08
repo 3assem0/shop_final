@@ -16,7 +16,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-[400px] sm:w-[450px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 flex flex-col z-[56]">
         <SheetHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
-          <SheetTitle className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
+          <SheetTitle className="flex items-center gap-2 text-xl font-bold text-[#831670]">
             <ShoppingCart className="h-5 w-5 text-purple-600" />
             Shopping Cart ({cartItems.length})
           </SheetTitle>
@@ -105,13 +105,13 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
             <div className="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-3">
               {/* Subtotal */}
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
+                <span className="text-[#831670] ">Subtotal</span>
                 <span className="font-medium text-gray-900 dark:text-white">${subtotal.toFixed(2)}</span>
               </div>
 
               {/* Shipping */}
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-400">Shipping</span>
+                <span className="text-[#831670] ">Shipping</span>
                 <span className={`font-medium ${shipping === 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'}`}>
                   {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
                 </span>
@@ -119,7 +119,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
 
               {/* Tax */}
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-400">Tax</span>
+                <span className="text-[#831670] ">Tax</span>
                 <span className="font-medium text-gray-900 dark:text-white">${tax.toFixed(2)}</span>
               </div>
 
@@ -132,19 +132,19 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
 
               {/* Total */}
               <div className="flex justify-between text-base font-bold border-t border-gray-200 dark:border-gray-700 pt-3">
-                <span className="text-gray-900 dark:text-white">Total</span>
+                <span className="text-[#831670] ">Total</span>
                 <span className="text-gray-900 dark:text-white">${total.toFixed(2)}</span>
               </div>
 
               {/* Checkout Button */}
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-base font-semibold mt-4">
+              <Button className="w-full bg-[#831670] hover:bg-[#c148ad] text-[#fee0f9] py-3 text-base font-semibold mt-4">
                 Proceed to Checkout
               </Button>
 
               {/* Continue Shopping */}
               <Button 
                 variant="outline" 
-                className="w-full border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="w-full border-gray-300 text-[#831670]  bg-[#fee0f9] hover:bg-[#f4c6ec] "
                 onClick={() => onOpenChange(false)}
               >
                 Continue Shopping
