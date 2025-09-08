@@ -15,8 +15,8 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-[400px] sm:w-[450px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 flex flex-col z-[56]">
-        <SheetHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
-          <SheetTitle className="flex items-center gap-2 text-xl font-bold text-[#831670]">
+        <SheetHeader className="border-b border-gray-200  pb-4">
+          <SheetTitle className="flex items-center gap-2 text-xl font-bold text-[#fb6f92]">
             <ShoppingCart className="h-5 w-5 text-purple-600" />
             Shopping Cart ({cartItems.length})
           </SheetTitle>
@@ -28,14 +28,14 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
             <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
               <ShoppingBag className="h-12 w-12 text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-[#831670] mb-2">
               Your cart is empty
             </h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">
+            <p className="text-[#bd37a7] mb-6 max-w-sm">
               Looks like you haven't added anything to your cart yet. Start shopping to fill it up!
             </p>
             <Button 
-              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2"
+              className="bg-[#831670] hover:bg-[#9c2388] text-white px-6 py-2"
               onClick={() => onOpenChange(false)}
             >
               Continue Shopping
@@ -137,7 +137,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
               </div>
 
               {/* Checkout Button */}
-              <Button className="w-full bg-[#831670] hover:bg-[#c148ad] text-[#fee0f9] py-3 text-base font-semibold mt-4">
+              <Button className="w-full bg-[#de4ac6] hover:bg-[#c63aaf] text-[#fb6f92] py-3 text-base font-semibold mt-4">
                 Proceed to Checkout
               </Button>
 
