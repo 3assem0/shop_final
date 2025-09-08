@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useState } from 'react';
 import { getCart, setCart } from '../../lib/cart';
 import { Star, ShoppingCart, Eye, X } from 'lucide-react';
@@ -8,7 +8,7 @@ interface Product {
   description: string;
   price: string;
   id?: number;
-  imageSrc?: string;
+  image?: string;
   imageAlt?: string;
   color?: string;
   colorHex?: string;
@@ -166,7 +166,7 @@ const Products: React.FC = () => {
               {/* Image Container */}
               <div className="relative aspect-square overflow-hidden bg-gray-100">
                 <img
-                  src={product.imageSrc && product.imageSrc.includes('cloudinary.com') ? product.imageSrc : '/public/logo.png'}
+                  src={product.image && product.image.includes('cloudinary.com') ? product.image : '/public/logo.png'}
                   alt={product.imageAlt || product.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}
@@ -257,7 +257,7 @@ const Products: React.FC = () => {
                 <div className="md:w-1/2">
                   <div className="relative aspect-square">
                     <img
-                      src={selectedProduct.imageSrc && selectedProduct.imageSrc.includes('cloudinary.com') ? selectedProduct.imageSrc : '/public/logo.png'}
+                      src={selectedProduct.image && selectedProduct.image.includes('cloudinary.com') ? selectedProduct.image : '/public/logo.png'}
                       alt={selectedProduct.name}
                       className="w-full h-full object-cover"
                       onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}

@@ -107,6 +107,7 @@ const AdminPanel: React.FC = () => {
           name: formData.name.trim(),
           description: formData.description.trim(),
           price: formData.price.trim(),
+          image: formData.image,
         };
         showMessage('Product updated successfully!', 'success');
       } else {
@@ -115,6 +116,7 @@ const AdminPanel: React.FC = () => {
           name: formData.name.trim(),
           description: formData.description.trim(),
           price: formData.price.trim(),
+          image: formData.image,
         }];
         showMessage('Product added successfully!', 'success');
       }
