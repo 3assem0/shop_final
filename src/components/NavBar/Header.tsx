@@ -3,53 +3,7 @@ import { ShoppingBag, Menu, X, Plus, Minus, Trash2, ShoppingCart } from "lucide-
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import Banner from "../banner/Banner";
 import { useEffect, useState } from "react";
-
-// Mock cart functions - replace with your actual cart implementation
-const getCart = () => {
-  const cart = localStorage.getItem('cart');
-  return cart ? JSON.parse(cart) : [];
-};
-
-const saveCart = (cartItems) => {
-  localStorage.setItem('cart', JSON.stringify(cartItems));
-};
-
-const addToCart = (product) => {
-  const cart = getCart();
-  const existingItem = cart.find(item => item.id === product.id);
-  
-  if (existingItem) {
-    existingItem.quantity += 1;
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
-  
-  saveCart(cart);
-  return cart;
-};
-
-const removeFromCart = (productId) => {
-  const cart = getCart();
-  const updatedCart = cart.filter(item => item.id !== productId);
-  saveCart(updatedCart);
-  return updatedCart;
-};
-
-const updateQuantity = (productId, quantity) => {
-  const cart = getCart();
-  const item = cart.find(item => item.id === productId);
-  
-  if (item) {
-    if (quantity <= 0) {
-      return removeFromCart(productId);
-    } else {
-      item.quantity = quantity;
-      saveCart(cart);
-      return cart;
-    }
-  }
-  return cart;
-};
+import { getCart, setCart, addToCart as addToCartLib } from '../../lib/cart';
 
 // Shopping Cart Component
 const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart }) => {
@@ -237,8 +191,8 @@ export const Header = () => {
 
   // Demo function to add items to cart (you can call this from your product components)
   const handleAddToCart = (product) => {
-    const updatedCart = addToCart(product);
-    setCartItems(updatedCart);
+    addToCartLib(product);
+    setCartItems(getCart());
   };
 
   const navigate = (path) => {

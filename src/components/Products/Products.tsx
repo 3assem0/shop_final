@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { getCart, setCart } from '../../lib/cart';
 import { Star, ShoppingCart, Eye, X } from 'lucide-react';
@@ -143,7 +142,7 @@ const Products: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 rounded-2xl to-blue-50 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -164,7 +163,7 @@ const Products: React.FC = () => {
               onClick={() => quickView(product, {} as React.MouseEvent)}
             >
               {/* Image Container */}
-              <div className="relative aspect-square overflow-hidden bg-gray-100">
+              <div className="relative aspect-square overflow-hidden bg-transparent">
                 <img
                   src={product.image && product.image.includes('cloudinary.com') ? product.image : '/public/logo.png'}
                   alt={product.imageAlt || product.name}
@@ -262,17 +261,18 @@ const Products: React.FC = () => {
                       className="w-full h-full object-cover"
                       onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}
                     />
-                    <button
-                      onClick={() => setModalOpen(false)}
-                      className="absolute text-[#fee0f9] top-4 right-4 bg-[#831670] backdrop-blur-sm p-2 rounded-full hover:bg-[#bb32a4] transition-colors"
-                    >
-                      <X className="w-5 h-5 text-[#fee0f9]" />
-                    </button>
                   </div>
                 </div>
 
                 {/* Product Details */}
-                <div className="md:w-1/2 p-8 flex flex-col justify-center">
+                <div className="md:w-1/2 p-8 flex flex-col justify-center relative">
+                  <button
+                    onClick={() => setModalOpen(false)}
+                    className="absolute top-4 right-4 text-[#fee0f9] bg-[#831670] backdrop-blur-sm p-2 rounded-full hover:bg-[#bb32a4] transition-colors"
+                    style={{zIndex: 10}}
+                  >
+                    <X className="w-5 h-5 text-[#fee0f9]" />
+                  </button>
                   <div className="mb-4">
                     <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full mb-3">
                       {selectedProduct.category}
