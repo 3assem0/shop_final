@@ -51,7 +51,20 @@
       "rating": 4,
       "reviewCount": 1,
       "oldPrice": ""
+    },
+    {
+      "name": "Product",
+      "description": "gweg",
+      "price": "333",
+      "featured": false,
+      "image": "blob:https://shop-final-omega.vercel.app/7a8211ba-becc-4369-a302-b0dd8a3f8b30",
+      "color": "",
+      "colorHex": "#bb0202",
+      "category": "cad",
+      "rating": 4,
+      "reviewCount": 1,
+      "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-08T12:00:00.000Z"
+  "lastUpdated": "2025-09-08T01:05:31.132Z"
 }
