@@ -264,9 +264,9 @@ const Products: React.FC = () => {
                     />
                     <button
                       onClick={() => setModalOpen(false)}
-                      className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors"
+                      className="absolute text-[#fee0f9] top-4 right-4 bg-[#831670] backdrop-blur-sm p-2 rounded-full hover:bg-[#bb32a4] transition-colors"
                     >
-                      <X className="w-5 h-5" />
+                      <X className="w-5 h-5 text-[#fee0f9]" />
                     </button>
                   </div>
                 </div>

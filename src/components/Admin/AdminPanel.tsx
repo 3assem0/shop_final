@@ -4,11 +4,12 @@ interface ApiResponse {
   error?: string;
 }import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, Plus, Edit3, Trash2, Star, RefreshCw, Upload, Save, X, Package, DollarSign, Tag, Palette, Star as StarIcon, Users } from 'lucide-react';
+import AdminLogin from './AdminLogin';
 
 interface Product {
   name: string;
   description: string;
-  price: string;
+  price: number;
   featured?: boolean;
   image?: string;
   color?: string;
@@ -32,7 +33,7 @@ interface Message {
 const AdminPanel: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingIndex, setEditingIndex] = useState<number>(-1);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<Message | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -42,7 +43,7 @@ const AdminPanel: React.FC = () => {
   const [formData, setFormData] = useState<Product>({
     name: '',
     description: '',
-    price: '',
+    price: 0,
     featured: false,
     image: '',
     color: '',
@@ -79,12 +80,29 @@ const AdminPanel: React.FC = () => {
 
   // Load products on mount
   useEffect(() => {
-    loadProducts();
+    // Get password from URL query
+    const params = new URLSearchParams(window.location.search);
+    const password = params.get('password');
+    if (!password) {
+      setIsAuthenticated(false);
+      return;
+    }
+    fetch('/api/verify-admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    })
+      .then(res => res.json())
+      .then(result => {
+        setIsAuthenticated(result.success);
+        if (result.success) loadProducts();
+      })
+      .catch(() => setIsAuthenticated(false));
   }, [loadProducts]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name.trim() || !formData.price.trim()) {
+    if (!formData.name.trim() || !formData.price) {
       showMessage('Please fill in all required fields.', 'error');
       return;
     }
@@ -106,8 +124,10 @@ const AdminPanel: React.FC = () => {
           ...formData,
           name: formData.name.trim(),
           description: formData.description.trim(),
-          price: formData.price.trim(),
+          price: Number(formData.price),
           image: formData.image,
+          rating: Number(formData.rating),
+          reviewCount: Number(formData.reviewCount),
         };
         showMessage('Product updated successfully!', 'success');
       } else {
@@ -115,8 +135,10 @@ const AdminPanel: React.FC = () => {
           ...formData,
           name: formData.name.trim(),
           description: formData.description.trim(),
-          price: formData.price.trim(),
+          price: Number(formData.price),
           image: formData.image,
+          rating: Number(formData.rating),
+          reviewCount: Number(formData.reviewCount),
         }];
         showMessage('Product added successfully!', 'success');
       }
@@ -199,7 +221,7 @@ const AdminPanel: React.FC = () => {
     setFormData({ 
       name: '', 
       description: '', 
-      price: '', 
+      price: 0, 
       featured: false, 
       image: '', 
       color: '', 
@@ -369,7 +391,7 @@ const AdminPanel: React.FC = () => {
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Avg Price</p>
                   <p className="text-2xl font-semibold text-gray-900">
-                    ${products.length > 0 ? (products.reduce((sum, p) => sum + parseFloat(p.price || '0'), 0) / products.length).toFixed(2) : '0.00'}
+                    ${products.length > 0 ? (products.reduce((sum, p) => sum + parseFloat(String(p.price ?? '0')), 0) / products.length).toFixed(2) : '0.00'}
                   </p>
                 </div>
               </div>
