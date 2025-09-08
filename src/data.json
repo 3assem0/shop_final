@@ -1,19 +1,40 @@
 {
   "products": [
     {
+      "id": "1",
       "name": "Portable Laptop Stand",
-      "description": "lorem",
-      "price": "$39.99"
+      "title": "Portable Laptop Stand",
+      "description": "Ergonomic, foldable stand for laptops. Lightweight and portable.",
+      "image": "https://res.cloudinary.com/demo/image/upload/laptop-stand.jpg",
+      "discount": "20%",
+      "buttonText": "Shop Now",
+      "price": "$39.99",
+      "oldPrice": "$49.99",
+      "featured": true
     },
     {
+      "id": "2",
       "name": "Assem Ayman",
-      "description": "",
-      "price": "250"
+      "title": "Assem Ayman Designer Shirt",
+      "description": "Premium designer shirt by Assem Ayman. Limited edition.",
+      "image": "https://res.cloudinary.com/demo/image/upload/designer-shirt.jpg",
+      "discount": "15%",
+      "buttonText": "Shop Now",
+      "price": "$250",
+      "oldPrice": "$295",
+      "featured": true
     },
     {
+      "id": "3",
       "name": "Product 1",
-      "description": "bf fh",
-      "price": "335"
+      "title": "Classic T-shirt",
+      "description": "Soft cotton classic t-shirt. Available in multiple colors.",
+      "image": "https://res.cloudinary.com/demo/image/upload/classic-tshirt.jpg",
+      "discount": "10%",
+      "buttonText": "Shop Now",
+      "price": "$335",
+      "oldPrice": "$370",
+      "featured": true
     }
   ],
   "lastUpdated": "2025-09-04T20:00:56.914Z"

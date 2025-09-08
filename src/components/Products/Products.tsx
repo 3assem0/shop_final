@@ -19,14 +19,14 @@ interface Product {
 const ProductLoadingSkeleton = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     {[...Array(8)].map((_, i) => (
-      <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="aspect-square bg-gray-200 animate-pulse"></div>
-        <div className="p-4 space-y-3">
-          <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-          <div className="h-3 bg-gray-200 rounded w-3/4 animate-pulse"></div>
-          <div className="flex justify-between items-center">
-            <div className="h-5 bg-gray-200 rounded w-16 animate-pulse"></div>
-            <div className="h-8 bg-gray-200 rounded w-8 animate-pulse"></div>
+      <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+        <div className="aspect-square bg-gray-200 animate-pulse w-full" />
+        <div className="p-4 space-y-3 w-full">
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-full" />
+          <div className="h-3 bg-gray-200 rounded w-3/4 animate-pulse" />
+          <div className="flex justify-between items-center w-full">
+            <div className="h-5 bg-gray-200 rounded w-16 animate-pulse" />
+            <div className="h-8 bg-gray-200 rounded w-8 animate-pulse" />
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ const Products: React.FC = () => {
                 
                 {/* Category Badge */}
                 <div className="absolute top-3 right-3">
-                  <div className="bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-medium px-2 py-1 rounded-full">
+                  <div className="bg-[#fee0f9] backdrop-blur-sm text-[#831670] text-xs font-medium px-2 py-1 rounded-full">
                     {product.category}
                   </div>
                 </div>
@@ -274,7 +274,7 @@ const Products: React.FC = () => {
                     <X className="w-5 h-5 text-[#fee0f9]" />
                   </button>
                   <div className="mb-4">
-                    <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full mb-3">
+                    <span className="inline-block bg-[#fee0f9]  text-[#831670]text-sm font-medium px-3 py-1 rounded-full mb-3">
                       {selectedProduct.category}
                     </span>
                     <h2 className="text-3xl font-bold text-gray-900 mb-2">

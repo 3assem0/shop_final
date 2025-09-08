@@ -6,21 +6,11 @@ import { useEffect, useState } from "react";
 import { getCart, setCart, addToCart as addToCartLib } from '../../lib/cart';
 
 // Shopping Cart Component
-const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart }) => {
+const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, handleQuantityChange, handleRemoveItem }) => {
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 50 ? 0 : 9.99;
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + shipping + tax;
-
-  const handleQuantityChange = (productId, newQuantity) => {
-    const updatedCart = updateQuantity(productId, newQuantity);
-    onUpdateCart(updatedCart);
-  };
-
-  const handleRemoveItem = (productId) => {
-    const updatedCart = removeFromCart(productId);
-    onUpdateCart(updatedCart);
-  };
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -169,31 +159,43 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart }) =
 
 // Updated Header component with cart functionality
 export const Header = () => {
+  // Remove all local cart logic and use shared functions
+  // Cart state
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [query, setQuery] = useState("");
 
-  // Load cart on component mount and listen for cart updates
   useEffect(() => {
-    const loadedCart = getCart();
-    setCartItems(loadedCart);
-    const handleCartUpdated = () => {
-      setCartItems(getCart());
-    };
+    setCartItems(getCart());
+    const handleCartUpdated = () => setCartItems(getCart());
     window.addEventListener('cart-updated', handleCartUpdated);
-    return () => {
-      window.removeEventListener('cart-updated', handleCartUpdated);
-    };
+    return () => window.removeEventListener('cart-updated', handleCartUpdated);
   }, []);
 
-  // Calculate cart count
-  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-
-  // Demo function to add items to cart (you can call this from your product components)
   const handleAddToCart = (product) => {
     addToCartLib(product);
     setCartItems(getCart());
   };
+
+  const handleRemoveItem = (productId) => {
+    const cart = getCart().filter(item => item.id !== productId);
+    setCart(cart);
+    setCartItems(cart);
+  };
+
+  const handleQuantityChange = (productId, newQuantity) => {
+    let cart = getCart();
+    if (newQuantity <= 0) {
+      cart = cart.filter(item => item.id !== productId);
+    } else {
+      cart = cart.map(item => item.id === productId ? { ...item, quantity: newQuantity } : item);
+    }
+    setCart(cart);
+    setCartItems(cart);
+  };
+
+  // Calculate cart count
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const navigate = (path) => {
     console.log(`Navigate to: ${path}`);
@@ -385,6 +387,8 @@ export const Header = () => {
         onOpenChange={setIsCartOpen}
         cartItems={cartItems}
         onUpdateCart={setCartItems}
+        handleQuantityChange={handleQuantityChange}
+        handleRemoveItem={handleRemoveItem}
       />
     </>
   );
