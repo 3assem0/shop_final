@@ -137,7 +137,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
               </div>
 
               {/* Checkout Button */}
-              <Button className="w-full bg-[#de4ac6] hover:bg-[#c63aaf] text-[#fb6f92] py-3 text-base font-semibold mt-4">
+              <Button className="w-full bg-[#de4ac6] hover:bg-[#c63aaf] text-green-600 py-3 text-base font-semibold mt-4">
                 Proceed to Checkout
               </Button>
 
