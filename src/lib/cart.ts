@@ -8,6 +8,7 @@ export type CartItem = {
   color?: string;
   colorHex?: string;
   category?: string;
+  quantity: number;
   // any other fields you want to store
 };
 

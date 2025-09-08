@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
+import { getCart, setCart } from '../../lib/cart';
 import { Star, ShoppingCart, Eye, X } from 'lucide-react';
 
 interface Product {
@@ -63,21 +64,18 @@ const Products: React.FC = () => {
 
   const addToCart = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();
-    let cart: CartItem[] = [];
-    try {
-      cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    } catch (err) {
-      console.error('Cart parse error:', err);
-      cart = [];
-    }
+    let cart = getCart();
     const existing = cart.find((item) => item.id === product.id);
     if (existing) {
-      existing.quantity = (existing.quantity || 1) + 1;
+      cart = cart.map((item) =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
     } else {
-      cart.push({ ...product, quantity: 1 });
+  cart.push({ ...product, id: product.id ?? Date.now(), quantity: 1 });
     }
-    localStorage.setItem('cart', JSON.stringify(cart));
-    // Update cart badge if present
+    setCart(cart);
     const badge = document.getElementById('cart-badge');
     if (badge) {
       badge.textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0).toString();
@@ -168,9 +166,10 @@ const Products: React.FC = () => {
               {/* Image Container */}
               <div className="relative aspect-square overflow-hidden bg-gray-100">
                 <img
-                  src={product.imageSrc}
+                  src={product.imageSrc && product.imageSrc.includes('cloudinary.com') ? product.imageSrc : '/public/logo.png'}
                   alt={product.imageAlt || product.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}
                 />
                 
                 {/* Category Badge */}
@@ -245,101 +244,95 @@ const Products: React.FC = () => {
           ))}
         </div>
 
-        {/* Load More Button */}
-        <div className="text-center mt-12">
-          <button className="bg-white text-gray-900 px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-shadow border border-gray-200 font-medium">
-            Load More Products
-          </button>
-        </div>
-      </div>
-
-      {/* Quick View Modal */}
-      {modalOpen && selectedProduct && (
-        <div 
-          id="modal-backdrop"
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={handleModalClick}
-        >
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
-            <div className="flex flex-col md:flex-row">
-              {/* Product Image */}
-              <div className="md:w-1/2">
-                <div className="relative aspect-square">
-                  <img
-                    src={selectedProduct.imageSrc}
-                    alt={selectedProduct.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <button
-                    onClick={() => setModalOpen(false)}
-                    className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Product Details */}
-              <div className="md:w-1/2 p-8 flex flex-col justify-center">
-                <div className="mb-4">
-                  <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full mb-3">
-                    {selectedProduct.category}
-                  </span>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                    {selectedProduct.name}
-                  </h2>
-                  <p className="text-gray-600 mb-4">{selectedProduct.description}</p>
+        {/* Quick View Modal */}
+        {modalOpen && selectedProduct && (
+          <div 
+            id="modal-backdrop"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={handleModalClick}
+          >
+            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+              <div className="flex flex-col md:flex-row">
+                {/* Product Image */}
+                <div className="md:w-1/2">
+                  <div className="relative aspect-square">
+                    <img
+                      src={selectedProduct.imageSrc && selectedProduct.imageSrc.includes('cloudinary.com') ? selectedProduct.imageSrc : '/public/logo.png'}
+                      alt={selectedProduct.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}
+                    />
+                    <button
+                      onClick={() => setModalOpen(false)}
+                      className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
 
-                {/* Color */}
-                {selectedProduct.color && (
-                  <div className="flex items-center space-x-3 mb-4">
-                    <span className="text-sm font-medium text-gray-700">Color:</span>
-                    <div className="flex items-center space-x-2">
-                      <div
-                        className="w-6 h-6 rounded-full border-2 border-white shadow-lg"
-                        style={{ backgroundColor: selectedProduct.colorHex }}
-                      />
-                      <span className="text-sm text-gray-600">{selectedProduct.color}</span>
+                {/* Product Details */}
+                <div className="md:w-1/2 p-8 flex flex-col justify-center">
+                  <div className="mb-4">
+                    <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full mb-3">
+                      {selectedProduct.category}
+                    </span>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                      {selectedProduct.name}
+                    </h2>
+                    <p className="text-gray-600 mb-4">{selectedProduct.description}</p>
+                  </div>
+
+                  {/* Color */}
+                  {selectedProduct.color && (
+                    <div className="flex items-center space-x-3 mb-4">
+                      <span className="text-sm font-medium text-gray-700">Color:</span>
+                      <div className="flex items-center space-x-2">
+                        <div
+                          className="w-6 h-6 rounded-full border-2 border-white shadow-lg"
+                          style={{ backgroundColor: selectedProduct.colorHex }}
+                        />
+                        <span className="text-sm text-gray-600">{selectedProduct.color}</span>
+                      </div>
                     </div>
+                  )}
+
+                  {/* Rating */}
+                  <div className="flex items-center space-x-2 mb-6">
+                    <div className="flex">
+                      {renderStars(selectedProduct.rating || 4)}
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      ({selectedProduct.reviewCount} reviews)
+                    </span>
                   </div>
-                )}
 
-                {/* Rating */}
-                <div className="flex items-center space-x-2 mb-6">
-                  <div className="flex">
-                    {renderStars(selectedProduct.rating || 4)}
+                  {/* Price */}
+                  <div className="flex items-baseline space-x-3 mb-6">
+                    <span className="text-3xl font-bold text-gray-900">
+                      {formatPrice(selectedProduct.price)}
+                    </span>
                   </div>
-                  <span className="text-sm text-gray-500">
-                    ({selectedProduct.reviewCount} reviews)
-                  </span>
-                </div>
 
-                {/* Price */}
-                <div className="flex items-baseline space-x-3 mb-6">
-                  <span className="text-3xl font-bold text-gray-900">
-                    {formatPrice(selectedProduct.price)}
-                  </span>
-                </div>
-
-                {/* Actions */}
-                <div className="flex space-x-3">
-                  <button
-                    onClick={(e) => {
-                      addToCart(selectedProduct, e);
-                      setModalOpen(false);
-                    }}
-                    className="flex-1 bg-[#fee0f9] text-[#831670] py-3 px-6 rounded-lg hover:bg-[#f4b8ea] active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
-                  >
-                    <ShoppingCart className="w-5 h-5" />
-                    <span>Add to Cart</span>
-                  </button>
+                  {/* Actions */}
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={(e) => {
+                        addToCart(selectedProduct, e);
+                        setModalOpen(false);
+                      }}
+                      className="flex-1 bg-[#fee0f9] text-[#831670] py-3 px-6 rounded-lg hover:bg-[#f4b8ea] active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
+                    >
+                      <ShoppingCart className="w-5 h-5" />
+                      <span>Add to Cart</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
