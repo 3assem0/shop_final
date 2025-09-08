@@ -3,20 +3,20 @@
     {
       "name": "Product 1",
       "description": "desx1",
-  "price": 100,
+      "price": 100,
       "featured": true,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260013/fy0g8agf3g4s6zoxledl.webp",
       "color": "red",
       "colorHex": "#fa0000",
       "category": "IT & Programming",
-  "rating": 5,
-  "reviewCount": 5,
+      "rating": 5,
+      "reviewCount": 5,
       "oldPrice": "3232h"
     },
     {
       "name": "Product 2",
       "description": "desc2",
-  "price": 200,
+      "price": 200,
       "featured": true,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260026/aoch4r2kql70scejpyve.jpg",
       "color": "",
@@ -29,7 +29,7 @@
     {
       "name": "Product 3",
       "description": "desc3",
-  "price": 300,
+      "price": 300,
       "featured": true,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260036/vy1a27lkxyricjmoh86b.jpg",
       "color": "",
@@ -42,7 +42,7 @@
     {
       "name": "Assem Ayman",
       "description": "dfn",
-  "price": 34,
+      "price": 34,
       "featured": false,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260295/grppg6oj8zt55cxtnzx3.jpg",
       "color": "",
@@ -51,20 +51,7 @@
       "rating": 4,
       "reviewCount": 1,
       "oldPrice": ""
-    },
-    {
-      "name": "Product",
-      "description": "gweg",
-  "price": 333,
-      "featured": false,
-      "image": "blob:https://shop-final-omega.vercel.app/6b7ae34c-b98d-4de8-b9a6-d1e43c284187",
-      "color": "",
-      "colorHex": "#bb0202",
-      "category": "cad",
-      "rating": 4,
-      "reviewCount": 1,
-      "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-08T01:18:34.652Z"
+  "lastUpdated": "2025-09-08T01:34:56.242Z"
 }
