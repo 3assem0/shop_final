@@ -26,7 +26,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
           // Empty Cart State
           <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
             <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
-              <ShoppingBag className="h-12 w-12 text-gray-400" />
+              <ShoppingBag className="h-12 w-12 text-[#fb6f92]" />
             </div>
             <h3 className="text-lg font-semibold text-[#831670] mb-2">
               Your cart is empty
