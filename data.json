@@ -57,7 +57,7 @@
       "description": "gweg",
       "price": "333",
       "featured": false,
-      "image": "blob:https://shop-final-omega.vercel.app/7a8211ba-becc-4369-a302-b0dd8a3f8b30",
+      "image": "blob:https://shop-final-omega.vercel.app/6b7ae34c-b98d-4de8-b9a6-d1e43c284187",
       "color": "",
       "colorHex": "#bb0202",
       "category": "cad",
@@ -66,5 +66,5 @@
       "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-08T01:05:31.132Z"
+  "lastUpdated": "2025-09-08T01:18:34.652Z"
 }
