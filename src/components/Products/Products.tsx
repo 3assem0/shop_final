@@ -129,102 +129,107 @@ const Products: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Discover Amazing Products
+          <h1 className="text-4xl font-bold text-[#a23891] mb-4">
+            Our Products
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#fb6f92]  max-w-2xl mx-auto">
             Curated collection of premium products that our customers love
           </p>
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
-              onClick={() => quickView(product, {} as React.MouseEvent)}
-            >
-              {/* Image Container */}
-              <div className="relative aspect-square overflow-hidden bg-transparent">
-                <img
-                  src={product.image && product.image.includes('cloudinary.com') ? product.image : '/public/logo.png'}
-                  alt={product.imageAlt || product.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}
-                />
-                
-                {/* Category Badge */}
-                <div className="absolute top-3 right-3">
-                  <div className="bg-[#fee0f9] backdrop-blur-sm text-[#831670] text-xs font-medium px-2 py-1 rounded-full">
-                    {product.category}
-                  </div>
-                </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  {products.map((product) => (
+    <div
+      key={product.id}
+      className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 
+                 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 
+                 cursor-pointer flex flex-col"
+      onClick={() => quickView(product, {} as React.MouseEvent)}
+    >
+      {/* Image Container */}
+      <div className="relative aspect-square overflow-hidden bg-transparent">
+        <img
+          src={
+            product.image && product.image.includes('cloudinary.com')
+              ? product.image
+              : '/public/logo.png'
+          }
+          alt={product.imageAlt || product.name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = '/public/logo.png'
+          }}
+        />
 
-                {/* Quick View Button */}
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <button
-                    onClick={(e) => quickView(product, e)}
-                    className="bg-white text-gray-900 p-3 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
-                    title="Quick View"
-                  >
-                    <Eye className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Product Info */}
-              <div className="p-4">
-                <div className="mb-2">
-                  <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-blue-600 transition-colors">
-                    {product.name}
-                  </h3>
-                </div>
-
-                {/* Color */}
-                {product.color && (
-                  <div className="flex items-center space-x-2 mb-3">
-                    <div
-                      className="w-4 h-4 rounded-full border-2 border-white shadow-sm"
-                      style={{ backgroundColor: product.colorHex }}
-                    />
-                    <span className="text-xs text-gray-500">{product.color}</span>
-                  </div>
-                )}
-
-                {/* Rating */}
-                <div className="flex items-center space-x-1 mb-3">
-                  <div className="flex">
-                    {renderStars(product.rating || 4)}
-                  </div>
-                  <span className="text-xs text-gray-500">
-                    ({product.reviewCount})
-                  </span>
-                </div>
-
-                {/* Price */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-baseline space-x-2">
-                    <span className="text-lg font-bold text-gray-900">
-                      {formatPrice(product.price)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Static Add to Cart Button */}
-              <div className="p-3">
-                <button
-                  onClick={(e) => addToCart(product, e)}
-                  className="w-full bg-[#fee0f9]  text-[#831670] py-2 px-4 rounded-lg hover:bg-[#f4b8ea]  active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  <span>Add to Cart</span>
-                </button>
-              </div>
-            </div>
-          ))}
+        {/* Category Badge */}
+        <div className="absolute top-3 right-3">
+          <div className="bg-[#fee0f9] backdrop-blur-sm text-[#831670] text-xs font-medium px-2 py-1 rounded-full">
+            {product.category}
+          </div>
         </div>
+
+        {/* Quick View Button */}
+        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <button
+            onClick={(e) => quickView(product, e)}
+            className="bg-white text-gray-900 p-3 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+            title="Quick View"
+          >
+            <Eye className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="p-4 flex-1">
+        <div className="mb-2">
+          <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-blue-600 transition-colors">
+            {product.name}
+          </h3>
+        </div>
+
+        {/* Color */}
+        {product.color && (
+          <div className="flex items-center space-x-2 mb-3">
+            <div
+              className="w-4 h-4 rounded-full border-2 border-white shadow-sm"
+              style={{ backgroundColor: product.colorHex }}
+            />
+            <span className="text-xs text-gray-500">{product.color}</span>
+          </div>
+        )}
+
+        {/* Rating */}
+        <div className="flex items-center space-x-1 mb-3">
+          <div className="flex">{renderStars(product.rating || 4)}</div>
+          <span className="text-xs text-gray-500">({product.reviewCount})</span>
+        </div>
+
+        {/* Price */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-baseline space-x-2">
+            <span className="text-lg font-bold text-gray-900">
+              {formatPrice(product.price)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Add to Cart Button */}
+      <div className="p-3 mt-auto">
+        <button
+          onClick={(e) => addToCart(product, e)}
+          className="w-full bg-[#fee0f9] text-[#831670] py-2 px-4 rounded-lg hover:bg-[#f4b8ea] active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
+        >
+          <ShoppingCart className="w-4 h-4" />
+          <span>Add to Cart</span>
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
 
         {/* Quick View Modal */}
         {modalOpen && selectedProduct && (
@@ -257,7 +262,7 @@ const Products: React.FC = () => {
                     <X className="w-5 h-5 text-[#fee0f9]" />
                   </button>
                   <div className="mb-4">
-                    <span className="inline-block bg-[#fee0f9]  text-[#831670]text-sm font-medium px-3 py-1 rounded-full mb-3">
+                    <span className="inline-block bg-[#fee0f9]  text-[#831670] text-sm font-medium px-3 py-1 rounded-full mb-3">
                       {selectedProduct.category}
                     </span>
                     <h2 className="text-3xl font-bold text-gray-900 mb-2">

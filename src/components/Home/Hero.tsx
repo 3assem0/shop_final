@@ -158,10 +158,10 @@ export default function Hero() {
   if (loading) {
     // Skeleton loader for hero grid
     return (
-      <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-7 bg-transparent dark:bg-black w-full">
+    <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-7 bg-transparent dark:bg-black w-full">
         <div className="grid lg:grid-cols-2 gap-6 h-auto lg:h-[500px] w-full">
           {/* Left Column - Large Skeleton */}
-          <div className="bg-white rounded-3xl p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8 animate-pulse overflow-hidden select-none w-full h-full min-h-[300px]">
+          <div className="bg-white rounded-3xl animate-fade-in p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8  overflow-hidden select-none w-full h-full min-h-[300px]">
             <div className="flex-1 space-y-6 w-full">
               <div className="inline-block w-full">
                 <div className="h-10 w-24 bg-gray-200 rounded mb-2" />
@@ -193,7 +193,7 @@ export default function Hero() {
           {/* Right Column - Two Skeleton Cards */}
           <div className="flex flex-col gap-6 w-full h-full">
             {[...Array(2)].map((_, idx) => (
-              <div key={idx} className="bg-white rounded-3xl p-6 shadow-lg flex items-center gap-6 flex-1 animate-pulse w-full h-full min-h-[120px]">
+              <div key={idx} className="bg-white rounded-3xl p-6 shadow-lg flex items-center gap-6 flex-1 animate-fade-in w-full h-full min-h-[120px]">
                 <div className="flex-1 w-full">
                   <div className="h-6 w-32 bg-gray-200 rounded mb-2" />
                   <div className="h-4 w-40 bg-gray-200 rounded mb-4" />
@@ -357,5 +357,6 @@ export default function Hero() {
         </div>
       </div>
     </div>
+     
   );
 };
