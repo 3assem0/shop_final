@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { getCart, setCart } from '../../lib/cart';
 import { Star, ShoppingCart, Eye, X } from 'lucide-react';
+import ProductGrid from '../Skiliton/ProductGrid';
 
 interface Product {
   name: string;
@@ -15,24 +16,6 @@ interface Product {
   reviewCount?: number;
   category?: string;
 }
-
-const ProductLoadingSkeleton = () => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-    {[...Array(8)].map((_, i) => (
-      <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-        <div className="aspect-square bg-gray-200 animate-pulse w-full" />
-        <div className="p-4 space-y-3 w-full">
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-full" />
-          <div className="h-3 bg-gray-200 rounded w-3/4 animate-pulse" />
-          <div className="flex justify-between items-center w-full">
-            <div className="h-5 bg-gray-200 rounded w-16 animate-pulse" />
-            <div className="h-8 bg-gray-200 rounded w-8 animate-pulse" />
-          </div>
-        </div>
-      </div>
-    ))}
-  </div>
-);
 
 type CartItem = Product & { quantity: number };
 
@@ -119,7 +102,7 @@ const Products: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <ProductLoadingSkeleton />
+          <ProductGrid />
         </div>
       </div>
     );

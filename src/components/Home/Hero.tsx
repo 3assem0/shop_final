@@ -158,25 +158,25 @@ export default function Hero() {
   if (loading) {
     // Skeleton loader for hero grid
     return (
-      <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-7 bg-transparent dark:bg-black">
-        <div className="grid lg:grid-cols-2 gap-6 h-auto lg:h-[500px]">
+      <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-7 bg-transparent dark:bg-black w-full">
+        <div className="grid lg:grid-cols-2 gap-6 h-auto lg:h-[500px] w-full">
           {/* Left Column - Large Skeleton */}
-          <div className="bg-white rounded-3xl p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8 animate-pulse overflow-hidden select-none">
-            <div className="flex-1 space-y-6">
-              <div className="inline-block">
+          <div className="bg-white rounded-3xl p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8 animate-pulse overflow-hidden select-none w-full h-full min-h-[300px]">
+            <div className="flex-1 space-y-6 w-full">
+              <div className="inline-block w-full">
                 <div className="h-10 w-24 bg-gray-200 rounded mb-2" />
                 <div className="text-gray-400 flex gap-2">
                   <div className="h-4 w-10 bg-gray-200 rounded" />
                   <div className="h-4 w-10 bg-gray-200 rounded" />
                 </div>
               </div>
-              <div>
+              <div className="w-full">
                 <div className="h-8 w-40 bg-gray-200 rounded mb-3" />
                 <div className="h-4 w-64 bg-gray-200 rounded mb-2" />
                 <div className="h-4 w-48 bg-gray-200 rounded" />
               </div>
               <div className="h-10 w-32 bg-gray-300 rounded-xl mt-4" />
-              <div className="flex items-center justify-between pt-4">
+              <div className="flex items-center justify-between pt-4 w-full">
                 <div className="flex space-x-2">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="w-3 h-3 rounded-full bg-gray-300" />
@@ -186,15 +186,15 @@ export default function Hero() {
               </div>
               <div className="h-4 w-32 bg-gray-100 rounded mt-2" />
             </div>
-            <div className="flex-1 flex justify-center">
+            <div className="flex-1 flex justify-center items-center w-full">
               <div className="w-full max-w-[300px] h-[180px] bg-gray-200 rounded" />
             </div>
           </div>
           {/* Right Column - Two Skeleton Cards */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 w-full h-full">
             {[...Array(2)].map((_, idx) => (
-              <div key={idx} className="bg-white rounded-3xl p-6 shadow-lg flex items-center gap-6 flex-1 animate-pulse">
-                <div className="flex-1">
+              <div key={idx} className="bg-white rounded-3xl p-6 shadow-lg flex items-center gap-6 flex-1 animate-pulse w-full h-full min-h-[120px]">
+                <div className="flex-1 w-full">
                   <div className="h-6 w-32 bg-gray-200 rounded mb-2" />
                   <div className="h-4 w-40 bg-gray-200 rounded mb-4" />
                   <div className="flex items-center gap-2">
@@ -242,32 +242,45 @@ export default function Hero() {
             }}
           >
             <div className="flex-1 space-y-6 pointer-events-auto">
-              {/* Sale Badge */}
-              <div className="inline-block">
-                <span className="text-5xl font-bold text-blue-600 transition-all duration-500">
-                  {currentProduct.discount}
-                </span>
+              {/* Sale Badge & Discount */}
+              <div className="inline-block mb-2">
+                {currentProduct.discount && (
+                  <span className="text-5xl font-bold text-blue-600 transition-all duration-500 mr-2">
+                    {currentProduct.discount}
+                  </span>
+                )}
                 <div className="text-gray-600">
                   <div className="text-sm">Sale</div>
                   <div className="text-sm">Off</div>
                 </div>
               </div>
               {/* Product Info */}
-              <div>
+              <div className="mb-2">
                 <h2 className="text-3xl font-bold text-gray-900 mb-3 transition-all duration-500">
                   {currentProduct.title}
                 </h2>
-                <p className="text-gray-500 text-sm leading-relaxed transition-all duration-500">
+                <p className="text-gray-500 text-sm leading-relaxed transition-all duration-500 mb-2">
                   {currentProduct.description}
                 </p>
+                {/* Price & Old Price */}
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-2xl font-bold text-red-500">{currentProduct.price}</span>
+                  {currentProduct.oldPrice && (
+                    <span className="text-lg text-gray-400 line-through">{currentProduct.oldPrice}</span>
+                  )}
+                </div>
               </div>
               {/* Shop Button */}
               <button 
-                className="bg-gray-900 text-white px-8 py-3 rounded-xl font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 pointer-events-auto"
+                className="bg-gray-900 text-white px-8 py-3 rounded-xl font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 pointer-events-auto mb-2"
                 onMouseDown={(e) => e.stopPropagation()}
               >
                 {currentProduct.buttonText}
               </button>
+              {/* Product ID */}
+              {currentProduct.id && (
+                <div className="text-xs text-gray-400 mb-2">ID: {currentProduct.id}</div>
+              )}
               {/* Auto-play indicator and Controls */}
               <div className="flex items-center justify-between pt-4">
                 <div className="flex space-x-2">
