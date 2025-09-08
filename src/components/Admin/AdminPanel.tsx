@@ -121,7 +121,7 @@ const AdminPanel: React.FC = () => {
       const response = await fetch('/api/update-json', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newData: updatedProducts })
+        body: JSON.stringify({ newData: { products: updatedProducts, lastUpdated: new Date().toISOString() } })
       });
       const result: ApiResponse = await response.json();
       if (!result.success) throw new Error(result.error || 'Failed to save product');
@@ -177,7 +177,7 @@ const AdminPanel: React.FC = () => {
       const response = await fetch('/api/update-json', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newData: updatedProducts })
+        body: JSON.stringify({ newData: { products: updatedProducts, lastUpdated: new Date().toISOString() } })
       });
       const result: ApiResponse = await response.json();
       if (!result.success) throw new Error(result.error || 'Failed to delete product');
@@ -246,7 +246,7 @@ const AdminPanel: React.FC = () => {
       const response = await fetch('/api/update-json', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newData: updatedProducts })
+        body: JSON.stringify({ newData: { products: updatedProducts, lastUpdated: new Date().toISOString() } })
       });
       const result: ApiResponse = await response.json();
       if (!result.success) throw new Error(result.error || 'Failed to update featured status');

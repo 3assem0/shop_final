@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
-import { Star, ShoppingCart, Eye, Heart, Zap } from 'lucide-react';
+import { Star, ShoppingCart, Eye, X } from 'lucide-react';
 
 interface Product {
   name: string;
@@ -13,7 +14,6 @@ interface Product {
   rating?: number;
   reviewCount?: number;
   category?: string;
-  oldPrice?: string;
 }
 
 const ProductLoadingSkeleton = () => (
@@ -34,33 +34,54 @@ const ProductLoadingSkeleton = () => (
   </div>
 );
 
+type CartItem = Product & { quantity: number };
+
 const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  React.useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetch('/api/get-products')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to load products');
-        return res.json();
-      })
-      .then(data => {
-        setProducts(data.products || []);
-      })
-      .catch(err => {
-        setError(err.message || 'Failed to load products');
-      })
-      .finally(() => setLoading(false));
-  }, []);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
+  React.useEffect(() => {
+    setLoading(true);
+    fetch('/api/get-products')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else {
+          setError('Failed to load products.');
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setError('Failed to load products.');
+        setLoading(false);
+      });
+  }, []);
+
   const addToCart = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();
-    // Add to cart logic here
-    console.log('Added to cart:', product);
+    let cart: CartItem[] = [];
+    try {
+      cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    } catch (err) {
+      console.error('Cart parse error:', err);
+      cart = [];
+    }
+    const existing = cart.find((item) => item.id === product.id);
+    if (existing) {
+      existing.quantity = (existing.quantity || 1) + 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    // Update cart badge if present
+    const badge = document.getElementById('cart-badge');
+    if (badge) {
+      badge.textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0).toString();
+    }
   };
 
   const quickView = (product: Product, e: React.MouseEvent) => {
@@ -90,6 +111,12 @@ const Products: React.FC = () => {
       />
     ));
   };
+  
+  const handleModalClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).id === "modal-backdrop") {
+      setModalOpen(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -100,12 +127,18 @@ const Products: React.FC = () => {
       </div>
     );
   }
+
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="bg-white rounded-xl shadow p-8 text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-2">Error</h2>
-          <p className="text-gray-700">{error}</p>
+          <h2 className="text-2xl font-bold mb-4 text-red-600">{error}</h2>
+          <button
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
@@ -147,24 +180,15 @@ const Products: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Hover Actions */}
+                {/* Quick View Button */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={(e) => quickView(product, e)}
-                      className="bg-white text-gray-900 p-2 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
-                      title="Quick View"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={(e) => addToCart(product, e)}
-                      className="bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
-                      title="Add to Cart"
-                    >
-                      <ShoppingCart className="w-4 h-4" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={(e) => quickView(product, e)}
+                    className="bg-white text-gray-900 p-3 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+                    title="Quick View"
+                  >
+                    <Eye className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
 
@@ -207,11 +231,11 @@ const Products: React.FC = () => {
                 </div>
               </div>
 
-              {/* Bottom Action Bar */}
-              <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              {/* Static Add to Cart Button */}
+              <div className="p-3">
                 <button
                   onClick={(e) => addToCart(product, e)}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
+                  className="w-full bg-[#fee0f9]  text-[#831670] py-2 px-4 rounded-lg hover:bg-[#f4b8ea]  active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
                 >
                   <ShoppingCart className="w-4 h-4" />
                   <span>Add to Cart</span>
@@ -231,7 +255,11 @@ const Products: React.FC = () => {
 
       {/* Quick View Modal */}
       {modalOpen && selectedProduct && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div 
+          id="modal-backdrop"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={handleModalClick}
+        >
           <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
             <div className="flex flex-col md:flex-row">
               {/* Product Image */}
@@ -246,7 +274,7 @@ const Products: React.FC = () => {
                     onClick={() => setModalOpen(false)}
                     className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors"
                   >
-                    ✕
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
@@ -301,7 +329,7 @@ const Products: React.FC = () => {
                       addToCart(selectedProduct, e);
                       setModalOpen(false);
                     }}
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-blue-700 hover:to-purple-700 active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
+                    className="flex-1 bg-[#fee0f9] text-[#831670] py-3 px-6 rounded-lg hover:bg-[#f4b8ea] active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
                   >
                     <ShoppingCart className="w-5 h-5" />
                     <span>Add to Cart</span>
