@@ -290,7 +290,7 @@ export const Header = () => {
                         <Menu className="h-5 w-5" />
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="right" className="w-[280px] sm:w-[320px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 mt-20">
+                    <SheetContent side="right" className="w-[280px] sm:w-[320px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 mt-16 pt-1">
                       <div className="flex flex-col space-y-6 mt-8">
                         <nav className="flex flex-col space-y-2">
                           <button 
