@@ -481,10 +481,10 @@ useEffect(() => {
 {modalOpen && selectedProduct && (
   <div 
     id="modal-backdrop"
-    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8 overflow-scroll"
     onClick={handleModalClick}
   >
-    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
+    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-scroll shadow-2xl flex flex-col ">
       {/* Mobile: Stack vertically with scrollable content */}
       <div className="flex flex-col sm:flex-row h-full">
         {/* Product Image */}
