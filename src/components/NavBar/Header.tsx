@@ -14,7 +14,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[400px] sm:w-[450px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 flex flex-col z-[56]">
+      <SheetContent side="right" className="w-[400px] sm:w-[400px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 flex flex-col z-[56]">
         <SheetHeader className="border-b border-gray-200  pb-4">
           <SheetTitle className="flex items-center gap-2 text-xl font-bold text-[#fb6f92]">
             <ShoppingCart className="h-5 w-5 text-purple-600" />
@@ -279,7 +279,7 @@ export const Header = () => {
               <div className="flex items-center space-x-3">
               
                 {/* Mobile Menu */}
-                <div className="block md:hidden mt-20">
+                <div className="block md:hidden ">
                   <Sheet>
                     <SheetTrigger asChild>
                       <Button 
@@ -290,7 +290,7 @@ export const Header = () => {
                         <Menu className="h-5 w-5" />
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="right" className="w-[280px] sm:w-[320px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+                    <SheetContent side="right" className="w-[280px] sm:w-[320px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 mt-20">
                       <div className="flex flex-col space-y-6 mt-8">
                         <nav className="flex flex-col space-y-2">
                           <button 
@@ -313,21 +313,6 @@ export const Header = () => {
                           </button>
                         </nav>
 
-                        {/* Demo buttons in mobile menu */}
-                        {/* <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Demo Cart:</p>
-                          {demoProducts.map(product => (
-                            <Button
-                              key={product.id}
-                              variant="outline"
-                              size="sm"
-                              className="w-full mb-2"
-                              onClick={() => handleAddToCart(product)}
-                            >
-                              Add {product.name}
-                            </Button>
-                          ))}
-                        </div> */}
                         
                         {/* Mobile Menu Footer */}
                         <div className="mt-auto pt-6 border-t border-gray-200 dark:border-gray-700">
