@@ -1,11 +1,10 @@
-import { Instagram, Mail, Heart } from "lucide-react";
-
+import { Mail, Heart } from "lucide-react";
 export const Footer = () => {
   return (
-    <footer className="p-5 px-20">
-      <div className="w-full md:h-[332px] md:p-11 text-background bg-[#fee0f9] rounded-[12px] flex flex-col justify-between max-md:gap-8">
-        <div className="flex  flex-col justify-between md:flex-row">
-          <div className="md:basis-3/4 max-md:w-full max-w-[1200px]  h-auto block  text-9xl font-handmade font-extrabold text-[#831670] " >
+    <footer className="p-5 md:px-20">
+      <div className="w-full md:h-[332px] md:p-11 p-4 text-background bg-[#fee0f9] rounded-[12px] flex flex-col justify-between max-md:gap-8">
+        <div className="flex  flex-row justify-between  flex-wrap ">
+          <div className=" max-w-[1200px] lg:text-9xl  h-auto block  md:text-8xl sm:text-8xl text-7xl font-handmade font-extrabold text-[#831670] " >
           MOHAR
           </div>
           <ul className="flex flex-col flex-wrap gap-4 max-md:justify-start justify-end mb-2 text-[#831670] text-md">
@@ -44,6 +43,7 @@ export const Footer = () => {
            
         </div>
       </div>
+      
     </footer>
   );
 };

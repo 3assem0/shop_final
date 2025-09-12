@@ -7,7 +7,8 @@ export default function Banner() {
   if (!showBanner) return null
 
   return (
-    <div className="relative max-w-4xl mx-auto px-6 lg:px-8 isolate flex items-center gap-x-6 overflow-hidden bg-[#de0ee1] py-2.5 rounded-b-lg after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:before:flex-1 transition-all duration-300">
+    <div className='px-10 lg:px-12 w-full'>
+    <div className="relative w-full mx-auto px-6 lg:px-8 isolate flex items-center gap-x-6 overflow-hidden bg-[#de0ee1] py-2 rounded-b-lg after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:before:flex-1 transition-all duration-300">
       {/* Background shapes */}
       <div
         aria-hidden="true"
@@ -58,6 +59,7 @@ export default function Banner() {
           <X aria-hidden="true" className="h-5 w-5 text-gray-100" />
         </button>
       </div>
+    </div>
     </div>
   )
 }

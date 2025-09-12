@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useRef } from 'react'
+import CurvedLoop from '../CurvedLoop';
 
 interface Product {
   id?: string | number;
@@ -355,6 +356,16 @@ export default function Hero() {
             ))}
           </div>
         </div>
+      </div>
+      <div className="pb-10">
+        <CurvedLoop 
+      marqueeText="Be ✦ Creative ✦ With ✦ React ✦ Bits ✦"
+        speed={3}
+        curveAmount={300}
+        direction="right"
+        interactive={true}
+        className=" text-[#831670]"
+      />
       </div>
     </div>
      

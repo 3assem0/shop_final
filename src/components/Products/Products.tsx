@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { getCart, setCart } from '../../lib/cart';
-import { Star, ShoppingCart, Eye, X } from 'lucide-react';
+import { Star, ShoppingCart, Eye, X, Filter, ChevronDown } from 'lucide-react';
 import ProductGrid from '../Skiliton/ProductGrid';
 
 interface Product {
@@ -19,12 +19,26 @@ interface Product {
 
 type CartItem = Product & { quantity: number };
 
+interface Filters {
+  category: string;
+  priceRange: [number, number];
+  minRating: number;
+  colors: string[];
+}
+
 const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [filters, setFilters] = useState<Filters>({
+    category: '',
+    priceRange: [0, 1000],
+    minRating: 0,
+    colors: []
+  });
 
   React.useEffect(() => {
     setLoading(true);
@@ -33,6 +47,10 @@ const Products: React.FC = () => {
       .then((data) => {
         if (data && Array.isArray(data.products)) {
           setProducts(data.products);
+          // Auto-adjust price range based on actual product prices
+          const prices = data.products.map((p: Product) => parseFloat(p.price));
+          const maxPrice = Math.max(...prices);
+          setFilters(prev => ({ ...prev, priceRange: [0, Math.ceil(maxPrice)] }));
         } else {
           setError('Failed to load products.');
         }
@@ -43,6 +61,41 @@ const Products: React.FC = () => {
         setLoading(false);
       });
   }, []);
+
+  // Get unique values for filter options
+  const filterOptions = useMemo(() => {
+    const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+    const colors = [...new Set(products.map(p => p.color).filter(Boolean))];
+    return { categories, colors };
+  }, [products]);
+
+  // Filter products based on current filters
+  const filteredProducts = useMemo(() => {
+    return products.filter(product => {
+      // Category filter
+      if (filters.category && product.category !== filters.category) {
+        return false;
+      }
+
+      // Price filter
+      const price = parseFloat(product.price);
+      if (price < filters.priceRange[0] || price > filters.priceRange[1]) {
+        return false;
+      }
+
+      // Rating filter
+      if (product.rating && product.rating < filters.minRating) {
+        return false;
+      }
+
+      // Color filter
+      if (filters.colors.length > 0 && product.color && !filters.colors.includes(product.color)) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [products, filters]);
 
   const addToCart = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -55,7 +108,7 @@ const Products: React.FC = () => {
           : item
       );
     } else {
-  cart.push({ ...product, id: product.id ?? Date.now(), quantity: 1 });
+      cart.push({ ...product, id: product.id ?? Date.now(), quantity: 1 });
     }
     setCart(cart);
     const badge = document.getElementById('cart-badge');
@@ -73,7 +126,7 @@ const Products: React.FC = () => {
   const formatPrice = (price: string) => {
     return parseFloat(price).toLocaleString('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'EGP',
     });
   };
 
@@ -96,6 +149,24 @@ const Products: React.FC = () => {
     if ((e.target as HTMLElement).id === "modal-backdrop") {
       setModalOpen(false);
     }
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      category: '',
+      priceRange: [0, Math.max(...products.map(p => parseFloat(p.price))) || 1000],
+      minRating: 0,
+      colors: []
+    });
+  };
+
+  const handleColorFilter = (color: string) => {
+    setFilters(prev => ({
+      ...prev,
+      colors: prev.colors.includes(color)
+        ? prev.colors.filter(c => c !== color)
+        : [...prev.colors, color]
+    }));
   };
 
   if (loading) {
@@ -128,108 +199,261 @@ const Products: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 rounded-2xl to-blue-50 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-[#a23891] mb-4">
             Our Products
           </h1>
-          <p className="text-lg text-[#fb6f92]  max-w-2xl mx-auto">
+          <p className="text-lg text-[#fb6f92] max-w-2xl mx-auto">
             Curated collection of premium products that our customers love
           </p>
         </div>
 
-        {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-  {products.map((product) => (
-    <div
-      key={product.id}
-      className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 
-                 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 
-                 cursor-pointer flex flex-col"
-      onClick={() => quickView(product, {} as React.MouseEvent)}
-    >
-      {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-transparent">
-        <img
-          src={
-            product.image && product.image.includes('cloudinary.com')
-              ? product.image
-              : '/public/logo.png'
-          }
-          alt={product.imageAlt || product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onError={(e) => {
-            (e.currentTarget as HTMLImageElement).src = '/public/logo.png'
-          }}
-        />
-
-        {/* Category Badge */}
-        <div className="absolute top-3 right-3">
-          <div className="bg-[#fee0f9] backdrop-blur-sm text-[#831670] text-xs font-medium px-2 py-1 rounded-full">
-            {product.category}
-          </div>
-        </div>
-
-        {/* Quick View Button */}
-        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+        {/* Filter Toggle Button - Mobile */}
+        <div className="mb-6 flex justify-between items-center">
           <button
-            onClick={(e) => quickView(product, e)}
-            className="bg-white text-gray-900 p-3 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
-            title="Quick View"
+            onClick={() => setShowFilters(!showFilters)}
+            className="lg:hidden flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm border"
           >
-            <Eye className="w-5 h-5" />
+            <Filter className="w-4 h-4" />
+            <span>Filters</span>
+            <ChevronDown className={`w-4 h-4 transform transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
-        </div>
-      </div>
-
-      {/* Product Info */}
-      <div className="p-4 flex-1">
-        <div className="mb-2">
-          <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-blue-600 transition-colors">
-            {product.name}
-          </h3>
-        </div>
-
-        {/* Color */}
-        {product.color && (
-          <div className="flex items-center space-x-2 mb-3">
-            <div
-              className="w-4 h-4 rounded-full border-2 border-white shadow-sm"
-              style={{ backgroundColor: product.colorHex }}
-            />
-            <span className="text-xs text-gray-500">{product.color}</span>
-          </div>
-        )}
-
-        {/* Rating */}
-        <div className="flex items-center space-x-1 mb-3">
-          <div className="flex">{renderStars(product.rating || 4)}</div>
-          <span className="text-xs text-gray-500">({product.reviewCount})</span>
-        </div>
-
-        {/* Price */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-baseline space-x-2">
-            <span className="text-lg font-bold text-gray-900">
-              {formatPrice(product.price)}
-            </span>
+          
+          <div className="text-sm text-gray-600">
+            Showing {filteredProducts.length} of {products.length} products
           </div>
         </div>
-      </div>
 
-      {/* Add to Cart Button */}
-      <div className="p-3 mt-auto">
-        <button
-          onClick={(e) => addToCart(product, e)}
-          className="w-full bg-[#fee0f9] text-[#831670] py-2 px-4 rounded-lg hover:bg-[#f4b8ea] active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
-        >
-          <ShoppingCart className="w-4 h-4" />
-          <span>Add to Cart</span>
-        </button>
-      </div>
-    </div>
-  ))}
-</div>
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Filters Sidebar */}
+          <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-4">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+                <button
+                  onClick={clearFilters}
+                  className="text-sm text-[#831670] hover:text-[#a23891] font-medium"
+                >
+                  Clear All
+                </button>
+              </div>
 
+              {/* Category Filter */}
+              <div className="mb-6">
+                <h4 className="font-medium text-gray-900 mb-3">Category</h4>
+                <select
+                  value={filters.category}
+                  onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
+                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#831670] focus:border-transparent"
+                >
+                  <option value="">All Categories</option>
+                  {filterOptions.categories.map(category => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Price Range Filter */}
+              <div className="mb-6">
+                <h4 className="font-medium text-gray-900 mb-3">Price Range</h4>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={filters.priceRange[0]}
+                      onChange={(e) => setFilters(prev => ({
+                        ...prev,
+                        priceRange: [parseInt(e.target.value) || 0, prev.priceRange[1]]
+                      }))}
+                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#831670] focus:border-transparent"
+                    />
+                    <span className="text-gray-500">-</span>
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={filters.priceRange[1]}
+                      onChange={(e) => setFilters(prev => ({
+                        ...prev,
+                        priceRange: [prev.priceRange[0], parseInt(e.target.value) || 1000]
+                      }))}
+                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#831670] focus:border-transparent"
+                    />
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {formatPrice(filters.priceRange[0].toString())} - {formatPrice(filters.priceRange[1].toString())}
+                  </div>
+                </div>
+              </div>
+
+              {/* Rating Filter */}
+              <div className="mb-6">
+                <h4 className="font-medium text-gray-900 mb-3">Minimum Rating</h4>
+                <div className="space-y-2">
+                  {[4, 3, 2, 1, 0].map(rating => (
+                    <label key={rating} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="rating"
+                        value={rating}
+                        checked={filters.minRating === rating}
+                        onChange={(e) => setFilters(prev => ({ ...prev, minRating: parseInt(e.target.value) }))}
+                        className="text-[#831670] focus:ring-[#831670]"
+                      />
+                      <div className="flex items-center space-x-1">
+                        <div className="flex">
+                          {renderStars(rating || 0.1)}
+                        </div>
+                        <span className="text-sm text-gray-600">
+                          {rating === 0 ? 'All ratings' : `${rating}+ stars`}
+                        </span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Color Filter */}
+              {filterOptions.colors.length > 0 && (
+                <div className="mb-6">
+                  <h4 className="font-medium text-gray-900 mb-3">Colors</h4>
+                  <div className="space-y-2">
+                    {filterOptions.colors.map(color => (
+                      <label key={color} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={filters.colors.includes(color)}
+                          onChange={() => handleColorFilter(color)}
+                          className="text-[#831670] focus:ring-[#831670] rounded"
+                        />
+                        <div className="flex items-center space-x-2">
+                          <div 
+                            className="w-4 h-4 rounded-full border border-gray-300"
+                            style={{ 
+                              backgroundColor: products.find(p => p.color === color)?.colorHex || '#ccc'
+                            }}
+                          />
+                          <span className="text-sm text-gray-700">{color}</span>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Products Grid */}
+          <div className="flex-1">
+            {filteredProducts.length === 0 ? (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+                <div className="text-gray-400 mb-4">
+                  <Filter className="w-12 h-12 mx-auto" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+                <p className="text-gray-600 mb-4">Try adjusting your filters to see more products.</p>
+                <button
+                  onClick={clearFilters}
+                  className="bg-[#831670] text-white px-6 py-2 rounded-lg hover:bg-[#a23891] transition-colors"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProducts.map((product) => (
+                  <div
+                    key={product.id}
+                    className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 
+                               overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 
+                               cursor-pointer flex flex-col"
+                    onClick={() => quickView(product, {} as React.MouseEvent)}
+                  >
+                    {/* Image Container */}
+                    <div className="relative aspect-square overflow-hidden bg-transparent">
+                      <img
+                        src={
+                          product.image && product.image.includes('cloudinary.com')
+                            ? product.image
+                            : '/public/logo.png'
+                        }
+                        alt={product.imageAlt || product.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/public/logo.png'
+                        }}
+                      />
+
+                      {/* Category Badge */}
+                      <div className="absolute top-3 right-3">
+                        <div className="bg-[#fee0f9] backdrop-blur-sm text-[#831670] text-xs font-medium px-2 py-1 rounded-full">
+                          {product.category}
+                        </div>
+                      </div>
+
+                      {/* Quick View Button */}
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <button
+                          onClick={(e) => quickView(product, e)}
+                          className="bg-white text-gray-900 p-3 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+                          title="Quick View"
+                        >
+                          <Eye className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Product Info */}
+                    <div className="p-4 flex-1">
+                      <div className="mb-2">
+                        <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-blue-600 transition-colors">
+                          {product.name}
+                        </h3>
+                      </div>
+
+                      {/* Color */}
+                      {product.color && (
+                        <div className="flex items-center space-x-2 mb-3">
+                          <div
+                            className="w-4 h-4 rounded-full border-2 border-white shadow-sm"
+                            style={{ backgroundColor: product.colorHex }}
+                          />
+                          <span className="text-xs text-gray-500">{product.color}</span>
+                        </div>
+                      )}
+
+                      {/* Rating */}
+                      <div className="flex items-center space-x-1 mb-3">
+                        <div className="flex">{renderStars(product.rating || 4)}</div>
+                        <span className="text-xs text-gray-500">({product.reviewCount})</span>
+                      </div>
+
+                      {/* Price */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-baseline space-x-2">
+                          <span className="text-lg font-bold text-gray-900">
+                            {formatPrice(product.price)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Add to Cart Button */}
+                    <div className="p-3 mt-auto">
+                      <button
+                        onClick={(e) => addToCart(product, e)}
+                        className="w-full bg-[#fee0f9] text-[#831670] py-2 px-4 rounded-lg hover:bg-[#f4b8ea] active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
+                      >
+                        <ShoppingCart className="w-4 h-4" />
+                        <span>Add to Cart</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Quick View Modal */}
         {modalOpen && selectedProduct && (
@@ -262,7 +486,7 @@ const Products: React.FC = () => {
                     <X className="w-5 h-5 text-[#fee0f9]" />
                   </button>
                   <div className="mb-4">
-                    <span className="inline-block bg-[#fee0f9]  text-[#831670] text-sm font-medium px-3 py-1 rounded-full mb-3">
+                    <span className="inline-block bg-[#fee0f9] text-[#831670] text-sm font-medium px-3 py-1 rounded-full mb-3">
                       {selectedProduct.category}
                     </span>
                     <h2 className="text-3xl font-bold text-gray-900 mb-2">

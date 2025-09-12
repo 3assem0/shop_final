@@ -62,7 +62,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
                       {item.name}
                     </h4>
                     <p className="text-gray-500 dark:text-gray-400 text-xs">
-                      ${item.price.toFixed(2)}
+                      EGP{item.price.toFixed(2)}
                     </p>
                     
                     {/* Quantity Controls */}
@@ -88,7 +88,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
                   {/* Price and Remove */}
                   <div className="text-right">
                     <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                      ${(item.price * item.quantity).toFixed(2)}
+                     EGP{(item.price * item.quantity).toFixed(2)}
                     </p>
                     <button
                       onClick={() => handleRemoveItem(item.id)}
@@ -106,34 +106,34 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
               {/* Subtotal */}
               <div className="flex justify-between text-sm">
                 <span className="text-[#831670] ">Subtotal</span>
-                <span className="font-medium text-gray-900 dark:text-white">${subtotal.toFixed(2)}</span>
+                <span className="font-medium text-gray-900 dark:text-white">EGP{subtotal.toFixed(2)}</span>
               </div>
 
               {/* Shipping */}
               <div className="flex justify-between text-sm">
                 <span className="text-[#831670] ">Shipping</span>
                 <span className={`font-medium ${shipping === 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'}`}>
-                  {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                  {shipping === 0 ? 'FREE' : `EGP${shipping.toFixed(2)}`}
                 </span>
               </div>
 
               {/* Tax */}
               <div className="flex justify-between text-sm">
                 <span className="text-[#831670] ">Tax</span>
-                <span className="font-medium text-gray-900 dark:text-white">${tax.toFixed(2)}</span>
+                <span className="font-medium text-gray-900 dark:text-white">EGP{tax.toFixed(2)}</span>
               </div>
 
               {/* Free shipping notice */}
               {subtotal < 50 && (
                 <div className="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-2 rounded">
-                  💡 Add ${(50 - subtotal).toFixed(2)} more for free shipping!
+                  💡 Add EGP{(50 - subtotal).toFixed(2)} more for free shipping!
                 </div>
               )}
 
               {/* Total */}
               <div className="flex justify-between text-base font-bold border-t border-gray-200 dark:border-gray-700 pt-3">
                 <span className="text-[#831670] ">Total</span>
-                <span className="text-gray-900 dark:text-white">${total.toFixed(2)}</span>
+                <span className="text-gray-900 dark:text-white">EGP{total.toFixed(2)}</span>
               </div>
 
               {/* Checkout Button */}
@@ -228,7 +228,7 @@ export const Header = () => {
   return (
     <>
       <header className="fixed top-5 left-0 right-0 z-[55] w-full flex flex-col items-center ">
-        <div className="w-full max-w-4xl mx-auto px-6 lg:px-8">
+        <div className="w-full mx-auto px-6 lg:px-8">
           <div className="rounded-lg border-b backdrop-blur-sm shadow-sm border-gray-200  text-[#831670] bg-[#fee0f9]">
             <div className="flex items-center justify-between h-16 px-6 lg:px-8">
               
