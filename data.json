@@ -27,19 +27,6 @@
       "oldPrice": ""
     },
     {
-      "name": "Product 3",
-      "description": "desc3",
-      "price": 300,
-      "featured": false,
-      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260036/vy1a27lkxyricjmoh86b.jpg",
-      "color": "",
-      "colorHex": "#6366f1",
-      "category": "",
-      "rating": 4,
-      "reviewCount": 1,
-      "oldPrice": ""
-    },
-    {
       "name": "Handcrafted Leather Shoes",
       "description": "Comfort-first leather shoes with handcrafted finishing and cushioned insole.",
       "price": 129.99,
@@ -53,5 +40,5 @@
       "oldPrice": "159.99"
     }
   ],
-  "lastUpdated": "2025-09-12T19:08:15.645Z"
+  "lastUpdated": "2025-09-12T19:11:36.495Z"
 }
