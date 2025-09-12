@@ -59,14 +59,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
-            <div className="relative">
+            <div className="relative text-black">
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter admin password"
-                className="pr-10"
+                className="pr-10 text-black"
                 required
                 disabled={isLoading}
               />
