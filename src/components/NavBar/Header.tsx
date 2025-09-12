@@ -227,7 +227,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className="fixed top-5 left-0 right-0 z-[55] w-full flex flex-col items-center ">
+      <header className="fixed top-0 left-0 right-0 z-[55] w-full flex flex-col items-center ">
         <div className="w-full mx-auto px-6 lg:px-8">
           <div className="rounded-lg border-b backdrop-blur-sm shadow-sm border-gray-200  text-[#831670] bg-[#fee0f9]">
             <div className="flex items-center justify-between h-16 px-6 lg:px-8">

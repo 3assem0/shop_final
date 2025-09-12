@@ -159,7 +159,7 @@ export default function Hero() {
   if (loading) {
     // Skeleton loader for hero grid
     return (
-    <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-7 bg-transparent dark:bg-black w-full">
+    <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-5 bg-transparent dark:bg-black w-full">
         <div className="grid lg:grid-cols-2 gap-6 h-auto lg:h-[500px] w-full">
           {/* Left Column - Large Skeleton */}
           <div className="bg-white rounded-3xl animate-fade-in p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8  overflow-hidden select-none w-full h-full min-h-[300px]">

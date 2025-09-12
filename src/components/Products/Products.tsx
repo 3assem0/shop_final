@@ -209,7 +209,7 @@ const Products: React.FC = () => {
         </div>
 
         {/* Filter Toggle Button - Mobile */}
-        <div className="mb-6 flex justify-between items-center">
+        <div className="mb-6 flex justify-between items-center sticky top-4">
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="lg:hidden flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm border"
@@ -227,7 +227,7 @@ const Products: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filters Sidebar */}
           <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
                 <button
