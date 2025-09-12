@@ -7,7 +7,7 @@ export default function ProductGrid() {
   return (
     <div className="p-32 pt-32 bg-transparent">
       
-        //  Skeletons
+        {/* //  Skeletons */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {Array.from({ length: 8 }).map((_, i) => (
             <div
@@ -15,7 +15,7 @@ export default function ProductGrid() {
               className="animate-fade-in"
               style={{ animationDelay: `${i * 0.1}s` }}
             >
-              <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl shadow-lg border border-slate-100 dark:border-slate-800 overflow-hidden">
+              <div className="bg-white  rounded-2xl shadow-lg border border-slate-100  overflow-hidden">
                 <div className="h-80 skeleton rounded-t-2xl"></div>
                 <div className="p-6 space-y-4">
                   <div className="h-6 skeleton rounded w-3/4"></div>

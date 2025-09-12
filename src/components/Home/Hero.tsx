@@ -182,9 +182,22 @@ export default function HeroCarousel(): JSX.Element {
 
   if (loading) {
     return (
-      <div className="w-full px-4 py-10">
-        <div className="h-64 rounded-xl bg-gray-100 " />
-      </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-10 relative w-full px-[5%] sm:px-[8%] md:px-[10%] p-32 pt-32">
+              <div className="max-w-7xl mx-auto">
+                 <div className="animate-fade-in"
+            >
+              <div className="bg-white  rounded-2xl shadow-lg border border-slate-100  overflow-hidden">
+                <div className="h-80 skeleton rounded-t-2xl"></div>
+                <div className="p-6 space-y-4">
+                  <div className="h-6 skeleton rounded"></div>
+                  <div className="h-4 skeleton rounded "></div>
+                  <div className="h-4 skeleton rounded "></div>
+                  <div className="h-8 skeleton rounded "></div>
+                </div>
+              </div>
+            </div>
+              </div>
+            </div>
     );
   }
 
