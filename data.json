@@ -14,11 +14,11 @@
       "oldPrice": "3232h"
     },
     {
-      "name": "Product 3",
-      "description": "desc3",
-      "price": 300,
+      "name": "Product 2",
+      "description": "desc2",
+      "price": 200,
       "featured": true,
-      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260036/vy1a27lkxyricjmoh86b.jpg",
+      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260026/aoch4r2kql70scejpyve.jpg",
       "color": "",
       "colorHex": "#6366f1",
       "category": "",
@@ -40,5 +40,5 @@
       "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-12T18:45:09.957Z"
+  "lastUpdated": "2025-09-12T18:45:13.254Z"
 }
