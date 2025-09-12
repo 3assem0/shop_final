@@ -182,7 +182,7 @@ export default function HeroCarousel(): JSX.Element {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-10 relative w-full px-[5%] sm:px-[8%] md:px-[10%] p-32 pt-32">
+      <div className=" bg-gradient-to-br from-slate-50 to-blue-50 py-10 relative w-full px-[5%] sm:px-[8%] md:px-[10%]  pt-32">
               <div className="max-w-7xl mx-auto">
                  <div className="animate-fade-in"
             >

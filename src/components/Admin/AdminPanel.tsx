@@ -4,7 +4,7 @@ interface ApiResponse {
   error?: string;
 }import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, Plus, Edit3, Trash2, Star, RefreshCw, Upload, Save, X, Package, DollarSign, Tag, Palette, Star as StarIcon, Users } from 'lucide-react';
-import AdminLogin from './AdminLogin';
+
 
 interface Product {
   name: string;
@@ -55,6 +55,41 @@ const AdminPanel: React.FC = () => {
   });
   
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
+
+  // Upload image to Cloudinary
+  const uploadImageToCloudinary = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64Data = reader.result as string;
+          const response = await fetch('/api/upload-image', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              imageData: base64Data,
+              folder: 'mohair-products'
+            })
+          });
+
+          const result = await response.json();
+          
+          if (result.success) {
+            resolve(result.url);
+          } else {
+            reject(new Error(result.error || 'Failed to upload image'));
+          }
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  };
 
   // Load products from backend
   const loadProducts = useCallback(async () => {
@@ -117,6 +152,22 @@ const AdminPanel: React.FC = () => {
 
     setIsSubmitting(true);
     try {
+      let imageUrl = formData.image;
+      
+      // Upload image to Cloudinary if a new file was selected
+      if (imageFile) {
+        setIsUploadingImage(true);
+        try {
+          imageUrl = await uploadImageToCloudinary(imageFile);
+          showMessage('Image uploaded successfully!', 'success');
+        } catch (uploadError) {
+          showMessage(`Failed to upload image: ${uploadError instanceof Error ? uploadError.message : 'Unknown error'}`, 'error');
+          return;
+        } finally {
+          setIsUploadingImage(false);
+        }
+      }
+
       let updatedProducts: Product[];
       if (editingIndex >= 0) {
         updatedProducts = [...products];
@@ -125,7 +176,7 @@ const AdminPanel: React.FC = () => {
           name: formData.name.trim(),
           description: formData.description.trim(),
           price: Number(formData.price),
-          image: formData.image,
+          image: imageUrl,
           rating: Number(formData.rating),
           reviewCount: Number(formData.reviewCount),
         };
@@ -136,7 +187,7 @@ const AdminPanel: React.FC = () => {
           name: formData.name.trim(),
           description: formData.description.trim(),
           price: Number(formData.price),
-          image: formData.image,
+          image: imageUrl,
           rating: Number(formData.rating),
           reviewCount: Number(formData.reviewCount),
         }];
@@ -581,7 +632,9 @@ const AdminPanel: React.FC = () => {
                           const file = e.target.files?.[0] || null;
                           setImageFile(file);
                           if (file) {
-                            setFormData(prev => ({ ...prev, image: URL.createObjectURL(file) }));
+                            // Show preview with local URL, but don't save it as the final image
+                            const previewUrl = URL.createObjectURL(file);
+                            setFormData(prev => ({ ...prev, image: previewUrl }));
                           }
                         }}
                         className="hidden"
@@ -622,10 +675,15 @@ const AdminPanel: React.FC = () => {
                   <div className="flex space-x-3 pt-4">
                     <button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isUploadingImage}
                       className="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
-                      {isSubmitting ? (
+                      {isUploadingImage ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                          Uploading Image...
+                        </>
+                      ) : isSubmitting ? (
                         <>
                           <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                           {editingIndex >= 0 ? 'Updating...' : 'Adding...'}

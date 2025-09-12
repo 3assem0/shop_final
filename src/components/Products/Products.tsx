@@ -6,7 +6,7 @@ import ProductGrid from '../Skiliton/ProductGrid';
 interface Product {
   name: string;
   description: string;
-  price: string;
+  price: string | number;
   id?: number;
   image?: string;
   imageAlt?: string;
@@ -17,7 +17,7 @@ interface Product {
   category?: string;
 }
 
-type CartItem = Product & { quantity: number };
+type CartItem = Omit<Product, 'price'> & { price: string; quantity: number };
 
 interface Filters {
   category: string;
@@ -48,7 +48,10 @@ const Products: React.FC = () => {
         if (data && Array.isArray(data.products)) {
           setProducts(data.products);
           // Auto-adjust price range based on actual product prices
-          const prices = data.products.map((p: Product) => parseFloat(p.price));
+          const prices = data.products.map((p: Product) => {
+            const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
+            return isNaN(price) ? 0 : price;
+          });
           const maxPrice = Math.max(...prices);
           setFilters(prev => ({ ...prev, priceRange: [0, Math.ceil(maxPrice)] }));
         } else {
@@ -100,8 +103,8 @@ useEffect(() => {
       }
 
       // Price filter
-      const price = parseFloat(product.price);
-      if (price < filters.priceRange[0] || price > filters.priceRange[1]) {
+      const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
+      if (isNaN(price) || price < filters.priceRange[0] || price > filters.priceRange[1]) {
         return false;
       }
 
@@ -130,7 +133,12 @@ useEffect(() => {
           : item
       );
     } else {
-      cart.push({ ...product, id: product.id ?? Date.now(), quantity: 1 });
+      cart.push({ 
+        ...product, 
+        id: product.id ?? Date.now(), 
+        quantity: 1,
+        price: typeof product.price === 'string' ? product.price : product.price.toString()
+      });
     }
     setCart(cart);
     const badge = document.getElementById('cart-badge');
@@ -145,8 +153,9 @@ useEffect(() => {
     setModalOpen(true);
   };
 
-  const formatPrice = (price: string) => {
-    return parseFloat(price).toLocaleString('en-EG', {
+  const formatPrice = (price: string | number) => {
+    const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return numericPrice.toLocaleString('en-EG', {
       style: 'currency',
       currency: 'EGP',
     });
@@ -176,7 +185,10 @@ useEffect(() => {
   const clearFilters = () => {
     setFilters({
       category: '',
-      priceRange: [0, Math.max(...products.map(p => parseFloat(p.price))) || 1000],
+      priceRange: [0, Math.max(...products.map(p => {
+        const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
+        return isNaN(price) ? 0 : price;
+      })) || 1000],
       minRating: 0,
       colors: []
     });
@@ -395,14 +407,14 @@ useEffect(() => {
                     <div className="relative aspect-square overflow-hidden bg-transparent">
                       <img
                         src={
-                          product.image && product.image.includes('cloudinary.com')
+                          product.image && (product.image.includes('cloudinary.com') || product.image.startsWith('http'))
                             ? product.image
-                            : '/public/logo.png'
+                            : '/logo.png'
                         }
                         alt={product.imageAlt || product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = '/public/logo.png'
+                          (e.currentTarget as HTMLImageElement).src = '/logo.png'
                         }}
                       />
 
@@ -491,10 +503,10 @@ useEffect(() => {
         <div className="sm:w-1/2 flex-shrink-0">
           <div className="relative aspect-square sm:h-full">
             <img
-              src={selectedProduct.image && selectedProduct.image.includes('cloudinary.com') ? selectedProduct.image : '/public/logo.png'}
+              src={selectedProduct.image && (selectedProduct.image.includes('cloudinary.com') || selectedProduct.image.startsWith('http')) ? selectedProduct.image : '/logo.png'}
               alt={selectedProduct.name}
               className="w-full h-full object-cover rounded-t-xl sm:rounded-l-2xl sm:rounded-t-none"
-              onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}
+              onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.png'; }}
             />
           </div>
         </div>
