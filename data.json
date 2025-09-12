@@ -1,17 +1,17 @@
 {
   "products": [
     {
-      "name": "Product 1",
-      "description": "desx1",
-      "price": 100,
+      "name": "Classic Handmade Bag",
+      "description": "Premium hand-stitched leather bag — roomy, durable, and stylish for everyday use.",
+      "price": 79.99,
       "featured": true,
-      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260013/fy0g8agf3g4s6zoxledl.webp",
+      "image": "blob:https://shop-final-omega.vercel.app/8cdf5fb2-e9e2-4d2a-a877-ea853f7f8fe1",
       "color": "red",
       "colorHex": "#fa0000",
-      "category": "IT & Programming",
-      "rating": 5,
-      "reviewCount": 5,
-      "oldPrice": "3232h"
+      "category": "Bags",
+      "rating": 4,
+      "reviewCount": 128,
+      "oldPrice": "99.99"
     },
     {
       "name": "Product 2",
@@ -30,7 +30,7 @@
       "name": "Product 3",
       "description": "desc3",
       "price": 300,
-      "featured": false,
+      "featured": true,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260036/vy1a27lkxyricjmoh86b.jpg",
       "color": "",
       "colorHex": "#6366f1",
@@ -40,5 +40,5 @@
       "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-12T18:52:45.343Z"
+  "lastUpdated": "2025-09-12T18:58:53.442Z"
 }
