@@ -1,16 +1,5 @@
 // /lib/cart.ts
-export type CartItem = {
-  id: number | string;
-  name: string;
-  price?: string;
-  imageSrc?: string;
-  imageAlt?: string;
-  color?: string;
-  colorHex?: string;
-  category?: string;
-  quantity: number;
-  // any other fields you want to store
-};
+import { CartItem } from '../types/product';
 
 const STORAGE_KEY = 'myapp_cart_v1';
 
@@ -36,8 +25,29 @@ export function setCart(items: CartItem[]) {
 
 export function addToCart(item: CartItem) {
   const cart = getCart();
-  cart.push(item);
+  const existingItem = cart.find(cartItem => cartItem.id === item.id);
+  
+  if (existingItem) {
+    existingItem.quantity += item.quantity;
+  } else {
+    cart.push(item);
+  }
+  
   setCart(cart);
+}
+
+export function updateCartItemQuantity(itemId: string | number, quantity: number) {
+  const cart = getCart();
+  const item = cart.find(cartItem => cartItem.id === itemId);
+  
+  if (item) {
+    if (quantity <= 0) {
+      removeFromCart(itemId);
+    } else {
+      item.quantity = quantity;
+      setCart(cart);
+    }
+  }
 }
 
 export function removeFromCart(itemId: string | number) {

@@ -4,6 +4,7 @@ interface ApiResponse {
   error?: string;
 }import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, Plus, Edit3, Trash2, Star, RefreshCw, Upload, Save, X, Package, DollarSign, Tag, Palette, Star as StarIcon, Users } from 'lucide-react';
+import LoginForm from './LoginForm';
 
 
 interface Product {
@@ -56,6 +57,7 @@ const AdminPanel: React.FC = () => {
   
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
   // Upload image to Cloudinary
   const uploadImageToCloudinary = async (file: File): Promise<string> => {
@@ -113,27 +115,53 @@ const AdminPanel: React.FC = () => {
     }
   }, []);
 
-  // Load products on mount
+  // Check for existing session on mount
   useEffect(() => {
-    // Get password from URL query
-    const params = new URLSearchParams(window.location.search);
-    const password = params.get('password');
-    if (!password) {
+    const token = localStorage.getItem('admin_token');
+    if (token) {
+      verifySession(token);
+    } else {
       setIsAuthenticated(false);
-      return;
     }
-    fetch('/api/verify-admin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password })
-    })
-      .then(res => res.json())
-      .then(result => {
-        setIsAuthenticated(result.success);
-        if (result.success) loadProducts();
-      })
-      .catch(() => setIsAuthenticated(false));
-  }, [loadProducts]);
+  }, []);
+
+  // Verify session token
+  const verifySession = async (token: string) => {
+    try {
+      const response = await fetch('/api/auth-verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success && result.authenticated) {
+        setAuthToken(token);
+        setIsAuthenticated(true);
+        loadProducts();
+      } else {
+        localStorage.removeItem('admin_token');
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      localStorage.removeItem('admin_token');
+      setIsAuthenticated(false);
+    }
+  };
+
+  // Handle successful login
+  const handleLogin = (token: string) => {
+    setAuthToken(token);
+    setIsAuthenticated(true);
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('admin_token');
+    setAuthToken(null);
+    setIsAuthenticated(false);
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -337,17 +365,7 @@ const AdminPanel: React.FC = () => {
   };
 
   if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 text-center max-w-md w-full">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <X className="w-8 h-8 text-red-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
-          <p className="text-gray-600">You are not authorized to access this panel.</p>
-        </div>
-      </div>
-    );
+    return <LoginForm onLogin={handleLogin} />;
   }
 
   function goToHome(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
@@ -375,8 +393,17 @@ const AdminPanel: React.FC = () => {
                 <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
                 <p className="text-sm text-gray-500">Manage your product inventory</p>
               </div>
-              <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
-                <Package className="w-5 h-5 text-white" />
+              <div className="flex items-center space-x-2">
+                <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <Package className="w-5 h-5 text-white" />
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Logout"
+                >
+                  Logout
+                </button>
               </div>
             </div>
           </div>

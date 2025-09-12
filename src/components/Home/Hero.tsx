@@ -1,24 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from "react";
 import { ShoppingCart } from "lucide-react";
-
-interface Product {
-  id?: string | number;
-  title: string;
-  description?: string;
-  image?: string;
-  buttonText?: string;
-  price?: string | number;
-  featured?: boolean;
-  category?: string;
-}
-
-const formatPrice = (price: any) => {
-  if (price === undefined || price === null || price === "") return "";
-  const n = Number(price);
-  if (Number.isNaN(n)) return String(price);
-  return `$${n.toFixed(2)}`;
-};
+import { Product } from '../../types/product';
+import { normalizeProduct, formatPrice, productToCartItem, getProductDisplayName, isFeaturedProduct } from '../../lib/product-utils';
+import { addToCart as addToCartLib, getCart } from '../../lib/cart';
 
 export default function HeroCarousel(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
@@ -41,7 +25,7 @@ export default function HeroCarousel(): JSX.Element {
   const resumeTimeoutRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Fetch featured products (replace endpoint as needed)
+  // Fetch featured products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -50,19 +34,12 @@ export default function HeroCarousel(): JSX.Element {
         const res = await fetch("/api/get-products");
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
-        const heroProducts = (data.products || [])
-          .filter((p: any) => p.featured)
-          .map((p: any) => ({
-            id: p.id,
-            title: p.title || p.name || "",
-            description: p.description || "",
-            image: p.image || p.imageSrc || "/Classic_T-shirt.webp",
-            buttonText: p.buttonText || "Shop Now",
-            price: p.price,
-            featured: !!p.featured,
-            category: p.category,
-          })) as Product[];
-        setProducts(heroProducts);
+        
+        // Normalize all products and filter for featured ones
+        const allProducts = (data.products || []).map(normalizeProduct);
+        const featuredProducts = allProducts.filter(isFeaturedProduct);
+        
+        setProducts(featuredProducts);
       } catch (err: any) {
         setError(err?.message || "Error loading products");
       } finally {
@@ -245,7 +222,7 @@ export default function HeroCarousel(): JSX.Element {
             )}
 
             <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
-              {current.title}
+              {getProductDisplayName(current)}
             </h1>
 
             <p className="mt-4 text-gray-600 max-w-xl">{current.description}</p>
@@ -273,11 +250,11 @@ export default function HeroCarousel(): JSX.Element {
           >
             <img
               src={current.image}
-              alt={current.title}
+              alt={getProductDisplayName(current)}
               className="max-h-[380px] w-full object-contain"
               draggable={false}
               onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = "/Classic_T-shirt.webp";
+                (e.currentTarget as HTMLImageElement).src = "/logo.png";
               }}
             />
           </div>
@@ -304,17 +281,32 @@ export default function HeroCarousel(): JSX.Element {
               <div className="md:w-1/2">
                 <img
                   src={selectedProduct.image}
-                  alt={selectedProduct.title}
+                  alt={getProductDisplayName(selectedProduct)}
                   className="w-full h-64 object-cover rounded-md"
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/Classic_T-shirt.webp"; }}
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/logo.png"; }}
                 />
               </div>
               <div className="md:w-1/2">
-                <h3 className="text-xl font-bold">{selectedProduct.title}</h3>
+                <h3 className="text-xl font-bold">{getProductDisplayName(selectedProduct)}</h3>
                 <p className="mt-2 text-gray-600">{selectedProduct.description}</p>
                 <div className="mt-4 flex items-center justify-between">
                   <div className="text-2xl font-bold">{formatPrice(selectedProduct.price)}</div>
-                  <button onClick={() => { /* add to cart */ }} className="bg-pink-700 text-white px-4 py-2 rounded-md">Add to cart</button>
+                  <button 
+                    onClick={() => {
+                      const cartItem = productToCartItem(selectedProduct, 1);
+                      addToCartLib(cartItem);
+                      
+                      // Update cart badge
+                      const updatedCart = getCart();
+                      const badge = document.getElementById('cart-badge');
+                      if (badge) {
+                        badge.textContent = updatedCart.reduce((sum, item) => sum + item.quantity, 0).toString();
+                      }
+                    }} 
+                    className="bg-pink-700 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition-colors"
+                  >
+                    Add to cart
+                  </button>
                 </div>
               </div>
             </div>
