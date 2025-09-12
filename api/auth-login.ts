@@ -37,7 +37,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     // Get the admin password from environment variables
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'assem123';
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ;
     const SESSION_SECRET = process.env.SESSION_SECRET || 'your-session-secret-key';
     
     if (!ADMIN_PASSWORD) {
