@@ -484,7 +484,7 @@ useEffect(() => {
     className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8 sm:overflow-scroll"
     onClick={handleModalClick}
   >
-    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-[95vh] sm:max-h-[95vh] sm:overflow-scroll min-h-fit shadow-2xl flex flex-col mt-24 p-2">
+    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-[95vh] sm:max-h-[75vh] sm:overflow-scroll min-h-fit shadow-2xl flex flex-col mt-24 p-2">
       {/* Mobile: Stack vertically with scrollable content */}
       <div className="flex flex-col sm:flex-row h-full">
         {/* Product Image */}
