@@ -17,7 +17,7 @@
       "name": "Product 2",
       "description": "desc2",
       "price": 200,
-      "featured": false,
+      "featured": true,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260026/aoch4r2kql70scejpyve.jpg",
       "color": "",
       "colorHex": "#6366f1",
@@ -30,7 +30,7 @@
       "name": "Product 3",
       "description": "desc3",
       "price": 300,
-      "featured": true,
+      "featured": false,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260036/vy1a27lkxyricjmoh86b.jpg",
       "color": "",
       "colorHex": "#6366f1",
@@ -53,5 +53,5 @@
       "oldPrice": "159.99"
     }
   ],
-  "lastUpdated": "2025-09-12T19:08:06.750Z"
+  "lastUpdated": "2025-09-12T19:08:11.405Z"
 }
