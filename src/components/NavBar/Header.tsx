@@ -14,7 +14,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[400px] sm:w-[400px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 flex flex-col z-[56]">
+      <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white  border-gray-200 flex flex-col z-[56]">
         <SheetHeader className="border-b border-gray-200  pb-4">
           <SheetTitle className="flex items-center gap-2 text-xl font-bold text-[#fb6f92]">
             <ShoppingCart className="h-5 w-5 text-purple-600" />
