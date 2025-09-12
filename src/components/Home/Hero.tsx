@@ -159,7 +159,7 @@ export default function Hero() {
   if (loading) {
     // Skeleton loader for hero grid
     return (
-    <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-5 bg-transparent dark:bg-black w-full">
+    <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-5 bg-transparent  w-full">
         <div className="grid lg:grid-cols-2 gap-6 h-auto lg:h-[500px] w-full">
           {/* Left Column - Large Skeleton */}
           <div className="bg-white rounded-3xl animate-fade-in p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8  overflow-hidden select-none w-full h-full min-h-[300px]">
@@ -226,107 +226,126 @@ export default function Hero() {
       <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-7 bg-transparent dark:bg-black">
         <div className="grid lg:grid-cols-2 gap-6 h-auto lg:h-[500px]">
           {/* Left Column - Large Featured Product with Swap */}
-          <div 
-            ref={containerRef}
-            className="bg-white rounded-3xl p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8 overflow-hidden cursor-grab active:cursor-grabbing select-none"
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseLeave}
-            onMouseEnter={handleMouseEnter}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            style={{
-              transform: isDragging ? `translateX(${dragOffset * 0.3}px)` : 'none',
-              transition: isDragging ? 'none' : 'transform 0.3s ease-out'
-            }}
-          >
-            <div className="flex-1 space-y-6 pointer-events-auto">
-              {/* Sale Badge & Discount */}
-              <div className="inline-block mb-2">
-                {currentProduct.discount && (
-                  <span className="text-5xl font-bold text-blue-600 transition-all duration-500 mr-2">
-                    {currentProduct.discount}
-                  </span>
-                )}
-                <div className="text-gray-600">
-                  <div className="text-sm">Sale</div>
-                  <div className="text-sm">Off</div>
-                </div>
-              </div>
-              {/* Product Info */}
-              <div className="mb-2">
-                <h2 className="text-3xl font-bold text-gray-900 mb-3 transition-all duration-500">
-                  {currentProduct.title}
-                </h2>
-                <p className="text-gray-500 text-sm leading-relaxed transition-all duration-500 mb-2">
-                  {currentProduct.description}
-                </p>
-                {/* Price & Old Price */}
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl font-bold text-red-500">{currentProduct.price}</span>
-                  {currentProduct.oldPrice && (
-                    <span className="text-lg text-gray-400 line-through">{currentProduct.oldPrice}</span>
-                  )}
-                </div>
-              </div>
-              {/* Shop Button */}
-              <button 
-                className="bg-gray-900 text-white px-8 py-3 rounded-xl font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 pointer-events-auto mb-2"
-                onMouseDown={(e) => e.stopPropagation()}
-              >
-                {currentProduct.buttonText}
-              </button>
-              {/* Product ID */}
-              {currentProduct.id && (
-                <div className="text-xs text-gray-400 mb-2">ID: {currentProduct.id}</div>
-              )}
-              {/* Auto-play indicator and Controls */}
-              <div className="flex items-center justify-between pt-4">
-                <div className="flex space-x-2">
-                  {products.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleDotClick(index)}
-                      onMouseDown={(e) => e.stopPropagation()}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-110 pointer-events-auto ${
-                        index === currentSlide 
-                          ? 'bg-blue-500 scale-110' 
-                          : 'bg-gray-300 hover:bg-gray-400'
-                      }`}
-                      aria-label={`Go to slide ${index + 1}`}
-                    />
-                  ))}
-                </div>
-                {/* Auto-play control */}
-                <button
-                  onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  className="text-xs text-gray-500 hover:text-gray-700 transition-colors pointer-events-auto flex items-center gap-1"
-                >
-                  {isAutoPlaying ? (
-                    <></>
-                  ) : (
-                    <></>
-                  )}
-                </button>
-              </div>
-              {/* Drag hint */}
-              <div className="text-xs text-gray-400 opacity-70">
-                💡 Drag to browse or click dots
-              </div>
-            </div>
-            {/* Product Image */}
-            <div className="flex-1 flex justify-center">
-              <img 
-                src={currentProduct.image}
-                alt={currentProduct.title}
-                className="w-full max-w-[300px] h-auto object-contain transition-all duration-500 transform hover:scale-105 pointer-events-none"
-                draggable={false}
-              />
-            </div>
-          </div>
+         <div 
+  ref={containerRef}
+  className="bg-white rounded-3xl p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8 overflow-hidden cursor-grab active:cursor-grabbing select-none"
+  onMouseDown={handleMouseDown}
+  onMouseMove={handleMouseMove}
+  onMouseUp={handleMouseUp}
+  onMouseLeave={handleMouseLeave}
+  onMouseEnter={handleMouseEnter}
+  onTouchStart={handleTouchStart}
+  onTouchMove={handleTouchMove}
+  onTouchEnd={handleTouchEnd}
+  // Remove the transform and transition from container - keep it static
+>
+  <div 
+    className="flex-1 space-y-6 pointer-events-auto"
+    style={{
+      transform: isDragging ? `translateX(${dragOffset * 0.1}px)` : 'none',
+      transition: isDragging ? 'none' : 'transform 0.3s ease-out, opacity 0.3s ease-out',
+      opacity: isDragging ? 0.8 : 1
+    }}
+  >
+    {/* Sale Badge & Discount */}
+    <div className="inline-block mb-2">
+      {currentProduct.discount && (
+        <span className="text-5xl font-bold text-blue-600 transition-all duration-500 mr-2">
+          {currentProduct.discount}
+        </span>
+      )}
+      <div className="text-gray-600">
+        <div className="text-sm">Sale</div>
+        <div className="text-sm">Off</div>
+      </div>
+    </div>
+    
+    {/* Product Info */}
+    <div className="mb-2">
+      <h2 className="text-3xl font-bold text-gray-900 mb-3 transition-all duration-500">
+        {currentProduct.title}
+      </h2>
+      <p className="text-gray-500 text-sm leading-relaxed transition-all duration-500 mb-2">
+        {currentProduct.description}
+      </p>
+      
+      {/* Price & Old Price */}
+      <div className="flex items-center gap-3 mb-2">
+        <span className="text-2xl font-bold text-red-500">{currentProduct.price}</span>
+        {currentProduct.oldPrice && (
+          <span className="text-lg text-gray-400 line-through">{currentProduct.oldPrice}</span>
+        )}
+      </div>
+    </div>
+    
+    {/* Shop Button */}
+    <button 
+      className="bg-gray-900 text-white px-8 py-3 rounded-xl font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 pointer-events-auto mb-2"
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      {currentProduct.buttonText}
+    </button>
+    
+    {/* Product ID */}
+    {currentProduct.id && (
+      <div className="text-xs text-gray-400 mb-2">ID: {currentProduct.id}</div>
+    )}
+    
+    {/* Auto-play indicator and Controls */}
+    <div className="flex items-center justify-between pt-4">
+      <div className="flex space-x-2">
+        {products.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => handleDotClick(index)}
+            onMouseDown={(e) => e.stopPropagation()}
+            className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-110 pointer-events-auto ${
+              index === currentSlide 
+                ? 'bg-blue-500 scale-110' 
+                : 'bg-gray-300 hover:bg-gray-400'
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+      
+      {/* Auto-play control */}
+      <button
+        onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+        onMouseDown={(e) => e.stopPropagation()}
+        className="text-xs text-gray-500 hover:text-gray-700 transition-colors pointer-events-auto flex items-center gap-1"
+      >
+        {isAutoPlaying ? (
+          <></>
+        ) : (
+          <></>
+        )}
+      </button>
+    </div>
+    
+    {/* Drag hint */}
+    <div className="text-xs text-gray-400 opacity-70">
+      💡 Drag to browse or click dots
+    </div>
+  </div>
+  
+  {/* Product Image */}
+  <div 
+    className="flex-1 flex justify-center"
+    style={{
+      transform: isDragging ? `translateX(${dragOffset * -0.1}px) scale(0.95)` : 'none',
+      transition: isDragging ? 'none' : 'transform 0.3s ease-out',
+      opacity: isDragging ? 0.8 : 1
+    }}
+  >
+    <img 
+      src={currentProduct.image}
+      alt={currentProduct.title}
+      className="w-full max-w-[300px] h-auto object-contain transition-all duration-500 transform hover:scale-105 pointer-events-none"
+      draggable={false}
+    />
+  </div>
+</div>
 
           {/* Right Column - Two Product Cards */}
           {/* Right Column - Two Featured Product Cards */}
