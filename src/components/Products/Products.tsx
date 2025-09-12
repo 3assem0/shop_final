@@ -124,7 +124,7 @@ const Products: React.FC = () => {
   };
 
   const formatPrice = (price: string) => {
-    return parseFloat(price).toLocaleString('en-US', {
+    return parseFloat(price).toLocaleString('en-EG', {
       style: 'currency',
       currency: 'EGP',
     });
@@ -209,17 +209,17 @@ const Products: React.FC = () => {
         </div>
 
         {/* Filter Toggle Button - Mobile */}
-        <div className="mb-6 flex justify-between items-center sticky top-4">
+        <div className="mb-6 flex justify-between items-center sticky top-4 bg-white/90 backdrop-blur-sm py-4 z-30 -mx-4 px-4 border-b border-gray-100 rounded-lg shadow-sm">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="lg:hidden flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm border"
+            className="lg:hidden flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm border hover:bg-gray-50 transition-colors"
           >
             <Filter className="w-4 h-4" />
             <span>Filters</span>
             <ChevronDown className={`w-4 h-4 transform transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
           
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 font-medium">
             Showing {filteredProducts.length} of {products.length} products
           </div>
         </div>
@@ -227,12 +227,12 @@ const Products: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filters Sidebar */}
           <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-[#831670] hover:text-[#a23891] font-medium"
+                  className="text-sm text-[#831670] hover:text-[#a23891] font-medium transition-colors"
                 >
                   Clear All
                 </button>
@@ -244,7 +244,7 @@ const Products: React.FC = () => {
                 <select
                   value={filters.category}
                   onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full p-2 border border-gray-200 rounded-lg  text-[#831670]"
+                  className="w-full p-3 border border-gray-200 rounded-lg text-[#831670] focus:ring-2 focus:ring-[#831670] focus:border-transparent transition-all"
                 >
                   <option value="">All Categories</option>
                   {filterOptions.categories.map(category => (
@@ -266,9 +266,9 @@ const Products: React.FC = () => {
                         ...prev,
                         priceRange: [parseInt(e.target.value) || 0, prev.priceRange[1]]
                       }))}
-                      className="w-full p-2 border border-gray-200 rounded-lg text-[#831670]"
+                      className="w-full p-3 border border-gray-200 rounded-lg text-[#831670] focus:ring-2 focus:ring-[#831670] focus:border-transparent transition-all"
                     />
-                    <span className="text-gray-500">-</span>
+                    <span className="text-gray-500 font-medium">-</span>
                     <input
                       type="number"
                       placeholder="Max"
@@ -277,16 +277,41 @@ const Products: React.FC = () => {
                         ...prev,
                         priceRange: [prev.priceRange[0], parseInt(e.target.value) || 1000]
                       }))}
-                      className="w-full p-2 border border-gray-200 rounded-lg   text-[#831670]"
+                      className="w-full p-3 border border-gray-200 rounded-lg text-[#831670] focus:ring-2 focus:ring-[#831670] focus:border-transparent transition-all"
                     />
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded-lg">
                     {formatPrice(filters.priceRange[0].toString())} - {formatPrice(filters.priceRange[1].toString())}
                   </div>
                 </div>
               </div>
 
-             
+              {/* Rating Filter */}
+              <div className="mb-6">
+                <h4 className="font-medium text-gray-900 mb-3">Minimum Rating</h4>
+                <div className="space-y-2">
+                  {[4, 3, 2, 1, 0].map(rating => (
+                    <label key={rating} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                      <input
+                        type="radio"
+                        name="rating"
+                        value={rating}
+                        checked={filters.minRating === rating}
+                        onChange={(e) => setFilters(prev => ({ ...prev, minRating: parseInt(e.target.value) }))}
+                        className="text-[#831670] focus:ring-[#831670]"
+                      />
+                      <div className="flex items-center space-x-1">
+                        <div className="flex">
+                          {renderStars(rating || 0.1)}
+                        </div>
+                        <span className="text-sm text-gray-600">
+                          {rating === 0 ? 'All ratings' : `${rating}+ stars`}
+                        </span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
               {/* Color Filter */}
               {filterOptions.colors.length > 0 && (
@@ -294,7 +319,7 @@ const Products: React.FC = () => {
                   <h4 className="font-medium text-gray-900 mb-3">Colors</h4>
                   <div className="space-y-2">
                     {filterOptions.colors.map(color => (
-                      <label key={color} className="flex items-center space-x-2 cursor-pointer">
+                      <label key={color} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
                         <input
                           type="checkbox"
                           checked={filters.colors.includes(color)}
@@ -303,7 +328,7 @@ const Products: React.FC = () => {
                         />
                         <div className="flex items-center space-x-2">
                           <div 
-                            className="w-4 h-4 rounded-full border border-gray-300"
+                            className="w-4 h-4 rounded-full border border-gray-300 shadow-sm"
                             style={{ 
                               backgroundColor: products.find(p => p.color === color)?.colorHex || '#ccc'
                             }}
