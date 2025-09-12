@@ -219,7 +219,7 @@ const Products: React.FC = () => {
             <ChevronDown className={`w-4 h-4 transform transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
           
-          <div className="text-sm text-gray-600 font-medium">
+          <div className="text-sm text-[#fb6f92] font-medium">
             Showing {filteredProducts.length} of {products.length} products
           </div>
         </div>
@@ -229,10 +229,10 @@ const Products: React.FC = () => {
           <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+                <h3 className="text-lg font-semibold text-[#a23891">Filters</h3>
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-[#831670] hover:text-[#a23891] font-medium transition-colors"
+                  className="text-sm text-[#fb6f92] font-medium transition-colors"
                 >
                   Clear All
                 </button>
@@ -240,7 +240,7 @@ const Products: React.FC = () => {
 
               {/* Category Filter */}
               <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Category</h4>
+                <h4 className="font-medium text-[#fb6f92] mb-3">Category</h4>
                 <select
                   value={filters.category}
                   onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
@@ -255,7 +255,7 @@ const Products: React.FC = () => {
 
               {/* Price Range Filter */}
               <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Price Range</h4>
+                <h4 className="font-medium text-[#fb6f92] mb-3">Price Range</h4>
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2">
                     <input
@@ -268,7 +268,7 @@ const Products: React.FC = () => {
                       }))}
                       className="w-full p-3 border border-gray-200 rounded-lg text-[#831670] focus:ring-2 focus:ring-[#831670] focus:border-transparent transition-all"
                     />
-                    <span className="text-gray-500 font-medium">-</span>
+                    <span className="text-[#fb6f92] font-medium">-</span>
                     <input
                       type="number"
                       placeholder="Max"
@@ -280,7 +280,7 @@ const Products: React.FC = () => {
                       className="w-full p-3 border border-gray-200 rounded-lg text-[#831670] focus:ring-2 focus:ring-[#831670] focus:border-transparent transition-all"
                     />
                   </div>
-                  <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded-lg">
+                  <div className="text-sm text-[#831670] bg-gray-50 p-2 rounded-lg">
                     {formatPrice(filters.priceRange[0].toString())} - {formatPrice(filters.priceRange[1].toString())}
                   </div>
                 </div>
@@ -316,7 +316,7 @@ const Products: React.FC = () => {
               {/* Color Filter */}
               {filterOptions.colors.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="font-medium text-gray-900 mb-3">Colors</h4>
+                  <h4 className="font-medium text-[#fb6f92] mb-3">Colors</h4>
                   <div className="space-y-2">
                     {filterOptions.colors.map(color => (
                       <label key={color} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
@@ -328,7 +328,7 @@ const Products: React.FC = () => {
                         />
                         <div className="flex items-center space-x-2">
                           <div 
-                            className="w-4 h-4 rounded-full border border-gray-300 shadow-sm"
+                            className="w-4 h-4 rounded-full border border-[#831670] shadow-sm"
                             style={{ 
                               backgroundColor: products.find(p => p.color === color)?.colorHex || '#ccc'
                             }}
@@ -360,7 +360,7 @@ const Products: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProducts.map((product) => (
                   <div
                     key={product.id}
@@ -456,7 +456,7 @@ const Products: React.FC = () => {
         </div>
 
         {/* Quick View Modal */}
-        {modalOpen && selectedProduct && (
+ {modalOpen && selectedProduct && (
   <div 
     id="modal-backdrop"
     className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
@@ -530,8 +530,8 @@ const Products: React.FC = () => {
             </div>
           </div>
 
-          {/* Actions - Fixed at bottom */}
-          <div className="flex-shrink-0 p-4 sm:p-6 border-t sm:border-t-0">
+          {/* Actions */}
+          <div className="flex-shrink-0 p-4 sm:p-6 sm:border-t-0">
             <button
               onClick={(e) => {
                 addToCart(selectedProduct, e);
