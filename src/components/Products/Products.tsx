@@ -457,93 +457,97 @@ const Products: React.FC = () => {
 
         {/* Quick View Modal */}
         {modalOpen && selectedProduct && (
-          <div 
-            id="modal-backdrop"
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={handleModalClick}
+  <div 
+    id="modal-backdrop"
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
+    onClick={handleModalClick}
+  >
+    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
+      {/* Mobile: Stack vertically with scrollable content */}
+      <div className="flex flex-col sm:flex-row h-full">
+        {/* Product Image */}
+        <div className="sm:w-1/2 flex-shrink-0">
+          <div className="relative aspect-square sm:h-full">
+            <img
+              src={selectedProduct.image && selectedProduct.image.includes('cloudinary.com') ? selectedProduct.image : '/public/logo.png'}
+              alt={selectedProduct.name}
+              className="w-full h-full object-cover"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}
+            />
+          </div>
+        </div>
+
+        {/* Product Details - Scrollable on mobile */}
+        <div className="sm:w-1/2 flex flex-col relative min-h-0">
+          <button
+            onClick={() => setModalOpen(false)}
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[#fee0f9] bg-[#831670] backdrop-blur-sm p-1.5 sm:p-2 rounded-full hover:bg-[#bb32a4] transition-colors z-10"
           >
-            <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
-              <div className="flex flex-col md:flex-row">
-                {/* Product Image */}
-                <div className="md:w-1/2">
-                  <div className="relative aspect-square">
-                    <img
-                      src={selectedProduct.image && selectedProduct.image.includes('cloudinary.com') ? selectedProduct.image : '/public/logo.png'}
-                      alt={selectedProduct.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}
-                    />
-                  </div>
-                </div>
+            <X className="w-4 h-4 sm:w-5 sm:h-5 text-[#fee0f9]" />
+          </button>
+          
+          {/* Scrollable content area */}
+          <div className="flex-1 overflow-y-auto p-4 sm:p-8">
+            <div className="mb-4">
+              <span className="inline-block bg-[#fee0f9] text-[#831670] text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full mb-3">
+                {selectedProduct.category}
+              </span>
+              <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2">
+                {selectedProduct.name}
+              </h2>
+              <p className="text-sm sm:text-base text-gray-600 mb-4">{selectedProduct.description}</p>
+            </div>
 
-                {/* Product Details */}
-                <div className="md:w-1/2 p-8 flex flex-col justify-center relative">
-                  <button
-                    onClick={() => setModalOpen(false)}
-                    className="absolute top-4 right-4 text-[#fee0f9] bg-[#831670] backdrop-blur-sm p-2 rounded-full hover:bg-[#bb32a4] transition-colors"
-                    style={{zIndex: 10}}
-                  >
-                    <X className="w-5 h-5 text-[#fee0f9]" />
-                  </button>
-                  <div className="mb-4">
-                    <span className="inline-block bg-[#fee0f9] text-[#831670] text-sm font-medium px-3 py-1 rounded-full mb-3">
-                      {selectedProduct.category}
-                    </span>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                      {selectedProduct.name}
-                    </h2>
-                    <p className="text-gray-600 mb-4">{selectedProduct.description}</p>
-                  </div>
-
-                  {/* Color */}
-                  {selectedProduct.color && (
-                    <div className="flex items-center space-x-3 mb-4">
-                      <span className="text-sm font-medium text-gray-700">Color:</span>
-                      <div className="flex items-center space-x-2">
-                        <div
-                          className="w-6 h-6 rounded-full border-2 border-white shadow-lg"
-                          style={{ backgroundColor: selectedProduct.colorHex }}
-                        />
-                        <span className="text-sm text-gray-600">{selectedProduct.color}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Rating */}
-                  <div className="flex items-center space-x-2 mb-6">
-                    <div className="flex">
-                      {renderStars(selectedProduct.rating || 4)}
-                    </div>
-                    <span className="text-sm text-gray-500">
-                      ({selectedProduct.reviewCount} reviews)
-                    </span>
-                  </div>
-
-                  {/* Price */}
-                  <div className="flex items-baseline space-x-3 mb-6">
-                    <span className="text-3xl font-bold text-gray-900">
-                      {formatPrice(selectedProduct.price)}
-                    </span>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex space-x-3">
-                    <button
-                      onClick={(e) => {
-                        addToCart(selectedProduct, e);
-                        setModalOpen(false);
-                      }}
-                      className="flex-1 bg-[#fee0f9] text-[#831670] py-3 px-6 rounded-lg hover:bg-[#f4b8ea] active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium"
-                    >
-                      <ShoppingCart className="w-5 h-5" />
-                      <span>Add to Cart</span>
-                    </button>
-                  </div>
+            {/* Color */}
+            {selectedProduct.color && (
+              <div className="flex items-center space-x-3 mb-4">
+                <span className="text-xs sm:text-sm font-medium text-gray-700">Color:</span>
+                <div className="flex items-center space-x-2">
+                  <div
+                    className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white shadow-lg"
+                    style={{ backgroundColor: selectedProduct.colorHex }}
+                  />
+                  <span className="text-xs sm:text-sm text-gray-600">{selectedProduct.color}</span>
                 </div>
               </div>
+            )}
+
+            {/* Rating */}
+            <div className="flex items-center space-x-2 mb-6">
+              <div className="flex">
+                {renderStars(selectedProduct.rating || 4)}
+              </div>
+              <span className="text-xs sm:text-sm text-gray-500">
+                ({selectedProduct.reviewCount} reviews)
+              </span>
+            </div>
+
+            {/* Price */}
+            <div className="flex items-baseline space-x-3 mb-6">
+              <span className="text-2xl sm:text-3xl font-bold text-gray-900">
+                {formatPrice(selectedProduct.price)}
+              </span>
             </div>
           </div>
-        )}
+
+          {/* Actions - Fixed at bottom */}
+          <div className="flex-shrink-0 p-4 sm:p-6 border-t sm:border-t-0">
+            <button
+              onClick={(e) => {
+                addToCart(selectedProduct, e);
+                setModalOpen(false);
+              }}
+              className="w-full bg-[#fee0f9] text-[#831670] py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg hover:bg-[#f4b8ea] active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium text-sm sm:text-base"
+            >
+              <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>Add to Cart</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );
