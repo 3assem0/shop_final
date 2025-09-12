@@ -360,8 +360,8 @@ export default function Hero() {
       <div className="pb-10">
         <CurvedLoop 
       marqueeText="Be ✦ Creative ✦ With ✦ React ✦ Bits ✦"
-        speed={3}
-        curveAmount={300}
+        speed={2}
+        curveAmount={200}
         direction="right"
         interactive={true}
         className=" text-[#831670]"

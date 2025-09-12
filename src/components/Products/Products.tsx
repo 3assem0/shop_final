@@ -196,7 +196,7 @@ const Products: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 rounded-2xl to-blue-50 py-12 px-4">
+    <div className="min-h-screen bg-transparent py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -244,7 +244,7 @@ const Products: React.FC = () => {
                 <select
                   value={filters.category}
                   onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#831670] focus:border-transparent"
+                  className="w-full p-2 border border-gray-200 rounded-lg  text-[#831670]"
                 >
                   <option value="">All Categories</option>
                   {filterOptions.categories.map(category => (
@@ -266,7 +266,7 @@ const Products: React.FC = () => {
                         ...prev,
                         priceRange: [parseInt(e.target.value) || 0, prev.priceRange[1]]
                       }))}
-                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#831670] focus:border-transparent"
+                      className="w-full p-2 border border-gray-200 rounded-lg text-[#831670]"
                     />
                     <span className="text-gray-500">-</span>
                     <input
@@ -277,7 +277,7 @@ const Products: React.FC = () => {
                         ...prev,
                         priceRange: [prev.priceRange[0], parseInt(e.target.value) || 1000]
                       }))}
-                      className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#831670] focus:border-transparent"
+                      className="w-full p-2 border border-gray-200 rounded-lg   text-[#831670]"
                     />
                   </div>
                   <div className="text-sm text-gray-600">
@@ -286,32 +286,7 @@ const Products: React.FC = () => {
                 </div>
               </div>
 
-              {/* Rating Filter */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Minimum Rating</h4>
-                <div className="space-y-2">
-                  {[4, 3, 2, 1, 0].map(rating => (
-                    <label key={rating} className="flex items-center space-x-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={rating}
-                        checked={filters.minRating === rating}
-                        onChange={(e) => setFilters(prev => ({ ...prev, minRating: parseInt(e.target.value) }))}
-                        className="text-[#831670] focus:ring-[#831670]"
-                      />
-                      <div className="flex items-center space-x-1">
-                        <div className="flex">
-                          {renderStars(rating || 0.1)}
-                        </div>
-                        <span className="text-sm text-gray-600">
-                          {rating === 0 ? 'All ratings' : `${rating}+ stars`}
-                        </span>
-                      </div>
-                    </label>
-                  ))}
-                </div>
-              </div>
+             
 
               {/* Color Filter */}
               {filterOptions.colors.length > 0 && (
