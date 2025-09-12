@@ -24,7 +24,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
 
         {cartItems.length === 0 ? (
           // Empty Cart State
-          <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
+          <div className="flex-1 flex flex-col items-center justify-center text-center py-12 px-4">
             <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
               <ShoppingBag className="h-12 w-12 text-[#fb6f92]" />
             </div>
@@ -44,7 +44,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
         ) : (
           <>
             {/* Cart Items */}
-            <div className="flex-1 overflow-y-auto py-4 space-y-4">
+            <div className="flex-1 overflow-y-auto py-4 space-y-4 px-4">
               {cartItems.map((item) => (
                 <div key={item.id} className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                   {/* Product Image */}
@@ -218,12 +218,7 @@ export const Header = () => {
     goHomeThen(() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" }));
   };
 
-  // Demo products for testing (remove in production)
-  const demoProducts = [
-    { id: 1, name: "MacBook Pro M4", price: 1999, image: "/Classic_T-shirt.webp" },
-    { id: 2, name: "iPhone 16 Pro", price: 999, image: "/Classic_T-shirt.webp" },
-    { id: 3, name: "iPad Pro", price: 799, image: "/Classic_T-shirt.webp" }
-  ];
+ 
 
   return (
     <>
@@ -282,24 +277,9 @@ export const Header = () => {
 
               {/* Right Section - Actions */}
               <div className="flex items-center space-x-3">
-                
-                {/* Demo Add to Cart Buttons (remove in production) */}
-                {/* <div className="hidden lg:flex items-center space-x-2">
-                  {demoProducts.slice(0, 1).map(product => (
-                    <Button
-                      key={product.id}
-                      variant="outline"
-                      size="sm"
-                      className="text-xs"
-                      onClick={() => handleAddToCart(product)}
-                    >
-                      Add {product.name.split(' ')[0]}
-                    </Button>
-                  ))}
-                </div> */}
-
+              
                 {/* Mobile Menu */}
-                <div className="block md:hidden">
+                <div className="block md:hidden mt-20">
                   <Sheet>
                     <SheetTrigger asChild>
                       <Button 
