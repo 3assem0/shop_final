@@ -14,7 +14,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white  border-gray-200 flex flex-col z-[56]">
+      <SheetContent side="right" className="w-[350px] sm:w-[400px] bg-white  border-gray-200 flex flex-col z-[56]">
         <SheetHeader className="border-b border-gray-200  pb-4">
           <SheetTitle className="flex items-center gap-2 text-xl font-bold text-[#fb6f92]">
             <ShoppingCart className="h-5 w-5 text-purple-600" />
@@ -44,7 +44,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
         ) : (
           <>
             {/* Cart Items */}
-            <div className="flex-1 overflow-y-auto py-4 space-y-4 px-4">
+            <div className="flex-1 overflow-y-auto py-2 space-y-4 px-1">
               {cartItems.map((item) => (
                 <div key={item.id} className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                   {/* Product Image */}
