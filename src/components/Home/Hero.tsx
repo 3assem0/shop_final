@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, useRef } from 'react'
-import CurvedLoop from '../CurvedLoop';
+import React, { useState, useEffect, useRef } from 'react';
+import { ShoppingCart, X } from 'lucide-react';
+// import CurvedLoop from '../CurvedLoop'; // Uncomment if needed
 
 interface Product {
   id?: string | number;
@@ -12,28 +13,63 @@ interface Product {
   price?: string | number;
   oldPrice?: string | number;
   featured?: boolean;
+  category?: string;
+  rating?: number;
+  reviewCount?: number;
+  color?: string;
+  colorHex?: string;
 }
+
+// Helper: format price
+const formatPrice = (price: any) => {
+  if (!price) return '';
+  return `$${parseFloat(price).toFixed(2)}`;
+};
+
+// Helper: render stars
+const renderStars = (rating = 0) => {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    stars.push(
+      <svg
+        key={i}
+        className={`w-4 h-4 sm:w-5 sm:h-5 ${i <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.381-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
+      </svg>
+    );
+  }
+  return stars;
+};
+
 export default function Hero() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
-  const containerRef = useRef(null);
-  const autoPlayRef = useRef(null);
-  // Add missing state for products, loading, error
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Slider states
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // Modal states
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  // Fetch featured products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch('/api/get-products');
-        if (!response.ok) throw new Error('Failed to fetch products');
-        const data = await response.json();
-        // Map to Hero format and filter featured
+        const res = await fetch('/api/get-products');
+        if (!res.ok) throw new Error('Failed to fetch products');
+        const data = await res.json();
+
         const heroProducts = (data.products || [])
           .filter((p: any) => p.featured)
           .map((p: any) => ({
@@ -46,7 +82,13 @@ export default function Hero() {
             price: p.price,
             oldPrice: p.oldPrice,
             featured: !!p.featured,
+            category: p.category,
+            rating: p.rating,
+            reviewCount: p.reviewCount,
+            color: p.color,
+            colorHex: p.colorHex,
           }));
+
         setProducts(heroProducts);
       } catch (err: any) {
         setError(err.message || 'Error loading products');
@@ -57,336 +99,147 @@ export default function Hero() {
     fetchProducts();
   }, []);
 
-  // Auto-play functionality
-  useEffect(() => {
-    if (isAutoPlaying && !isDragging) {
-      autoPlayRef.current = setInterval(() => {
-        setCurrentSlide(prev => (prev + 1) % products.length);
-      }, 4000); // Change slide every 4 seconds
-    }
-
-    return () => {
-      if (autoPlayRef.current) {
-        clearInterval(autoPlayRef.current);
-      }
-    };
-  }, [isAutoPlaying, isDragging, products.length]);
-
-  const handleDotClick = (index) => {
-    setCurrentSlide(index);
-    setIsAutoPlaying(false); // Pause auto-play when user manually selects
-    
-    // Resume auto-play after 8 seconds of inactivity
-    setTimeout(() => {
-      setIsAutoPlaying(true);
-    }, 8000);
-  };
-
-  // Mouse drag handlers
-  const handleMouseDown = (e) => {
+  // Swipe handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
-    setDragStart(e.clientX);
-    setIsAutoPlaying(false);
-    e.preventDefault();
+    setStartX(e.pageX - (containerRef.current?.offsetLeft || 0));
+    setDragOffset(0);
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging) return;
-    
-    const currentX = e.clientX;
-    const offset = currentX - dragStart;
-    setDragOffset(offset);
+    const x = e.pageX - (containerRef.current?.offsetLeft || 0);
+    setDragOffset(x - startX);
   };
 
   const handleMouseUp = () => {
-    if (!isDragging) return;
-
-    const threshold = 100; // Minimum drag distance to trigger slide change
-    
-    if (Math.abs(dragOffset) > threshold) {
-      if (dragOffset > 0) {
-        // Dragged right - go to previous slide
-        setCurrentSlide(prev => prev === 0 ? products.length - 1 : prev - 1);
+    setIsDragging(false);
+    if (Math.abs(dragOffset) > 50) {
+      if (dragOffset < 0) {
+        setCurrentSlide((prev) => (prev + 1) % products.length);
       } else {
-        // Dragged left - go to next slide
-        setCurrentSlide(prev => (prev + 1) % products.length);
+        setCurrentSlide((prev) => (prev - 1 + products.length) % products.length);
       }
     }
-
-    setIsDragging(false);
     setDragOffset(0);
-    
-    // Resume auto-play after 6 seconds
-    setTimeout(() => {
-      setIsAutoPlaying(true);
-    }, 6000);
   };
 
-  // Touch drag handlers for mobile
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: React.TouchEvent) => {
     setIsDragging(true);
-    setDragStart(e.touches[0].clientX);
-    setIsAutoPlaying(false);
+    setStartX(e.touches[0].clientX);
+    setDragOffset(0);
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return;
-    
-    const currentX = e.touches[0].clientX;
-    const offset = currentX - dragStart;
-    setDragOffset(offset);
+    setDragOffset(e.touches[0].clientX - startX);
   };
 
   const handleTouchEnd = () => {
-    handleMouseUp(); // Reuse mouse up logic
+    handleMouseUp();
   };
 
-  // Pause auto-play on hover
-  const handleMouseEnter = () => {
-    setIsAutoPlaying(false);
+  const handleDotClick = (i: number) => setCurrentSlide(i);
+
+  const handleOpenModal = (p: Product) => {
+    setSelectedProduct(p);
+    setModalOpen(true);
   };
 
-  const handleMouseLeave = () => {
-    if (!isDragging) {
-      setIsAutoPlaying(true);
-    }
+  const addToCart = (p: Product, e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log(`Added ${p.title} to cart!`);
   };
 
-  const currentProduct = products.length > 0 ? products[currentSlide % products.length] : null;
-  // Only use up to 3 featured products
-  const featured = products.slice(0, 3);
+  // State UI
+  if (loading) return <div className="text-center py-10">Loading...</div>;
+  if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
+  if (!products.length) return <div className="text-center py-10">No featured products</div>;
 
-  if (loading) {
-    // Skeleton loader for hero grid
-    return (
-    <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-5 bg-transparent  w-full">
-        <div className="grid lg:grid-cols-2 gap-6 h-auto lg:h-[500px] w-full">
-          {/* Left Column - Large Skeleton */}
-          <div className="bg-white rounded-3xl animate-fade-in p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8  overflow-hidden select-none w-full h-full min-h-[300px]">
-            <div className="flex-1 space-y-6 w-full">
-              <div className="inline-block w-full">
-                <div className="h-10 w-24 bg-gray-200 rounded mb-2" />
-                <div className="text-gray-400 flex gap-2">
-                  <div className="h-4 w-10 bg-gray-200 rounded" />
-                  <div className="h-4 w-10 bg-gray-200 rounded" />
-                </div>
-              </div>
-              <div className="w-full">
-                <div className="h-8 w-40 bg-gray-200 rounded mb-3" />
-                <div className="h-4 w-64 bg-gray-200 rounded mb-2" />
-                <div className="h-4 w-48 bg-gray-200 rounded" />
-              </div>
-              <div className="h-10 w-32 bg-gray-300 rounded-xl mt-4" />
-              <div className="flex items-center justify-between pt-4 w-full">
-                <div className="flex space-x-2">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="w-3 h-3 rounded-full bg-gray-300" />
-                  ))}
-                </div>
-                <div className="h-4 w-16 bg-gray-200 rounded" />
-              </div>
-              <div className="h-4 w-32 bg-gray-100 rounded mt-2" />
-            </div>
-            <div className="flex-1 flex justify-center items-center w-full">
-              <div className="w-full max-w-[300px] h-[180px] bg-gray-200 rounded" />
-            </div>
-          </div>
-          {/* Right Column - Two Skeleton Cards */}
-          <div className="flex flex-col gap-6 w-full h-full">
-            {[...Array(2)].map((_, idx) => (
-              <div key={idx} className="bg-white rounded-3xl p-6 shadow-lg flex items-center gap-6 flex-1 animate-fade-in w-full h-full min-h-[120px]">
-                <div className="flex-1 w-full">
-                  <div className="h-6 w-32 bg-gray-200 rounded mb-2" />
-                  <div className="h-4 w-40 bg-gray-200 rounded mb-4" />
-                  <div className="flex items-center gap-2">
-                    <div className="h-6 w-16 bg-gray-200 rounded" />
-                    <div className="h-5 w-12 bg-gray-100 rounded" />
-                  </div>
-                </div>
-                <div className="w-24 h-24 bg-gray-200 rounded" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-  if (error) {
-    return <div className="text-center py-12 text-red-500">{error}</div>;
-  }
-  if (!products.length) {
-    return <div className="text-center text-black py-12">No featured products available.</div>;
-  }
-  if (!currentProduct) {
-    return <div className="text-center text-black py-12">No products available.</div>;
-  }
+  const currentProduct = products[currentSlide];
 
   return (
-    <div className='relative'>
-      <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-7 bg-transparent dark:bg-black">
-        <div className="grid lg:grid-cols-2 gap-6 h-auto lg:h-[500px]">
-          {/* Left Column - Large Featured Product with Swap */}
-         <div 
-  ref={containerRef}
-  className="bg-white rounded-3xl p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8 overflow-hidden cursor-grab active:cursor-grabbing select-none"
-  onMouseDown={handleMouseDown}
-  onMouseMove={handleMouseMove}
-  onMouseUp={handleMouseUp}
-  onMouseLeave={handleMouseLeave}
-  onMouseEnter={handleMouseEnter}
-  onTouchStart={handleTouchStart}
-  onTouchMove={handleTouchMove}
-  onTouchEnd={handleTouchEnd}
-  // Remove the transform and transition from container - keep it static
->
-  <div 
-    className="flex-1 space-y-6 pointer-events-auto"
-    style={{
-      transform: isDragging ? `translateX(${dragOffset * 0.1}px)` : 'none',
-      transition: isDragging ? 'none' : 'transform 0.3s ease-out, opacity 0.3s ease-out',
-      opacity: isDragging ? 0.8 : 1
-    }}
-  >
-    {/* Sale Badge & Discount */}
-    <div className="inline-block mb-2">
-      {currentProduct.discount && (
-        <span className="text-5xl font-bold text-blue-600 transition-all duration-500 mr-2">
-          {currentProduct.discount}
-        </span>
-      )}
-      <div className="text-gray-600">
-        <div className="text-sm">Sale</div>
-        <div className="text-sm">Off</div>
-      </div>
-    </div>
-    
-    {/* Product Info */}
-    <div className="mb-2">
-      <h2 className="text-3xl font-bold text-gray-900 mb-3 transition-all duration-500">
-        {currentProduct.title}
-      </h2>
-      <p className="text-gray-500 text-sm leading-relaxed transition-all duration-500 mb-2">
-        {currentProduct.description}
-      </p>
-      
-      {/* Price & Old Price */}
-      <div className="flex items-center gap-3 mb-2">
-        <span className="text-2xl font-bold text-red-500">{currentProduct.price}</span>
-        {currentProduct.oldPrice && (
-          <span className="text-lg text-gray-400 line-through">{currentProduct.oldPrice}</span>
-        )}
-      </div>
-    </div>
-    
-    {/* Shop Button */}
-    <button 
-      className="bg-gray-900 text-white px-8 py-3 rounded-xl font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 pointer-events-auto mb-2"
-      onMouseDown={(e) => e.stopPropagation()}
-    >
-      {currentProduct.buttonText}
-    </button>
-    
-    {/* Product ID */}
-    {currentProduct.id && (
-      <div className="text-xs text-gray-400 mb-2">ID: {currentProduct.id}</div>
-    )}
-    
-    {/* Auto-play indicator and Controls */}
-    <div className="flex items-center justify-between pt-4">
-      <div className="flex space-x-2">
-        {products.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handleDotClick(index)}
-            onMouseDown={(e) => e.stopPropagation()}
-            className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-110 pointer-events-auto ${
-              index === currentSlide 
-                ? 'bg-blue-500 scale-110' 
-                : 'bg-gray-300 hover:bg-gray-400'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
-      
-      {/* Auto-play control */}
-      <button
-        onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-        onMouseDown={(e) => e.stopPropagation()}
-        className="text-xs text-gray-500 hover:text-gray-700 transition-colors pointer-events-auto flex items-center gap-1"
-      >
-        {isAutoPlaying ? (
-          <></>
-        ) : (
-          <></>
-        )}
-      </button>
-    </div>
-    
-    {/* Drag hint */}
-    <div className="text-xs text-gray-400 opacity-70">
-      💡 Drag to browse or click dots
-    </div>
-  </div>
-  
-  {/* Product Image */}
-  <div 
-    className="flex-1 flex justify-center"
-    style={{
-      transform: isDragging ? `translateX(${dragOffset * -0.1}px) scale(0.95)` : 'none',
-      transition: isDragging ? 'none' : 'transform 0.3s ease-out',
-      opacity: isDragging ? 0.8 : 1
-    }}
-  >
-    <img 
-      src={currentProduct.image}
-      alt={currentProduct.title}
-      className="w-full max-w-[300px] h-auto object-contain transition-all duration-500 transform hover:scale-105 pointer-events-none"
-      draggable={false}
-    />
-  </div>
-</div>
-
-          {/* Right Column - Two Product Cards */}
-          {/* Right Column - Two Featured Product Cards */}
-          <div className="flex flex-col gap-6">
-            {featured.slice(1).map((product, idx) => (
-              <div key={idx} className="bg-white rounded-3xl p-6 shadow-lg flex items-center gap-6 flex-1 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    {product.title}
-                  </h3>
-                  <p className="text-gray-500 text-sm mb-4">{product.description}</p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-red-500">{product.price}</span>
-                    {product.oldPrice && (
-                      <span className="text-lg text-gray-400 line-through">{product.oldPrice}</span>
-                    )}
-                  </div>
-                </div>
-                <div className="w-24 h-24">
-                  <img 
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full h-full object-contain transition-transform duration-300 hover:scale-110"
+    <div className="relative px-[5%] sm:px-[10%] md:px-[8%] pt-7 bg-transparent">
+      <div className="grid lg:grid-cols-2 gap-6 h-auto lg:h-[500px]">
+        {/* Left - Featured Product */}
+        <div
+          ref={containerRef}
+          className="bg-white rounded-3xl p-8 shadow-lg flex flex-col lg:flex-row items-center gap-8 overflow-hidden cursor-grab active:cursor-grabbing select-none"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Info */}
+          <div className="flex-1 space-y-4">
+            {currentProduct.category && (
+              <span className="inline-block bg-pink-100 text-pink-800 text-xs font-medium px-2 py-1 rounded-full mb-1">
+                {currentProduct.category}
+              </span>
+            )}
+            <h2 className="text-3xl font-bold text-gray-900">{currentProduct.title}</h2>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold text-gray-900">{formatPrice(currentProduct.price)}</span>
+            </div>
+            <p className="text-gray-500 text-sm">{currentProduct.description}</p>
+            <div className="flex items-center justify-between pt-6">
+              <button
+                onClick={() => handleOpenModal(currentProduct)}
+                className="bg-pink-800 text-white py-3 px-8 rounded-xl font-medium hover:bg-pink-600 transition"
+              >
+                Shop Now
+              </button>
+              <div className="flex space-x-2">
+                {products.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleDotClick(i)}
+                    className={`w-3 h-3 rounded-full ${i === currentSlide ? 'bg-pink-800' : 'bg-gray-300'}`}
                   />
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
+          </div>
+          {/* Image */}
+          <div className="flex-1 flex justify-center">
+            <img src={currentProduct.image} alt={currentProduct.title} className="w-full max-w-[300px]" />
           </div>
         </div>
       </div>
-      <div className="pb-10">
-        <CurvedLoop 
-      marqueeText="Be ✦ Creative ✦ With ✦ React ✦ Bits ✦"
-        speed={2}
-        curveAmount={200}
-        direction="right"
-        interactive={true}
-        className=" text-[#831670]"
-      />
-      </div>
+
+      {/* Modal */}
+      {modalOpen && selectedProduct && (
+        <div
+          id="modal-backdrop"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8"
+          onClick={() => setModalOpen(false)}
+        >
+          <div className="bg-white rounded-xl w-full max-w-md shadow-2xl p-6" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-4 right-4 text-pink-800 bg-pink-100 p-2 rounded-full"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-64 object-contain" />
+            <h2 className="text-xl font-bold mt-4">{selectedProduct.title}</h2>
+            <p className="text-gray-600">{selectedProduct.description}</p>
+            <div className="flex items-center gap-2 mt-2">{renderStars(selectedProduct.rating)}</div>
+            <div className="flex items-center justify-between mt-4">
+              <span className="text-2xl font-bold">{formatPrice(selectedProduct.price)}</span>
+              <button
+                onClick={(e) => addToCart(selectedProduct, e)}
+                className="bg-pink-800 text-white py-2 px-4 rounded-lg flex items-center gap-2"
+              >
+                <ShoppingCart className="w-4 h-4" /> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-     
   );
-};
+}
