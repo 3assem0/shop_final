@@ -14,17 +14,17 @@
       "oldPrice": "99.99"
     },
     {
-      "name": "Product 2",
-      "description": "desc2",
-      "price": 200,
+      "name": "Cozy Knit Scarf",
+      "description": "Soft, breathable knit scarf made from eco-friendly yarn. Perfect for chilly mornings.",
+      "price": 29.5,
       "featured": true,
-      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260026/aoch4r2kql70scejpyve.jpg",
-      "color": "",
-      "colorHex": "#6366f1",
-      "category": "",
+      "image": "blob:https://shop-final-omega.vercel.app/c98eb424-4b4e-47b6-8a28-ec66c1596741",
+      "color": "Heather Gray",
+      "colorHex": "#e6e5e6",
+      "category": "Apparel",
       "rating": 4,
-      "reviewCount": 1,
-      "oldPrice": ""
+      "reviewCount": 89,
+      "oldPrice": "39.0"
     },
     {
       "name": "Product 3",
@@ -40,5 +40,5 @@
       "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-12T18:58:53.442Z"
+  "lastUpdated": "2025-09-12T19:01:26.071Z"
 }
