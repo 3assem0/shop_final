@@ -1,23 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { getCart, setCart } from '../../lib/cart';
+import { getCart, setCart, addToCart as addToCartLib } from '../../lib/cart';
 import { Star, ShoppingCart, Eye, X, Filter, ChevronDown } from 'lucide-react';
 import ProductGrid from '../Skiliton/ProductGrid';
-
-interface Product {
-  name: string;
-  description: string;
-  price: string | number;
-  id?: number;
-  image?: string;
-  imageAlt?: string;
-  color?: string;
-  colorHex?: string;
-  rating?: number;
-  reviewCount?: number;
-  category?: string;
-}
-
-type CartItem = Omit<Product, 'price'> & { price: string; quantity: number };
+import { Product, CartItem } from '../../types/product';
+import { normalizeProduct, formatPrice, productToCartItem, getProductDisplayName } from '../../lib/product-utils';
 
 interface Filters {
   category: string;
@@ -46,12 +32,12 @@ const Products: React.FC = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data && Array.isArray(data.products)) {
-          setProducts(data.products);
+          // Normalize all products to ensure consistent data structure
+          const normalizedProducts = data.products.map(normalizeProduct);
+          setProducts(normalizedProducts);
+          
           // Auto-adjust price range based on actual product prices
-          const prices = data.products.map((p: Product) => {
-            const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
-            return isNaN(price) ? 0 : price;
-          });
+          const prices = normalizedProducts.map(p => p.price);
           const maxPrice = Math.max(...prices);
           setFilters(prev => ({ ...prev, priceRange: [0, Math.ceil(maxPrice)] }));
         } else {
@@ -103,8 +89,7 @@ useEffect(() => {
       }
 
       // Price filter
-      const price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
-      if (isNaN(price) || price < filters.priceRange[0] || price > filters.priceRange[1]) {
+      if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1]) {
         return false;
       }
 
@@ -124,26 +109,18 @@ useEffect(() => {
 
   const addToCart = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();
-    let cart = getCart();
-    const existing = cart.find((item) => item.id === product.id);
-    if (existing) {
-      cart = cart.map((item) =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-    } else {
-      cart.push({ 
-        ...product, 
-        id: product.id ?? Date.now(), 
-        quantity: 1,
-        price: typeof product.price === 'string' ? product.price : product.price.toString()
-      });
-    }
-    setCart(cart);
+    
+    // Convert product to cart item
+    const cartItem = productToCartItem(product, 1);
+    
+    // Add to cart using the library function
+    addToCartLib(cartItem);
+    
+    // Update cart badge
+    const updatedCart = getCart();
     const badge = document.getElementById('cart-badge');
     if (badge) {
-      badge.textContent = cart.reduce((sum, item) => sum + (item.quantity || 1), 0).toString();
+      badge.textContent = updatedCart.reduce((sum, item) => sum + item.quantity, 0).toString();
     }
   };
 
@@ -153,13 +130,7 @@ useEffect(() => {
     setModalOpen(true);
   };
 
-  const formatPrice = (price: string | number) => {
-    const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
-    return numericPrice.toLocaleString('en-EG', {
-      style: 'currency',
-      currency: 'EGP',
-    });
-  };
+  // formatPrice is now imported from product-utils
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -185,10 +156,7 @@ useEffect(() => {
   const clearFilters = () => {
     setFilters({
       category: '',
-      priceRange: [0, Math.max(...products.map(p => {
-        const price = typeof p.price === 'string' ? parseFloat(p.price) : p.price;
-        return isNaN(price) ? 0 : price;
-      })) || 1000],
+      priceRange: [0, Math.max(...products.map(p => p.price)) || 1000],
       minRating: 0,
       colors: []
     });
@@ -441,7 +409,7 @@ useEffect(() => {
                     <div className="p-4 flex-1">
                       <div className="mb-2">
                         <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 group-hover:text-blue-600 transition-colors">
-                          {product.name}
+                          {getProductDisplayName(product)}
                         </h3>
                       </div>
 
@@ -527,7 +495,7 @@ useEffect(() => {
                 {selectedProduct.category}
               </span>
               <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2">
-                {selectedProduct.name}
+                {getProductDisplayName(selectedProduct)}
               </h2>
               <p className="text-sm sm:text-base text-gray-600 mb-4">{selectedProduct.description}</p>
             </div>
