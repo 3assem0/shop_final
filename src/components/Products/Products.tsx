@@ -479,12 +479,12 @@ useEffect(() => {
 
         {/* Quick View Modal */}
 {modalOpen && selectedProduct && (
-  <div 
+  <div
     id="modal-backdrop"
-    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8 sm:overflow-scroll"
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8 overflow-y-auto"
     onClick={handleModalClick}
   >
-    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-[95vh] sm:max-h-[75vh] sm:overflow-scroll min-h-fit shadow-2xl flex flex-col mt-24 p-2">
+    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-fit sm:max-h-[95vh] shadow-2xl flex flex-col p-2" onClick={e => e.stopPropagation()}>
       {/* Mobile: Stack vertically with scrollable content */}
       <div className="flex flex-col sm:flex-row h-full">
         {/* Product Image */}
@@ -493,21 +493,21 @@ useEffect(() => {
             <img
               src={selectedProduct.image && selectedProduct.image.includes('cloudinary.com') ? selectedProduct.image : '/public/logo.png'}
               alt={selectedProduct.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-t-xl sm:rounded-l-2xl sm:rounded-t-none"
               onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/public/logo.png'; }}
             />
           </div>
         </div>
 
         {/* Product Details - Scrollable on mobile */}
-        <div className="sm:w-1/2 flex flex-col relative min-h-0">
+        <div className="sm:w-1/2 flex flex-col relative">
           <button
             onClick={() => setModalOpen(false)}
-            className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[#fee0f9] bg-[#831670] backdrop-blur-sm p-1.5 sm:p-2 rounded-full hover:bg-[#bb32a4] transition-colors z-10"
+            className="absolute top-4 right-4 text-[#fee0f9] bg-[#831670] backdrop-blur-sm p-1.5 sm:p-2 rounded-full hover:bg-[#bb32a4] transition-colors z-10"
           >
             <X className="w-4 h-4 sm:w-5 sm:h-5 text-[#fee0f9]" />
           </button>
-          
+
           {/* Scrollable content area */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-8">
             <div className="mb-4">
@@ -553,7 +553,7 @@ useEffect(() => {
           </div>
 
           {/* Actions */}
-          <div className="flex-shrink-0 p-4 sm:p-6 sm:border-t-0">
+          <div className="flex-shrink-0 p-4 sm:p-6 sm:border-t sm:border-gray-200">
             <button
               onClick={(e) => {
                 addToCart(selectedProduct, e);
