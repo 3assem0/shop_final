@@ -183,7 +183,7 @@ export default function HeroCarousel(): JSX.Element {
   if (loading) {
     return (
       <div className="w-full px-4 py-10">
-        <div className="h-64 rounded-xl bg-gray-100 animate-pulse" />
+        <div className="h-64 rounded-xl bg-gray-100 " />
       </div>
     );
   }
