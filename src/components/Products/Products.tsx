@@ -209,13 +209,13 @@ const Products: React.FC = () => {
         </div>
 
         {/* Filter Toggle Button - Mobile */}
-        <div className="mb-6 flex justify-between items-center sticky top-4 bg-white/90 backdrop-blur-sm py-4 z-30 -mx-4 px-4 border-b border-gray-100 rounded-lg shadow-sm">
+        <div className="mb-6 flex justify-between text-[#fb6f92] items-center sticky top-4 bg-white/90 backdrop-blur-sm py-4 z-30 -mx-4 px-4 border-b border-gray-100 rounded-lg shadow-sm">
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="lg:hidden flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm border hover:bg-gray-50 transition-colors"
           >
             <Filter className="w-4 h-4" />
-            <span>Filters</span>
+            <span className='text-[#fb6f92]'>Filters</span>
             <ChevronDown className={`w-4 h-4 transform transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
           
@@ -287,7 +287,7 @@ const Products: React.FC = () => {
               </div>
 
               {/* Rating Filter */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <h4 className="font-medium text-gray-900 mb-3">Minimum Rating</h4>
                 <div className="space-y-2">
                   {[4, 3, 2, 1, 0].map(rating => (
@@ -311,7 +311,7 @@ const Products: React.FC = () => {
                     </label>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               {/* Color Filter */}
               {filterOptions.colors.length > 0 && (
