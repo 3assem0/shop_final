@@ -1,10 +1,23 @@
 {
   "products": [
     {
+      "name": "Classic Handmade Bag",
+      "description": "Premium hand-stitched leather bag — roomy, durable, and stylish for everyday use.",
+      "price": 79.99,
+      "featured": true,
+      "image": "blob:https://shop-final-omega.vercel.app/8cdf5fb2-e9e2-4d2a-a877-ea853f7f8fe1",
+      "color": "red",
+      "colorHex": "#fa0000",
+      "category": "Bags",
+      "rating": 4,
+      "reviewCount": 128,
+      "oldPrice": "99.99"
+    },
+    {
       "name": "Product 2",
       "description": "desc2",
       "price": 200,
-      "featured": true,
+      "featured": false,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260026/aoch4r2kql70scejpyve.jpg",
       "color": "",
       "colorHex": "#6366f1",
@@ -40,5 +53,5 @@
       "oldPrice": "159.99"
     }
   ],
-  "lastUpdated": "2025-09-12T19:08:00.735Z"
+  "lastUpdated": "2025-09-12T19:08:06.750Z"
 }
