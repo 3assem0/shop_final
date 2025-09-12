@@ -5,7 +5,7 @@
       "description": "Premium hand-stitched leather bag — roomy, durable, and stylish for everyday use.",
       "price": 79.99,
       "featured": true,
-      "image": "blob:https://shop-final-omega.vercel.app/8cdf5fb2-e9e2-4d2a-a877-ea853f7f8fe1",
+      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757706524/mohair-products/rt2cjr7yhlyxfrf1st3i.jpg",
       "color": "red",
       "colorHex": "#fa0000",
       "category": "Bags",
@@ -40,5 +40,5 @@
       "oldPrice": "159.99"
     }
   ],
-  "lastUpdated": "2025-09-12T19:11:36.495Z"
+  "lastUpdated": "2025-09-12T19:48:45.962Z"
 }
