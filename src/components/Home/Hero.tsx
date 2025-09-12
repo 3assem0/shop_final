@@ -228,7 +228,7 @@ export default function Hero(): JSX.Element {
     resumeTimeoutRef.current = window.setTimeout(() => {
       setIsAutoPlaying(true);
       resumeTimeoutRef.current = null;
-    }, 6000); // resume after 6s
+    }, 2000); // resume after 2s
   };
 
   // UI states
@@ -272,12 +272,17 @@ export default function Hero(): JSX.Element {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={() => {
-            if (isDragging) handleMouseUp();
+            if (isDragging) {
+              handleMouseUp();
+            } else {
+              setIsAutoPlaying(true);
+            }
           }}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={() => setIsAutoPlaying(false)}
+          style={{ touchAction: "pan-y" }}
         >
           {/* Info area (left column inside the card) */}
           <div
