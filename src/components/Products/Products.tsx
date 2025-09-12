@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { getCart, setCart } from '../../lib/cart';
 import { Star, ShoppingCart, Eye, X, Filter, ChevronDown } from 'lucide-react';
 import ProductGrid from '../Skiliton/ProductGrid';
@@ -61,7 +61,29 @@ const Products: React.FC = () => {
         setLoading(false);
       });
   }, []);
+// Add this useEffect to your component to prevent body scroll when modal is open
 
+useEffect(() => {
+  if (modalOpen) {
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+    // For iOS Safari
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+  } else {
+    // Restore body scroll
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+  }
+
+  // Cleanup function
+  return () => {
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+  };
+}, [modalOpen]);
   // Get unique values for filter options
   const filterOptions = useMemo(() => {
     const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
@@ -229,7 +251,7 @@ const Products: React.FC = () => {
           <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-[#a23891">Filters</h3>
+                <h3 className="text-lg font-semibold text-[#a23891]">Filters</h3>
                 <button
                   onClick={clearFilters}
                   className="text-sm text-[#fb6f92] font-medium transition-colors"
