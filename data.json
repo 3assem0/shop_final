@@ -1,19 +1,6 @@
 {
   "products": [
     {
-      "name": "Product 1",
-      "description": "desx1",
-      "price": 100,
-      "featured": true,
-      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260013/fy0g8agf3g4s6zoxledl.webp",
-      "color": "red",
-      "colorHex": "#fa0000",
-      "category": "IT & Programming",
-      "rating": 5,
-      "reviewCount": 5,
-      "oldPrice": "3232h"
-    },
-    {
       "name": "Product 2",
       "description": "desc2",
       "price": 200,
@@ -53,5 +40,5 @@
       "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-08T01:34:56.242Z"
+  "lastUpdated": "2025-09-12T18:45:05.968Z"
 }
