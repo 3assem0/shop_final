@@ -4,7 +4,7 @@
       "name": "Product 1",
       "description": "desx1",
       "price": 100,
-      "featured": true,
+      "featured": false,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260013/fy0g8agf3g4s6zoxledl.webp",
       "color": "red",
       "colorHex": "#fa0000",
@@ -40,5 +40,5 @@
       "oldPrice": ""
     }
   ],
-  "lastUpdated": "2025-09-12T18:45:16.063Z"
+  "lastUpdated": "2025-09-12T18:52:43.469Z"
 }
