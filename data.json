@@ -27,18 +27,31 @@
       "oldPrice": ""
     },
     {
-      "name": "Elegant Wool Hat",
-      "description": "Slim-fit wool hat with a modern cut — lightweight and warm.",
-      "price": 24,
+      "name": "Product 3",
+      "description": "desc3",
+      "price": 300,
       "featured": true,
-      "image": "blob:https://shop-final-omega.vercel.app/8c79f5fb-ba8d-4b84-9de7-f20812a627b9",
-      "color": "Charcoal",
-      "colorHex": "#b3bf08",
-      "category": "Accessories",
-      "rating": 5,
-      "reviewCount": 54,
+      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757260036/vy1a27lkxyricjmoh86b.jpg",
+      "color": "",
+      "colorHex": "#6366f1",
+      "category": "",
+      "rating": 4,
+      "reviewCount": 1,
       "oldPrice": ""
+    },
+    {
+      "name": "Handcrafted Leather Shoes",
+      "description": "Comfort-first leather shoes with handcrafted finishing and cushioned insole.",
+      "price": 129.99,
+      "featured": false,
+      "image": "blob:https://shop-final-omega.vercel.app/ccc6761f-d8d0-4b1e-afec-74a47bf93a8d",
+      "color": "Brown",
+      "colorHex": "#db8814",
+      "category": "Footwear",
+      "rating": 4,
+      "reviewCount": 123,
+      "oldPrice": "159.99"
     }
   ],
-  "lastUpdated": "2025-09-12T19:02:52.767Z"
+  "lastUpdated": "2025-09-12T19:04:08.056Z"
 }
