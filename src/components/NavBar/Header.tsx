@@ -152,7 +152,7 @@ const ShoppingCartDrawer = ({
                     "_blank"
                   )
                 }
-                className="w-full bg-[#eeecee] hover:bg-[#dedcdd] text-green-600 py-3 text-base font-semibold mt-4"
+                className="w-full bg-[#eeecee] hover:bg-[#dedcdd] text-green-600 py-3 my-2 text-base font-semibold mt-4"
               >
                 Proceed to Checkout
               </Button>
