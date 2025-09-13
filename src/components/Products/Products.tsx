@@ -454,78 +454,71 @@ useEffect(() => {
 {modalOpen && selectedProduct && (
   <div
     id="modal-backdrop"
-    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 lg:p-8 overflow-y-auto"
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto"
     onClick={handleModalClick}
   >
-    <div className="bg-white rounded-xl lg:rounded-2xl w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-5xl xl:max-w-6xl max-h-[98vh] shadow-2xl flex flex-col overflow-hidden transform transition-all duration-300 ease-out" onClick={e => e.stopPropagation()}>
+    <div className="bg-white rounded-lg sm:rounded-xl w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-3xl max-h-[75vh] shadow-2xl flex flex-col overflow-hidden transform transition-all duration-300 ease-out" onClick={e => e.stopPropagation()}>
       {/* Responsive layout: Mobile stack, larger screens side-by-side */}
-      <div className="flex flex-col lg:flex-row h-full min-h-0">
+      <div className="flex flex-col sm:flex-row h-full min-h-0">
         
         {/* Product Image Section */}
-        <div className="w-full lg:w-1/2 flex-shrink-0 relative group">
-          <div className="relative h-48 sm:h-64 md:h-72 lg:h-full lg:min-h-[500px] overflow-hidden">
+        <div className="w-full sm:w-1/2 flex-shrink-0 relative group">
+          <div className="relative h-32 sm:h-48 md:h-full md:min-h-[280px] overflow-hidden">
             <img
               src={selectedProduct.image && (selectedProduct.image.includes('cloudinary.com') || selectedProduct.image.startsWith('http')) ? selectedProduct.image : '/logo.png'}
               alt={selectedProduct.name}
-              className="w-full h-full object-cover "
+              className="w-full h-full object-cover"
               onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.png'; }}
             />
             
-            {/* Floating elements for visual interest */}
-            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 shadow-lg transform transition-all duration-300 hover:scale-105">
+            {/* Rating Badge */}
+            <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 shadow-md">
               <span className="text-xs font-medium text-gray-800">
                 ⭐ {selectedProduct.rating || 4}/5
               </span>
-            </div>
-            
-            {/* Animated shimmer effect */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 animate-shimmer"></div>
             </div>
           </div>
         </div>
 
         {/* Product Details Section */}
-        <div className="w-full lg:w-1/2 flex flex-col relative min-h-0">
+        <div className="w-full sm:w-1/2 flex flex-col relative min-h-0">
           
-          {/* Close Button - Positioned for all screen sizes */}
+          {/* Close Button */}
           <button
             onClick={() => setModalOpen(false)}
-            className="absolute top-3 right-3 lg:top-6 lg:right-6 text-white lg:text-[#fee0f9] bg-[#831670] backdrop-blur-sm p-2 lg:p-2.5 rounded-full hover:bg-[#bb32a4] active:scale-95 transition-all duration-200 z-20 shadow-lg"
+            className="absolute top-2 right-2 text-white sm:text-[#fee0f9] bg-[#831670] p-1.5 rounded-full hover:bg-[#bb32a4] active:scale-95 transition-all duration-200 z-20 shadow-lg"
           >
-            <X className="w-4 h-4 lg:w-5 lg:h-5" />
+            <X className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
 
           {/* Scrollable Content */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-4 lg:space-y-6">
+          <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
             
             {/* Category Badge */}
-            <div className="flex items-start justify-between">
-              <span className="inline-block bg-gradient-to-r from-[#fee0f9] to-[#f4b8ea] text-[#831670] text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-sm transform transition-all duration-200 hover:scale-105">
-                {selectedProduct.category}
-              </span>
-            </div>
+            <span className="inline-block bg-gradient-to-r from-[#fee0f9] to-[#f4b8ea] text-[#831670] text-xs font-semibold px-2 py-1 rounded-full">
+              {selectedProduct.category}
+            </span>
 
             {/* Product Title */}
-            <div className="pr-8">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight mb-3 lg:mb-4">
+            <div className="pr-6">
+              <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 leading-tight mb-2">
                 {getProductDisplayName(selectedProduct)}
               </h2>
-              <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed">
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                 {selectedProduct.description}
               </p>
             </div>
 
             {/* Color Selection */}
             {selectedProduct.color && (
-              <div className="flex flex-wrap items-center gap-3 p-4 bg-gray-50 rounded-xl">
-                <span className="text-sm lg:text-base font-medium text-gray-700">Color:</span>
-                <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                <span className="text-xs font-medium text-gray-700">Color:</span>
+                <div className="flex items-center gap-2">
                   <div
-                    className="w-6 h-6 lg:w-8 lg:h-8 rounded-full border-3 border-white shadow-lg ring-2 ring-gray-200 transition-all duration-200 hover:scale-110"
+                    className="w-4 h-4 rounded-full border-2 border-white shadow ring-1 ring-gray-200"
                     style={{ backgroundColor: selectedProduct.colorHex }}
                   />
-                  <span className="text-sm lg:text-base text-gray-700 font-medium">
+                  <span className="text-xs text-gray-700 font-medium">
                     {selectedProduct.color}
                   </span>
                 </div>
@@ -533,58 +526,36 @@ useEffect(() => {
             )}
 
             {/* Rating Section */}
-            <div className="flex flex-wrap items-center gap-3 p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl">
+            <div className="flex items-center gap-2 p-2 bg-amber-50 rounded-lg">
               <div className="flex items-center">
                 {renderStars(selectedProduct.rating || 4)}
               </div>
-              <span className="text-sm lg:text-base text-gray-600">
+              <span className="text-xs text-gray-600">
                 ({selectedProduct.reviewCount || 0} reviews)
-              </span>
-              <div className="hidden sm:block w-2 h-2 bg-amber-400 rounded-full"></div>
-              <span className="hidden sm:inline text-sm text-amber-700 font-medium">
-                Highly Rated
               </span>
             </div>
 
             {/* Price Section */}
-            <div className="p-4 lg:p-6 bg-gradient-to-br from-[#831670] to-[#bb32a4] rounded-xl text-white">
-              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
-                <div>
-                  <p className="text-sm opacity-90 mb-1">Price</p>
-                  <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-                    {formatPrice(selectedProduct.price)}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Additional Features */}
-            <div className="grid grid-cols-2 gap-3 lg:gap-4">
-              <div className="p-3 lg:p-4 bg-green-50 rounded-lg text-center">
-                <div className="text-green-600 text-lg lg:text-xl mb-1">✓</div>
-                <p className="text-xs lg:text-sm text-green-800 font-medium">In Stock</p>
-              </div>
-              <div className="p-3 lg:p-4 bg-blue-50 rounded-lg text-center">
-                <div className="text-blue-600 text-lg lg:text-xl mb-1">🚚</div>
-                <p className="text-xs lg:text-sm text-blue-800 font-medium">Fast Delivery</p>
-              </div>
+            <div className="p-3 bg-gradient-to-br from-[#831670] to-[#bb32a4] rounded-lg text-white">
+              <p className="text-xs opacity-90 mb-1">Price</p>
+              <span className="text-lg sm:text-xl font-bold">
+                {formatPrice(selectedProduct.price)}
+              </span>
             </div>
           </div>
 
-          {/* Action Buttons - Sticky at bottom */}
-          <div className="flex-shrink-0 p-4 sm:p-6 lg:p-8 bg-white border-t border-gray-100 space-y-3">
+          {/* Action Button - Sticky at bottom */}
+          <div className="flex-shrink-0 p-3 sm:p-4 bg-white border-t border-gray-100">
             <button
               onClick={(e) => {
                 addToCart(selectedProduct, e);
                 setModalOpen(false);
               }}
-              className="w-full bg-gradient-to-r from-[#fee0f9] to-[#f4b8ea] hover:from-[#f4b8ea] hover:to-[#e879c7] text-[#831670] py-2.5 lg:py-3 px-6 rounded-xl font-semibold text-sm lg:text-base shadow-lg hover:shadow-xl active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center gap-3 group"
+              className="w-full bg-gradient-to-r from-[#fee0f9] to-[#f4b8ea] hover:from-[#f4b8ea] hover:to-[#e879c7] text-[#831670] py-2 px-4 rounded-lg font-semibold text-sm shadow-lg hover:shadow-xl active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center gap-2"
             >
-              <ShoppingCart className="w-4 h-4 lg:w-5 lg:h-5 group-hover:animate-bounce" />
+              <ShoppingCart className="w-4 h-4" />
               <span>Add to Cart</span>
             </button>
-            
-          
           </div>
         </div>
       </div>
