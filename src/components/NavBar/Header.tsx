@@ -243,36 +243,34 @@ export const Header = () => {
                 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex">
-                  <ul className="flex items-center space-x-8">
-                    <li>
-                      <button 
-                        className="text-[#831670]   font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
-                        onClick={() => dispatchCategory("all")}
-                      >
-                        Products
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92]  transition-all duration-200 group-hover:w-full"></span>
-                      </button>
-                    </li>
-                    <li>
-                      <button 
-                        className="text-[#831670]    font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
-                        onClick={() => dispatchCategory("Shirts")}
-                      >
-                        About
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92]  transition-all duration-200 group-hover:w-full"></span>
-                      </button>
-                    </li>
-                    <li>
-                      <button 
-                        className="text-[#831670]0    font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
-                        onClick={() => dispatchCategory("Stickers")}
-                      >
-                        Contact
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
+  <ul className="flex items-center space-x-8">
+    <li>
+      <button
+        className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+        onClick={() => {
+          const el = document.getElementById("products");
+          el?.scrollIntoView({ behavior: "smooth" });
+        }}
+      >
+        Products
+        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
+      </button>
+    </li>
+    <li>
+      <button
+        className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+        onClick={() => {
+          const el = document.getElementById("contact");
+          el?.scrollIntoView({ behavior: "smooth" });
+        }}
+      >
+        Contact
+        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
               </div>
 
               {/* Right Section - Actions */}

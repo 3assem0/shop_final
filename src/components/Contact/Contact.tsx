@@ -23,7 +23,7 @@ export default function Contact() {
 
                 <h2 className="mt-4 text-lg font-medium text-[#831670] ">Email</h2>
                 <p className="mt-2 text-[#831670] ">Our friendly team is here to help.</p>
-                <p className="mt-2 text-[#fb6f92] ">hello@merakiui.com</p>
+                <p className="mt-2 text-[#fb6f92] ">mohair.handmade11@gmail.com</p>
             </div>
 
             <div className="flex flex-col items-center justify-center text-center">
