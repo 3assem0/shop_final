@@ -454,103 +454,147 @@ useEffect(() => {
 {modalOpen && selectedProduct && (
   <div
     id="modal-backdrop"
-    className="fixed top-[20px] left-0 right-0 bottom-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-8 overflow-y-auto"
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 lg:p-8 overflow-y-auto"
     onClick={handleModalClick}
   >
-    <div
-      className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-[calc(100vh-20px)] shadow-2xl flex flex-col p-2"
-      onClick={e => e.stopPropagation()}
-    >
-      {/* Mobile: Stack vertically with scrollable content */}
-      <div className="flex flex-col sm:flex-row h-full">
-        {/* Product Image */}
-        <div className="sm:w-1/2 flex-shrink-0">
-          <div className="relative aspect-square sm:h-full">
+    <div className="bg-white rounded-xl lg:rounded-2xl w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-5xl xl:max-w-6xl max-h-[98vh] shadow-2xl flex flex-col overflow-hidden transform transition-all duration-300 ease-out" onClick={e => e.stopPropagation()}>
+      {/* Responsive layout: Mobile stack, larger screens side-by-side */}
+      <div className="flex flex-col lg:flex-row h-full min-h-0">
+        
+        {/* Product Image Section */}
+        <div className="w-full lg:w-1/2 flex-shrink-0 relative group">
+          <div className="relative h-48 sm:h-64 md:h-72 lg:h-full lg:min-h-[500px] overflow-hidden">
             <img
-              src={
-                selectedProduct.image &&
-                (selectedProduct.image.includes('cloudinary.com') ||
-                  selectedProduct.image.startsWith('http'))
-                  ? selectedProduct.image
-                  : '/logo.png'
-              }
+              src={selectedProduct.image && (selectedProduct.image.includes('cloudinary.com') || selectedProduct.image.startsWith('http')) ? selectedProduct.image : '/logo.png'}
               alt={selectedProduct.name}
-              className="w-full h-full object-cover rounded-t-xl sm:rounded-l-2xl sm:rounded-t-none"
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = '/logo.png';
-              }}
+              className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-110"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.png'; }}
             />
+            
+            {/* Image overlay gradient for better text contrast on mobile */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:hidden"></div>
+            
+            {/* Floating elements for visual interest */}
+            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 shadow-lg transform transition-all duration-300 hover:scale-105">
+              <span className="text-xs font-medium text-gray-800">
+                ⭐ {selectedProduct.rating || 4}/5
+              </span>
+            </div>
+            
+            {/* Animated shimmer effect */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 animate-shimmer"></div>
+            </div>
           </div>
         </div>
 
-        {/* Product Details - Scrollable on mobile */}
-        <div className="sm:w-1/2 flex flex-col relative">
+        {/* Product Details Section */}
+        <div className="w-full lg:w-1/2 flex flex-col relative min-h-0">
+          
+          {/* Close Button - Positioned for all screen sizes */}
           <button
             onClick={() => setModalOpen(false)}
-            className="absolute top-4 right-4 text-[#fee0f9] bg-[#831670] backdrop-blur-sm p-1.5 sm:p-2 rounded-full hover:bg-[#bb32a4] transition-colors z-10"
+            className="absolute top-3 right-3 lg:top-6 lg:right-6 text-white lg:text-[#fee0f9] bg-[#831670] backdrop-blur-sm p-2 lg:p-2.5 rounded-full hover:bg-[#bb32a4] active:scale-95 transition-all duration-200 z-20 shadow-lg"
           >
-            <X className="w-4 h-4 sm:w-5 sm:h-5 text-[#fee0f9]" />
+            <X className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
 
-          {/* Scrollable content area */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-8">
-            <div className="mb-4">
-              <span className="inline-block bg-[#fee0f9] text-[#831670] text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full mb-3">
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-4 lg:space-y-6">
+            
+            {/* Category Badge */}
+            <div className="flex items-start justify-between">
+              <span className="inline-block bg-gradient-to-r from-[#fee0f9] to-[#f4b8ea] text-[#831670] text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-sm transform transition-all duration-200 hover:scale-105">
                 {selectedProduct.category}
               </span>
-              <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2">
+            </div>
+
+            {/* Product Title */}
+            <div className="pr-8">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight mb-3 lg:mb-4">
                 {getProductDisplayName(selectedProduct)}
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 mb-4">
+              <p className="text-sm sm:text-base lg:text-lg text-gray-600 leading-relaxed">
                 {selectedProduct.description}
               </p>
             </div>
 
-            {/* Color */}
+            {/* Color Selection */}
             {selectedProduct.color && (
-              <div className="flex items-center space-x-3 mb-4">
-                <span className="text-xs sm:text-sm font-medium text-gray-700">Color:</span>
-                <div className="flex items-center space-x-2">
+              <div className="flex flex-wrap items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                <span className="text-sm lg:text-base font-medium text-gray-700">Color:</span>
+                <div className="flex items-center gap-3">
                   <div
-                    className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white shadow-lg"
+                    className="w-6 h-6 lg:w-8 lg:h-8 rounded-full border-3 border-white shadow-lg ring-2 ring-gray-200 transition-all duration-200 hover:scale-110"
                     style={{ backgroundColor: selectedProduct.colorHex }}
                   />
-                  <span className="text-xs sm:text-sm text-gray-600">
+                  <span className="text-sm lg:text-base text-gray-700 font-medium">
                     {selectedProduct.color}
                   </span>
                 </div>
               </div>
             )}
 
-            {/* Rating */}
-            <div className="flex items-center space-x-2 mb-6">
-              <div className="flex">
+            {/* Rating Section */}
+            <div className="flex flex-wrap items-center gap-3 p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl">
+              <div className="flex items-center">
                 {renderStars(selectedProduct.rating || 4)}
               </div>
-              <span className="text-xs sm:text-sm text-gray-500">
-                ({selectedProduct.reviewCount} reviews)
+              <span className="text-sm lg:text-base text-gray-600">
+                ({selectedProduct.reviewCount || 0} reviews)
+              </span>
+              <div className="hidden sm:block w-2 h-2 bg-amber-400 rounded-full"></div>
+              <span className="hidden sm:inline text-sm text-amber-700 font-medium">
+                Highly Rated
               </span>
             </div>
 
-            {/* Price */}
-            <div className="flex items-baseline space-x-3 mb-6">
-              <span className="text-2xl sm:text-3xl font-bold text-gray-900">
-                {formatPrice(selectedProduct.price)}
-              </span>
+            {/* Price Section */}
+            <div className="p-4 lg:p-6 bg-gradient-to-br from-[#831670] to-[#bb32a4] rounded-xl text-white">
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+                <div>
+                  <p className="text-sm opacity-90 mb-1">Price</p>
+                  <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+                    {formatPrice(selectedProduct.price)}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs opacity-75">Free shipping</p>
+                  <p className="text-xs opacity-75">30-day returns</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Features */}
+            <div className="grid grid-cols-2 gap-3 lg:gap-4">
+              <div className="p-3 lg:p-4 bg-green-50 rounded-lg text-center">
+                <div className="text-green-600 text-lg lg:text-xl mb-1">✓</div>
+                <p className="text-xs lg:text-sm text-green-800 font-medium">In Stock</p>
+              </div>
+              <div className="p-3 lg:p-4 bg-blue-50 rounded-lg text-center">
+                <div className="text-blue-600 text-lg lg:text-xl mb-1">🚚</div>
+                <p className="text-xs lg:text-sm text-blue-800 font-medium">Fast Delivery</p>
+              </div>
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="flex-shrink-0 p-4 sm:p-6 sm:border-t sm:border-gray-200">
+          {/* Action Buttons - Sticky at bottom */}
+          <div className="flex-shrink-0 p-4 sm:p-6 lg:p-8 bg-white border-t border-gray-100 space-y-3">
             <button
               onClick={(e) => {
                 addToCart(selectedProduct, e);
                 setModalOpen(false);
               }}
-              className="w-full bg-[#fee0f9] text-[#831670] py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg hover:bg-[#f4b8ea] active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center space-x-2 font-medium text-sm sm:text-base"
+              className="w-full bg-gradient-to-r from-[#fee0f9] to-[#f4b8ea] hover:from-[#f4b8ea] hover:to-[#e879c7] text-[#831670] py-3 lg:py-4 px-6 rounded-xl font-semibold text-sm lg:text-base shadow-lg hover:shadow-xl active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center gap-3 group"
             >
-              <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ShoppingCart className="w-4 h-4 lg:w-5 lg:h-5 group-hover:animate-bounce" />
               <span>Add to Cart</span>
+            </button>
+            
+            {/* Secondary action */}
+            <button className="w-full border-2 border-gray-200 hover:border-[#831670] text-gray-700 hover:text-[#831670] py-2.5 lg:py-3 px-6 rounded-xl font-medium text-sm lg:text-base transition-all duration-200 flex items-center justify-center gap-2">
+              <span>💝</span>
+              <span>Add to Wishlist</span>
             </button>
           </div>
         </div>
