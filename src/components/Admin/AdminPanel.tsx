@@ -6,6 +6,12 @@ interface ApiResponse {
 import { ChevronLeft, Plus, Edit3, Trash2, Star, RefreshCw, Upload, Save, X, Package, DollarSign, Tag, Palette, Star as StarIcon, Users } from 'lucide-react';
 import LoginForm from './LoginForm';
 
+interface BannerSettings {
+  showBanner: boolean;
+  bannerText: string;
+  bannerButtonText: string;
+  bannerButtonLink: string;
+}
 
 interface Product {
   name: string;
@@ -23,6 +29,7 @@ interface Product {
 
 interface ProductData {
   products: Product[];
+  bannerSettings: BannerSettings;
   lastUpdated: string;
 }
 
@@ -58,7 +65,13 @@ const AdminPanel: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
   const [authToken, setAuthToken] = useState<string | null>(null);
-
+const [bannerSettings, setBannerSettings] = useState<BannerSettings>({
+  showBanner: true,
+  bannerText: 'Sale 50% OFF',
+  bannerButtonText: 'Shop Now',
+  bannerButtonLink: '#'
+});
+const [activeTab, setActiveTab] = useState<'products' | 'banner'>('products');
   // Upload image to Cloudinary
   const uploadImageToCloudinary = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -94,26 +107,28 @@ const AdminPanel: React.FC = () => {
   };
 
   // Load products from backend
-  const loadProducts = useCallback(async () => {
-    setIsRefreshing(true);
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/get-products');
-      if (!response.ok) throw new Error('Failed to load products');
-      const data: ProductData = await response.json();
-      setProducts(data.products || []);
-      showMessage('Products loaded successfully!', 'success');
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        showMessage(err.message || 'Failed to load products', 'error');
-      } else {
-        showMessage('Failed to load products', 'error');
-      }
-    } finally {
-      setIsRefreshing(false);
-      setIsLoading(false);
-    }
-  }, []);
+const loadProducts = useCallback(async () => {
+  setIsRefreshing(true);
+  setIsLoading(true);
+  try {
+    const response = await fetch('/api/get-products');
+    if (!response.ok) throw new Error('Failed to load products');
+    const data: ProductData = await response.json();
+    setProducts(data.products || []);
+    setBannerSettings(data.bannerSettings || {
+      showBanner: true,
+      bannerText: 'Sale 50% OFF',
+      bannerButtonText: 'Shop Now',
+      bannerButtonLink: '#'
+    });
+    showMessage('Data loaded successfully!', 'success');
+  } catch (err: unknown) {
+    // ... existing error handling
+  } finally {
+    setIsRefreshing(false);
+    setIsLoading(false);
+  }
+}, []);
 
   // Check for existing session on mount
   useEffect(() => {
@@ -372,7 +387,39 @@ const AdminPanel: React.FC = () => {
     event.preventDefault();
     window.location.href = '/';
   }
+const updateBannerSettings = async (newSettings: BannerSettings) => {
+  try {
+    const response = await fetch('/api/update-json', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        newData: { 
+          products, 
+          bannerSettings: newSettings,
+          lastUpdated: new Date().toISOString() 
+        } 
+      })
+    });
+    const result: ApiResponse = await response.json();
+    if (!result.success) throw new Error(result.error || 'Failed to update banner settings');
+    setBannerSettings(newSettings);
+    showMessage('Banner settings updated successfully!', 'success');
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      showMessage(err.message || 'Failed to update banner settings', 'error');
+    } else {
+      showMessage('Failed to update banner settings', 'error');
+    }
+  }
+};
 
+const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value, type, checked } = e.target;
+  setBannerSettings(prev => ({
+    ...prev,
+    [name]: type === 'checkbox' ? checked : value
+  }));
+};
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Header */}
@@ -430,7 +477,114 @@ const AdminPanel: React.FC = () => {
           </div>
         </div>
       )}
+{/* Tab Navigation */}
+<div className="mb-8">
+  <div className="border-b border-gray-200">
+    <nav className="-mb-px flex space-x-8">
+      <button
+        onClick={() => setActiveTab('products')}
+        className={`py-2 px-1 border-b-2 font-medium text-sm ${
+          activeTab === 'products'
+            ? 'border-indigo-500 text-indigo-600'
+            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+        }`}
+      >
+        Products
+      </button>
+      <button
+        onClick={() => setActiveTab('banner')}
+        className={`py-2 px-1 border-b-2 font-medium text-sm ${
+          activeTab === 'banner'
+            ? 'border-indigo-500 text-indigo-600'
+            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+        }`}
+      >
+        Banner Settings
+      </button>
+    </nav>
+  </div>
+</div>
 
+{activeTab === 'banner' ? (
+  /* Banner Settings Form */
+  <div className="max-w-2xl">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+        <h2 className="text-lg font-semibold text-gray-900">Banner Settings</h2>
+        <p className="text-sm text-gray-500">Control your site's promotional banner</p>
+      </div>
+      
+      <form onSubmit={(e) => { e.preventDefault(); updateBannerSettings(bannerSettings); }} className="p-6 space-y-4">
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            name="showBanner"
+            checked={bannerSettings.showBanner}
+            onChange={handleBannerChange}
+            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+          />
+          <label className="ml-2 block text-sm text-gray-700">
+            Show Banner on Website
+          </label>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Banner Text
+          </label>
+          <input
+            type="text"
+            name="bannerText"
+            value={bannerSettings.bannerText}
+            onChange={handleBannerChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Sale 50% OFF"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Button Text
+          </label>
+          <input
+            type="text"
+            name="bannerButtonText"
+            value={bannerSettings.bannerButtonText}
+            onChange={handleBannerChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Shop Now"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Button Link
+          </label>
+          <input
+            type="text"
+            name="bannerButtonLink"
+            value={bannerSettings.bannerButtonLink}
+            onChange={handleBannerChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="#"
+          />
+        </div>
+        
+        <button
+          type="submit"
+          className="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
+        >
+          Update Banner Settings
+        </button>
+      </form>
+    </div>
+  </div>
+) : (
+  // Your existing products content goes here, wrapped in this condition
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    {/* All your existing products content */}
+  </div>
+)}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Stats Cards */}
