@@ -461,7 +461,7 @@ useEffect(() => {
 {modalOpen && selectedProduct && (
   <div
     id="modal-backdrop"
-    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8 overflow-y-auto"
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8 "
     onClick={handleModalClick}
   >
     <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-fit sm:max-h-[95vh] shadow-2xl flex flex-col p-2" onClick={e => e.stopPropagation()}>
