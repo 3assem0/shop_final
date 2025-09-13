@@ -32,9 +32,7 @@ const ShoppingCartDrawer = ({
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const shipping = subtotal > 50 ? 0 : 9.99;
-  const tax = subtotal * 0.08; // 8% tax
-  const total = subtotal + shipping + tax;
+  const total = subtotal;
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -138,42 +136,7 @@ const ShoppingCartDrawer = ({
 
             {/* Cart Summary */}
             <div className="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-3">
-              {/* Subtotal */}
-              <div className="flex justify-between text-sm">
-                <span className="text-[#831670] ">Subtotal</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  EGP{subtotal.toFixed(2)}
-                </span>
-              </div>
-
-              {/* Shipping */}
-              <div className="flex justify-between text-sm">
-                <span className="text-[#831670] ">Shipping</span>
-                <span
-                  className={`font-medium ${
-                    shipping === 0
-                      ? "text-green-600 dark:text-green-400"
-                      : "text-gray-900 dark:text-white"
-                  }`}
-                >
-                  {shipping === 0 ? "FREE" : `EGP${shipping.toFixed(2)}`}
-                </span>
-              </div>
-
-              {/* Tax */}
-              <div className="flex justify-between text-sm">
-                <span className="text-[#831670] ">Tax</span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  EGP{tax.toFixed(2)}
-                </span>
-              </div>
-
-              {/* Free shipping notice */}
-              {subtotal < 50 && (
-                <div className="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-2 rounded">
-                  💡 Add EGP{(50 - subtotal).toFixed(2)} more for free shipping!
-                </div>
-              )}
+             
 
               {/* Total */}
               <div className="flex justify-between text-base font-bold border-t border-gray-200 dark:border-gray-700 pt-3">
