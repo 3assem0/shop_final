@@ -457,25 +457,33 @@ useEffect(() => {
     className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto"
     onClick={handleModalClick}
   >
-    <div className="bg-white rounded-lg sm:rounded-xl w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-3xl max-h-[85vh] shadow-2xl flex flex-col overflow-hidden transform transition-all duration-300 ease-out" onClick={e => e.stopPropagation()}>
+    <div className="bg-white rounded-lg sm:rounded-xl w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-3xl max-h-[80vh] shadow-2xl flex flex-col overflow-hidden transform transition-all duration-300 ease-out" onClick={e => e.stopPropagation()}>
       {/* Responsive layout: Mobile stack, larger screens side-by-side */}
       <div className="flex flex-col sm:flex-row h-full min-h-0">
         
         {/* Product Image Section */}
         <div className="w-full sm:w-1/2 flex-shrink-0 relative group">
-          <div className="relative h-32 sm:h-48 md:h-full md:min-h-[280px] overflow-hidden">
-            <img
-              src={selectedProduct.image && (selectedProduct.image.includes('cloudinary.com') || selectedProduct.image.startsWith('http')) ? selectedProduct.image : '/logo.png'}
-              alt={selectedProduct.name}
-              className="w-full h-full object-cover"
-              onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.png'; }}
-            />
+          <div className="relative h-64 sm:h-48 md:h-full md:min-h-[280px] overflow-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+            <div className="min-w-full min-h-full">
+              <img
+                src={selectedProduct.image && (selectedProduct.image.includes('cloudinary.com') || selectedProduct.image.startsWith('http')) ? selectedProduct.image : '/logo.png'}
+                alt={selectedProduct.name}
+                className="w-full h-auto min-h-full object-contain cursor-grab active:cursor-grabbing"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.png'; }}
+                draggable={false}
+              />
+            </div>
             
             {/* Rating Badge */}
-            <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 shadow-md">
+            <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 shadow-md z-10">
               <span className="text-xs font-medium text-gray-800">
                 ⭐ {selectedProduct.rating || 4}/5
               </span>
+            </div>
+            
+            {/* Scroll indicator */}
+            <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded opacity-75 pointer-events-none">
+              Scroll to explore
             </div>
           </div>
         </div>
