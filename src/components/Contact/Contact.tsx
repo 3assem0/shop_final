@@ -13,7 +13,7 @@ export default function Contact() {
             <p className="mt-3 text-[#831670] ">Our friendly team is always here to chat.</p>
         </div>
 
-        <div className="grid grid-cols-1 gap-12 mt-10 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-12 mt-10 md:grid-cols-2 lg:grid-cols-2">
             <div className="flex flex-col items-center justify-center text-center">
                 <span className="p-3 text-[#831670] rounded-full bg-[#fee0f9] ">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
@@ -23,21 +23,9 @@ export default function Contact() {
 
                 <h2 className="mt-4 text-lg font-medium text-[#831670] ">Email</h2>
                 <p className="mt-2 text-[#831670] ">Our friendly team is here to help.</p>
-                <p className="mt-2 text-[#fb6f92] ">mohair.handmade11@gmail.com</p>
+                <p className="mt-2 text-[#fb6f92] "><a href="mailto:mohair.handmade11@gmail.com">mohair.handmade11@gmail.com</a></p>
             </div>
 
-            <div className="flex flex-col items-center justify-center text-center">
-                <span className="p-3 text-[#831670] rounded-full bg-[#fee0f9] ">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                    </svg>
-                </span>
-                
-                <h2 className="mt-4 text-lg font-medium text-[#831670] ">Office</h2>
-                <p className="mt-2 text-[#831670] ">Come say hello at our office HQ.</p>
-                <p className="mt-2 text-[#fb6f92] ">100 Smith Street Collingwood VIC 3066 AU</p>
-            </div>
 
             <div className="flex flex-col items-center justify-center text-center">
                 <span className="p-3 text-[#831670] rounded-full bg-[#fee0f9] ">
@@ -47,8 +35,14 @@ export default function Contact() {
                 </span>
                 
                 <h2 className="mt-4 text-lg font-medium text-[#831670] ">Phone</h2>
-                <p className="mt-2 text-[#831670] ">Mon-Fri from 8am to 5pm.</p>
-                <p className="mt-2 text-[#fb6f92] ">+1 (555) 000-0000</p>
+                <p className="mt-2 text-[#831670] ">24-h</p>
+                <p className="mt-2 text-[#fb6f92] ">
+                    <a
+                href="https://wa.me/201092753813"
+                target="_blank"
+                rel="noopener noreferrer"
+              > (+20)1092753813</a>
+                    </p>
             </div>
         </div>
     </div>

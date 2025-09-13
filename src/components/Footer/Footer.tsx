@@ -45,7 +45,7 @@ export const Footer = () => {
             </li>
             <li>
               <a
-                href="https://wa.me/201068462411"
+                href="https://wa.me/201092753813"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
