@@ -309,11 +309,12 @@ export default function HeroCarousel(): JSX.Element {
                     Add to cart
                   </button>
                 </div>
-              </div>
-            </div>
-            <div className="p-4 text-right">
+                <div className="p-4  text-right">
               <button onClick={handleCloseModal} className="text-sm text-gray-600 hover:underline">Close</button>
             </div>
+              </div>
+            </div>
+            
           </div>
         </div>
       )}
