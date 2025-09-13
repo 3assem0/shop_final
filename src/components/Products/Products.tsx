@@ -457,7 +457,7 @@ useEffect(() => {
     className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto"
     onClick={handleModalClick}
   >
-    <div className="bg-white rounded-lg sm:rounded-xl w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-3xl max-h-[75vh] shadow-2xl flex flex-col overflow-hidden transform transition-all duration-300 ease-out" onClick={e => e.stopPropagation()}>
+    <div className="bg-white rounded-lg sm:rounded-xl w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-3xl max-h-[80vh] shadow-2xl flex flex-col overflow-hidden transform transition-all duration-300 ease-out" onClick={e => e.stopPropagation()}>
       {/* Responsive layout: Mobile stack, larger screens side-by-side */}
       <div className="flex flex-col sm:flex-row h-full min-h-0">
         
