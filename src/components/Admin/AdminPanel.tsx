@@ -537,7 +537,7 @@ const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             name="bannerText"
             value={bannerSettings.bannerText}
             onChange={handleBannerChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 "
             placeholder="Sale 50% OFF"
           />
         </div>
@@ -551,7 +551,7 @@ const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             name="bannerButtonText"
             value={bannerSettings.bannerButtonText}
             onChange={handleBannerChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 "
             placeholder="Shop Now"
           />
         </div>
@@ -565,7 +565,7 @@ const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             name="bannerButtonLink"
             value={bannerSettings.bannerButtonLink}
             onChange={handleBannerChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border text-black border-gray-300 rounded-lg focus:ring-2 "
             placeholder="#"
           />
         </div>
@@ -581,11 +581,7 @@ const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   </div>
 ) : (
   // Your existing products content goes here, wrapped in this condition
-  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    {/* All your existing products content */}
-  </div>
-)}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Stats Cards */}
           <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -1019,6 +1015,8 @@ const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           </div>
         </div>
       </div>
+)}
+      
     </div>
   );
 };
