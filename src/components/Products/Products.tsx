@@ -467,12 +467,9 @@ useEffect(() => {
             <img
               src={selectedProduct.image && (selectedProduct.image.includes('cloudinary.com') || selectedProduct.image.startsWith('http')) ? selectedProduct.image : '/logo.png'}
               alt={selectedProduct.name}
-              className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-110"
+              className="w-full h-full object-cover "
               onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.png'; }}
             />
-            
-            {/* Image overlay gradient for better text contrast on mobile */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:hidden"></div>
             
             {/* Floating elements for visual interest */}
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 shadow-lg transform transition-all duration-300 hover:scale-105">
@@ -558,10 +555,6 @@ useEffect(() => {
                     {formatPrice(selectedProduct.price)}
                   </span>
                 </div>
-                <div className="text-right">
-                  <p className="text-xs opacity-75">Free shipping</p>
-                  <p className="text-xs opacity-75">30-day returns</p>
-                </div>
               </div>
             </div>
 
@@ -585,17 +578,13 @@ useEffect(() => {
                 addToCart(selectedProduct, e);
                 setModalOpen(false);
               }}
-              className="w-full bg-gradient-to-r from-[#fee0f9] to-[#f4b8ea] hover:from-[#f4b8ea] hover:to-[#e879c7] text-[#831670] py-3 lg:py-4 px-6 rounded-xl font-semibold text-sm lg:text-base shadow-lg hover:shadow-xl active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center gap-3 group"
+              className="w-full bg-gradient-to-r from-[#fee0f9] to-[#f4b8ea] hover:from-[#f4b8ea] hover:to-[#e879c7] text-[#831670] py-2.5 lg:py-3 px-6 rounded-xl font-semibold text-sm lg:text-base shadow-lg hover:shadow-xl active:scale-[0.98] transform transition-all duration-200 flex items-center justify-center gap-3 group"
             >
               <ShoppingCart className="w-4 h-4 lg:w-5 lg:h-5 group-hover:animate-bounce" />
               <span>Add to Cart</span>
             </button>
             
-            {/* Secondary action */}
-            <button className="w-full border-2 border-gray-200 hover:border-[#831670] text-gray-700 hover:text-[#831670] py-2.5 lg:py-3 px-6 rounded-xl font-medium text-sm lg:text-base transition-all duration-200 flex items-center justify-center gap-2">
-              <span>💝</span>
-              <span>Add to Wishlist</span>
-            </button>
+          
           </div>
         </div>
       </div>
