@@ -276,7 +276,7 @@ export default function HeroCarousel(): JSX.Element {
 
       {/* simple modal */}
       {modalOpen && selectedProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6" onClick={handleCloseModal}>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-6" onClick={handleCloseModal}>
           <div className="bg-white rounded-xl max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
             <div className="flex flex-col md:flex-row gap-4 p-6">
               <div className="md:w-1/2">
