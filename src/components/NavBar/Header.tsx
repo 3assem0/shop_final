@@ -1,20 +1,47 @@
 import { Button } from "@/components/ui/button";
-import { ShoppingBag, Menu, X, Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  ShoppingBag,
+  Menu,
+  X,
+  Plus,
+  Minus,
+  Trash2,
+  ShoppingCart,
+} from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import Banner from "../banner/Banner";
 import { useEffect, useState } from "react";
-import { getCart, setCart, addToCart as addToCartLib } from '../../lib/cart';
+import { getCart, setCart, addToCart as addToCartLib } from "../../lib/cart";
 
 // Shopping Cart Component
-const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, handleQuantityChange, handleRemoveItem }) => {
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+const ShoppingCartDrawer = ({
+  isOpen,
+  onOpenChange,
+  cartItems,
+  onUpdateCart,
+  handleQuantityChange,
+  handleRemoveItem,
+}) => {
+  const subtotal = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
   const shipping = subtotal > 50 ? 0 : 9.99;
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + shipping + tax;
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[350px] sm:w-[400px] bg-white  border-gray-200 flex flex-col z-[56]">
+      <SheetContent
+        side="right"
+        className="w-[350px] sm:w-[400px] bg-white  border-gray-200 flex flex-col z-[56]"
+      >
         <SheetHeader className="border-b border-gray-200  pb-4">
           <SheetTitle className="flex items-center gap-2 text-xl font-bold text-[#fb6f92]">
             <ShoppingCart className="h-5 w-5 text-purple-600" />
@@ -32,9 +59,10 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
               Your cart is empty
             </h3>
             <p className="text-[#bd37a7] mb-6 max-w-sm">
-              Looks like you haven't added anything to your cart yet. Start shopping to fill it up!
+              Looks like you haven't added anything to your cart yet. Start
+              shopping to fill it up!
             </p>
-            <Button 
+            <Button
               className="bg-[#831670] hover:bg-[#9c2388] text-white px-6 py-2"
               onClick={() => onOpenChange(false)}
             >
@@ -46,11 +74,14 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
             {/* Cart Items */}
             <div className="flex-1 overflow-y-auto py-2 space-y-4 px-1">
               {cartItems.map((item) => (
-                <div key={item.id} className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                <div
+                  key={item.id}
+                  className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg"
+                >
                   {/* Product Image */}
                   <div className="w-16 h-16 bg-white rounded-lg flex-shrink-0 overflow-hidden border border-gray-200 dark:border-gray-700">
-                    <img 
-                      src={item.image || "/Classic_T-shirt.webp"} 
+                    <img
+                      src={item.image || "/Classic_T-shirt.webp"}
                       alt={item.name}
                       className="w-full h-full object-cover"
                     />
@@ -64,11 +95,13 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
                     <p className="text-gray-500 dark:text-gray-400 text-xs">
                       EGP{item.price.toFixed(2)}
                     </p>
-                    
+
                     {/* Quantity Controls */}
                     <div className="flex items-center gap-2 mt-2">
                       <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                        onClick={() =>
+                          handleQuantityChange(item.id, item.quantity - 1)
+                        }
                         className="w-7 h-7 rounded-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                       >
                         <Minus className="h-3 w-3 text-gray-600 dark:text-gray-300" />
@@ -77,7 +110,9 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                        onClick={() =>
+                          handleQuantityChange(item.id, item.quantity + 1)
+                        }
                         className="w-7 h-7 rounded-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                       >
                         <Plus className="h-3 w-3 text-gray-600 dark:text-gray-300" />
@@ -88,7 +123,7 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
                   {/* Price and Remove */}
                   <div className="text-right">
                     <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                     EGP{(item.price * item.quantity).toFixed(2)}
+                      EGP{(item.price * item.quantity).toFixed(2)}
                     </p>
                     <button
                       onClick={() => handleRemoveItem(item.id)}
@@ -106,21 +141,31 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
               {/* Subtotal */}
               <div className="flex justify-between text-sm">
                 <span className="text-[#831670] ">Subtotal</span>
-                <span className="font-medium text-gray-900 dark:text-white">EGP{subtotal.toFixed(2)}</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  EGP{subtotal.toFixed(2)}
+                </span>
               </div>
 
               {/* Shipping */}
               <div className="flex justify-between text-sm">
                 <span className="text-[#831670] ">Shipping</span>
-                <span className={`font-medium ${shipping === 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'}`}>
-                  {shipping === 0 ? 'FREE' : `EGP${shipping.toFixed(2)}`}
+                <span
+                  className={`font-medium ${
+                    shipping === 0
+                      ? "text-green-600 dark:text-green-400"
+                      : "text-gray-900 dark:text-white"
+                  }`}
+                >
+                  {shipping === 0 ? "FREE" : `EGP${shipping.toFixed(2)}`}
                 </span>
               </div>
 
               {/* Tax */}
               <div className="flex justify-between text-sm">
                 <span className="text-[#831670] ">Tax</span>
-                <span className="font-medium text-gray-900 dark:text-white">EGP{tax.toFixed(2)}</span>
+                <span className="font-medium text-gray-900 dark:text-white">
+                  EGP{tax.toFixed(2)}
+                </span>
               </div>
 
               {/* Free shipping notice */}
@@ -133,7 +178,9 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
               {/* Total */}
               <div className="flex justify-between text-base font-bold border-t border-gray-200 dark:border-gray-700 pt-3">
                 <span className="text-[#831670] ">Total</span>
-                <span className="text-gray-900 dark:text-white">EGP{total.toFixed(2)}</span>
+                <span className="text-gray-900 dark:text-white">
+                  EGP{total.toFixed(2)}
+                </span>
               </div>
 
               {/* Checkout Button */}
@@ -142,8 +189,8 @@ const ShoppingCartDrawer = ({ isOpen, onOpenChange, cartItems, onUpdateCart, han
               </Button>
 
               {/* Continue Shopping */}
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="w-full border-gray-300 text-[#831670]  bg-[#fee0f9] hover:bg-[#f4c6ec] "
                 onClick={() => onOpenChange(false)}
               >
@@ -168,8 +215,8 @@ export const Header = () => {
   useEffect(() => {
     setCartItems(getCart());
     const handleCartUpdated = () => setCartItems(getCart());
-    window.addEventListener('cart-updated', handleCartUpdated);
-    return () => window.removeEventListener('cart-updated', handleCartUpdated);
+    window.addEventListener("cart-updated", handleCartUpdated);
+    return () => window.removeEventListener("cart-updated", handleCartUpdated);
   }, []);
 
   const handleAddToCart = (product) => {
@@ -178,7 +225,7 @@ export const Header = () => {
   };
 
   const handleRemoveItem = (productId) => {
-    const cart = getCart().filter(item => item.id !== productId);
+    const cart = getCart().filter((item) => item.id !== productId);
     setCart(cart);
     setCartItems(cart);
   };
@@ -186,9 +233,11 @@ export const Header = () => {
   const handleQuantityChange = (productId, newQuantity) => {
     let cart = getCart();
     if (newQuantity <= 0) {
-      cart = cart.filter(item => item.id !== productId);
+      cart = cart.filter((item) => item.id !== productId);
     } else {
-      cart = cart.map(item => item.id === productId ? { ...item, quantity: newQuantity } : item);
+      cart = cart.map((item) =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      );
     }
     setCart(cart);
     setCartItems(cart);
@@ -210,15 +259,21 @@ export const Header = () => {
 
   const dispatchSearch = (value) => {
     window.dispatchEvent(new CustomEvent("global-search", { detail: value }));
-    goHomeThen(() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" }));
+    goHomeThen(() =>
+      document
+        .getElementById("products")
+        ?.scrollIntoView({ behavior: "smooth" })
+    );
   };
 
   const dispatchCategory = (value) => {
     window.dispatchEvent(new CustomEvent("global-category", { detail: value }));
-    goHomeThen(() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" }));
+    goHomeThen(() =>
+      document
+        .getElementById("products")
+        ?.scrollIntoView({ behavior: "smooth" })
+    );
   };
-
- 
 
   return (
     <>
@@ -226,92 +281,94 @@ export const Header = () => {
         <div className="w-full mx-auto ">
           <div className="rounded-lg border-b backdrop-blur-sm shadow-sm border-gray-200  text-[#831670] bg-[#fee0f9]">
             <div className="flex items-center justify-between h-16 px-6 lg:px-8">
-              
               {/* Left Section - Logo & Navigation */}
               <div className="flex items-center space-x-8 flex-1">
                 {/* Logo */}
-                <div 
-                  className="flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity duration-200" 
+                <div
+                  className="flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity duration-200"
                   onClick={() => navigate("/")}
                 >
-                  <img 
-                    src="/logo.png" 
-                    alt="Mohair" 
+                  <img
+                    src="/logo.png"
+                    alt="Mohair"
                     className="h-10 w-auto object-contain"
                   />
                 </div>
-                
+
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex">
-  <ul className="flex items-center space-x-8">
-    <li>
-      <button
-        className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
-        onClick={() => {
-          const el = document.getElementById("products");
-          el?.scrollIntoView({ behavior: "smooth" });
-        }}
-      >
-        Products
-        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
-      </button>
-    </li>
-    <li>
-      <button
-        className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
-        onClick={() => {
-          const el = document.getElementById("contact");
-          el?.scrollIntoView({ behavior: "smooth" });
-        }}
-      >
-        Contact
-        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
-      </button>
-    </li>
-  </ul>
-</nav>
-
+                  <ul className="flex items-center space-x-8">
+                    <li>
+                      <button
+                        className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+                        onClick={() => {
+                          const el = document.getElementById("products");
+                          el?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                      >
+                        Products
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+                        onClick={() => {
+                          const el = document.getElementById("contact");
+                          el?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                      >
+                        Contact
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
               </div>
 
               {/* Right Section - Actions */}
               <div className="flex items-center space-x-3">
-              
                 {/* Mobile Menu */}
                 <div className="block md:hidden ">
                   <Sheet>
                     <SheetTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-100 dark:hover:bg-gray-800 h-9 w-9 transition-all duration-200"
                       >
                         <Menu className="h-5 w-5" />
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="right" className="w-[280px] sm:w-[320px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 mt-16 pt-1">
+                    <SheetContent
+                      side="right"
+                      className="w-[280px] sm:w-[320px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 mt-16 pt-1"
+                    >
                       <div className="flex flex-col space-y-6 mt-8">
                         <nav className="flex flex-col space-y-2">
-                          <button 
-                            className="text-left py-3 px-4 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg font-medium text-base transition-all duration-200"
-                            onClick={() => dispatchCategory("Products")}
-                          >
-                            Products
-                          </button>
-                          <button 
-                            className="text-left py-3 px-4 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg font-medium text-base transition-all duration-200"
-                            onClick={() => dispatchCategory("About")}
-                          >
-                            About
-                          </button>
-                          <button 
-                            className="text-left py-3 px-4 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg font-medium text-base transition-all duration-200"
-                            onClick={() => dispatchCategory("Contact")}
-                          >
-                            Contact
-                          </button>
+                            <button
+                              className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+                              onClick={() => {
+                                const el = document.getElementById("products");
+                                el?.scrollIntoView({ behavior: "smooth" });
+                              }}
+                            >
+                              Products
+                              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
+                            </button>
+                            <button
+                              className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+                              onClick={() => {
+                                const el = document.getElementById("contact");
+                                el?.scrollIntoView({ behavior: "smooth" });
+                              }}
+                            >
+                              Contact
+                              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
+                            </button>
+                         
                         </nav>
 
-                        
                         {/* Mobile Menu Footer */}
                         <div className="mt-auto pt-6 border-t border-gray-200 dark:border-gray-700">
                           <p className="text-sm text-gray-500 dark:text-gray-400 text-center font-light">
@@ -324,16 +381,16 @@ export const Header = () => {
                 </div>
 
                 {/* Shopping Cart */}
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="relative text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-100 dark:hover:bg-gray-800 h-9 w-9 transition-all duration-200" 
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="relative text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-gray-100 dark:hover:bg-gray-800 h-9 w-9 transition-all duration-200"
                   onClick={() => setIsCartOpen(true)}
                 >
                   <ShoppingBag className="h-5 w-5" />
                   {cartCount > 0 && (
                     <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-purple-600 dark:bg-purple-500 text-white text-xs flex items-center justify-center font-semibold shadow-lg ">
-                      {cartCount > 99 ? '99+' : cartCount}
+                      {cartCount > 99 ? "99+" : cartCount}
                     </span>
                   )}
                 </Button>
@@ -341,11 +398,11 @@ export const Header = () => {
             </div>
           </div>
         </div>
-        <Banner /> 
+        <Banner />
       </header>
 
       {/* Shopping Cart Drawer */}
-      <ShoppingCartDrawer 
+      <ShoppingCartDrawer
         isOpen={isCartOpen}
         onOpenChange={setIsCartOpen}
         cartItems={cartItems}

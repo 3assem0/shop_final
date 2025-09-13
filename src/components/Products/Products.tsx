@@ -454,20 +454,31 @@ useEffect(() => {
 {modalOpen && selectedProduct && (
   <div
     id="modal-backdrop"
-    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8 overflow-y-auto"
+    className="fixed top-[20px] left-0 right-0 bottom-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-8 overflow-y-auto"
     onClick={handleModalClick}
   >
-    <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-fit sm:max-h-[95vh] shadow-2xl flex flex-col p-2" onClick={e => e.stopPropagation()}>
+    <div
+      className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-[calc(100vh-20px)] shadow-2xl flex flex-col p-2"
+      onClick={e => e.stopPropagation()}
+    >
       {/* Mobile: Stack vertically with scrollable content */}
       <div className="flex flex-col sm:flex-row h-full">
         {/* Product Image */}
         <div className="sm:w-1/2 flex-shrink-0">
           <div className="relative aspect-square sm:h-full">
             <img
-              src={selectedProduct.image && (selectedProduct.image.includes('cloudinary.com') || selectedProduct.image.startsWith('http')) ? selectedProduct.image : '/logo.png'}
+              src={
+                selectedProduct.image &&
+                (selectedProduct.image.includes('cloudinary.com') ||
+                  selectedProduct.image.startsWith('http'))
+                  ? selectedProduct.image
+                  : '/logo.png'
+              }
               alt={selectedProduct.name}
               className="w-full h-full object-cover rounded-t-xl sm:rounded-l-2xl sm:rounded-t-none"
-              onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/logo.png'; }}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = '/logo.png';
+              }}
             />
           </div>
         </div>
@@ -490,7 +501,9 @@ useEffect(() => {
               <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2">
                 {getProductDisplayName(selectedProduct)}
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 mb-4">{selectedProduct.description}</p>
+              <p className="text-sm sm:text-base text-gray-600 mb-4">
+                {selectedProduct.description}
+              </p>
             </div>
 
             {/* Color */}
@@ -502,7 +515,9 @@ useEffect(() => {
                     className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white shadow-lg"
                     style={{ backgroundColor: selectedProduct.colorHex }}
                   />
-                  <span className="text-xs sm:text-sm text-gray-600">{selectedProduct.color}</span>
+                  <span className="text-xs sm:text-sm text-gray-600">
+                    {selectedProduct.color}
+                  </span>
                 </div>
               </div>
             )}
@@ -543,6 +558,7 @@ useEffect(() => {
     </div>
   </div>
 )}
+
       </div>
     </div>
   );

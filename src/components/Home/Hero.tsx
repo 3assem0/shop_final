@@ -288,10 +288,10 @@ export default function HeroCarousel(): JSX.Element {
                 />
               </div>
               <div className="md:w-1/2">
-                <h3 className="text-xl font-bold">{getProductDisplayName(selectedProduct)}</h3>
-                <p className="mt-2 text-gray-600">{selectedProduct.description}</p>
+                <h3 className="text-xl text-[#831670] font-bold">{getProductDisplayName(selectedProduct)}</h3>
+                <p className="mt-2 text-[#fb6f92]">{selectedProduct.description}</p>
                 <div className="mt-4 flex items-center justify-between">
-                  <div className="text-2xl font-bold">{formatPrice(selectedProduct.price)}</div>
+                  <div className="text-2xl text-[#09c103] font-bold">{formatPrice(selectedProduct.price)}</div>
                   <button 
                     onClick={() => {
                       const cartItem = productToCartItem(selectedProduct, 1);
