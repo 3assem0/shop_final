@@ -5,7 +5,7 @@ export const Footer = () => {
       <div className="w-full md:h-[332px] md:p-11 p-4 text-background bg-[#fee0f9] rounded-[12px] flex flex-col justify-between max-md:gap-8">
         <div className="flex  flex-row justify-between  flex-wrap ">
           <div className=" max-w-[1200px] lg:text-9xl  h-auto block  md:text-8xl sm:text-8xl text-7xl font-handmade font-extrabold text-[#831670] " >
-          MOHAR
+          MOHAIR
           </div>
           <ul className="flex flex-col flex-wrap gap-4 max-md:justify-start justify-end mb-2 text-[#831670] text-md">
               <li className="text-xl font-bold hover:text-[#a23891] "><a href="">Shop</a></li>
