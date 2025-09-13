@@ -184,9 +184,13 @@ const ShoppingCartDrawer = ({
               </div>
 
               {/* Checkout Button */}
-              <Button className="w-full bg-[#eeecee] hover:bg-[#dedcdd] text-green-600 py-3 text-base font-semibold mt-4">
-                Proceed to Checkout
-              </Button>
+              <Button
+  onClick={() => window.open("https://ig.me/m/mohair_handmadecrochet", "_blank")}
+  className="w-full bg-[#eeecee] hover:bg-[#dedcdd] text-green-600 py-3 text-base font-semibold mt-4"
+>
+  Proceed to Checkout
+</Button>
+
 
               {/* Continue Shopping */}
               <Button
