@@ -135,9 +135,7 @@ const ShoppingCartDrawer = ({
             </div>
 
             {/* Cart Summary */}
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-3">
-             
-
+            <div className="">
               {/* Total */}
               <div className="flex justify-between text-base font-bold border-t border-gray-200 dark:border-gray-700 pt-3">
                 <span className="text-[#831670] ">Total</span>
@@ -148,12 +146,16 @@ const ShoppingCartDrawer = ({
 
               {/* Checkout Button */}
               <Button
-  onClick={() => window.open("https://ig.me/m/mohair_handmadecrochet", "_blank")}
-  className="w-full bg-[#eeecee] hover:bg-[#dedcdd] text-green-600 py-3 text-base font-semibold mt-4"
->
-  Proceed to Checkout
-</Button>
-
+                onClick={() =>
+                  window.open(
+                    "https://ig.me/m/mohair_handmadecrochet",
+                    "_blank"
+                  )
+                }
+                className="w-full bg-[#eeecee] hover:bg-[#dedcdd] text-green-600 py-3 text-base font-semibold mt-4"
+              >
+                Proceed to Checkout
+              </Button>
 
               {/* Continue Shopping */}
               <Button
@@ -313,27 +315,26 @@ export const Header = () => {
                     >
                       <div className="flex flex-col space-y-6 mt-8">
                         <nav className="flex flex-col space-y-2">
-                            <button
-                              className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
-                              onClick={() => {
-                                const el = document.getElementById("products");
-                                el?.scrollIntoView({ behavior: "smooth" });
-                              }}
-                            >
-                              Products
-                              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
-                            </button>
-                            <button
-                              className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
-                              onClick={() => {
-                                const el = document.getElementById("contact");
-                                el?.scrollIntoView({ behavior: "smooth" });
-                              }}
-                            >
-                              Contact
-                              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
-                            </button>
-                         
+                          <button
+                            className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+                            onClick={() => {
+                              const el = document.getElementById("products");
+                              el?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                          >
+                            Products
+                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
+                          </button>
+                          <button
+                            className="text-[#831670] font-medium text-sm tracking-wide transition-all duration-200 relative group py-2"
+                            onClick={() => {
+                              const el = document.getElementById("contact");
+                              el?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                          >
+                            Contact
+                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#fb6f92] transition-all duration-200 group-hover:w-full"></span>
+                          </button>
                         </nav>
 
                         {/* Mobile Menu Footer */}
