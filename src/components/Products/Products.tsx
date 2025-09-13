@@ -56,21 +56,14 @@ useEffect(() => {
   if (modalOpen) {
     // Prevent body scroll
     document.body.style.overflow = 'hidden';
-    // For iOS Safari
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
   } else {
     // Restore body scroll
     document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
   }
 
   // Cleanup function
   return () => {
     document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
   };
 }, [modalOpen]);
   // Get unique values for filter options
@@ -461,7 +454,7 @@ useEffect(() => {
 {modalOpen && selectedProduct && (
   <div
     id="modal-backdrop"
-    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8 "
+    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-8 overflow-y-auto"
     onClick={handleModalClick}
   >
     <div className="bg-white rounded-xl sm:rounded-2xl w-full max-w-sm sm:max-w-4xl max-h-fit sm:max-h-[95vh] shadow-2xl flex flex-col p-2" onClick={e => e.stopPropagation()}>
