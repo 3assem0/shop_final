@@ -135,7 +135,7 @@ const ShoppingCartDrawer = ({
             </div>
 
             {/* Cart Summary */}
-            <div className="">
+            <div className="gap-3 ">
               {/* Total */}
               <div className="flex justify-between text-base font-bold border-t border-gray-200 dark:border-gray-700 pt-3">
                 <span className="text-[#831670] ">Total</span>
