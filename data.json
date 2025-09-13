@@ -31,7 +31,7 @@
       "description": "Comfort-first leather shoes with handcrafted finishing and cushioned insole.",
       "price": 129.99,
       "featured": false,
-      "image": "blob:https://shop-final-omega.vercel.app/ccc6761f-d8d0-4b1e-afec-74a47bf93a8d",
+      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757763678/mohair-products/yettpzrnzsxc8pdcddk2.jpg",
       "color": "Brown",
       "colorHex": "#db8814",
       "category": "Footwear",
@@ -40,5 +40,5 @@
       "oldPrice": "159.99"
     }
   ],
-  "lastUpdated": "2025-09-12T19:50:06.350Z"
+  "lastUpdated": "2025-09-13T11:41:19.928Z"
 }
