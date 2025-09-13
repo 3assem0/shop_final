@@ -13,6 +13,13 @@ interface BannerSettings {
   bannerButtonLink: string;
 }
 
+// Update your ProductData interface:
+interface ProductData {
+  products: Product[];
+  bannerSettings?: BannerSettings;
+  lastUpdated: string;
+}
+
 interface Product {
   name: string;
   description: string;
@@ -27,11 +34,6 @@ interface Product {
   oldPrice?: string;
 }
 
-interface ProductData {
-  products: Product[];
-  bannerSettings: BannerSettings;
-  lastUpdated: string;
-}
 
 interface Message {
   text: string;

@@ -11,11 +11,24 @@ interface Product {
     description?: string;
     category?: string;
     image?: string;
-    // Add other product properties as needed
+    featured?: boolean;
+    color?: string;
+    colorHex?: string;
+    rating?: number;
+    reviewCount?: number;
+    oldPrice?: string;
+}
+
+interface BannerSettings {
+    showBanner: boolean;
+    bannerText: string;
+    bannerButtonText: string;
+    bannerButtonLink: string;
 }
 
 interface ProductsData {
     products: Product[];
+    bannerSettings?: BannerSettings;
     lastUpdated: string;
 }
 
@@ -66,9 +79,15 @@ export default async function handler(
 
         if (!response.ok) {
             if (response.status === 404) {
-                // File doesn't exist yet, return empty products
+                // File doesn't exist yet, return empty products with default banner settings
                 res.status(200).json({
                     products: [],
+                    bannerSettings: {
+                        showBanner: true,
+                        bannerText: 'Sale 50% OFF',
+                        bannerButtonText: 'Shop Now',
+                        bannerButtonLink: '#'
+                    },
                     lastUpdated: new Date().toISOString()
                 });
                 return;
@@ -84,7 +103,17 @@ export default async function handler(
             throw new Error('Invalid data structure: products array is required');
         }
 
-        // Return the products data
+        // Ensure banner settings exist with defaults if not present
+        if (!data.bannerSettings) {
+            data.bannerSettings = {
+                showBanner: true,
+                bannerText: 'Sale 50% OFF',
+                bannerButtonText: 'Shop Now',
+                bannerButtonLink: '#'
+            };
+        }
+
+        // Return the products data with banner settings
         res.status(200).json(data);
 
     } catch (error: unknown) {
