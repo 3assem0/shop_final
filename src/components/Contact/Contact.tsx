@@ -1,8 +1,10 @@
 import React from 'react'
+import SeasonBackground from '../SeasonBackground'
 
 export default function Contact() {
   return (
     <div className="relative bg-transparent ">
+         <SeasonBackground />
      <section className="bg-[#fbfbfb] ">
     <div className="container px-6 py-12 mx-auto">
         <div className="text-center">
