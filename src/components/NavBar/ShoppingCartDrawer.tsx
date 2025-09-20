@@ -47,47 +47,11 @@ export const ShoppingCartDrawer = ({
       )
       .join("\n\n");
 
-    const message = `Hello, I would like to order:\n\n${lines}\n\nTotal: EGP${total.toFixed(
-      2
-    )}`;
+    const message = `🛒 New Order\n\n${lines}\n\nTotal: EGP${total.toFixed(2)}`;
 
-    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
-      message
-    )}`;
+    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 
-   <Button
-  onClick={() => {
-    const phoneNumber = WA_NUMBER; 
-
-    const message = cartItems
-      .map(
-        (item, i) =>
-          `${i + 1}. ${item.name} | EGP${item.price} × ${item.quantity} = EGP${(
-            item.price * item.quantity
-          ).toFixed(2)}\nImage: ${item.image}`
-      )
-      .join("\n\n");
-
-    const total = cartItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-
-    const fullMessage = `🛒 New Order\n\n${message}\n\nTotal: EGP${total.toFixed(
-      2
-    )}`;
-
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      fullMessage
-    )}`;
-
-    window.open(whatsappUrl, "_blank");
-  }}
-  className="w-full bg-[#eeecee] hover:bg-[#dedcdd] text-green-600 py-3 my-2 text-base font-semibold mt-4"
->
-  Proceed to Checkout
-</Button>
-
+    window.open(url, "_blank"); // ✅ يفتح واتساب
   };
 
   return (
