@@ -29,7 +29,7 @@ export const ShoppingCartDrawer = ({
   const total = subtotal;
 
   // 👇 Replace this with your WhatsApp number (no +, no spaces)
-  const WA_NUMBER = "201068462411";
+  const WA_NUMBER = "201092753813";
 
   // Build WhatsApp message with cart data
   const handleProceedToWhatsApp = () => {
