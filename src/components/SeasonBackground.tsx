@@ -23,10 +23,10 @@ export default function SeasonBackground() {
   }, [month]);
 
   const backgrounds: Record<string, { emoji: string; count: number }> = {
-    spring: { emoji: "🌸", count: 10 },
-    summer: { emoji: "☀️", count: 10 },
-    autumn: { emoji: "🍂", count: 10 },
-    winter: { emoji: "❄️", count: 10 },
+    spring: { emoji: "🌸", count: 5 },
+    summer: { emoji: "☀️", count: 5 },
+    autumn: { emoji: "🍂", count: 5 },
+    winter: { emoji: "❄️", count: 5 },
   };
 
   const { emoji, count } = backgrounds[season];
