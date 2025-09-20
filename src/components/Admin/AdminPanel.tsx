@@ -13,7 +13,6 @@ interface BannerSettings {
   bannerButtonLink: string;
 }
 
-// Update your ProductData interface:
 interface ProductData {
   products: Product[];
   bannerSettings?: BannerSettings;
