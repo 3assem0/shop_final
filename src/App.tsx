@@ -20,7 +20,6 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/products" element={<ProductGrid />} />
           <Route path="/admin" element={<AdminPanel />} />
-          {/* <Route path="/product/:id" element={<ProductDetail />} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

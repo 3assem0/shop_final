@@ -1,10 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { Instagram, Mail, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ShoppingBag, User, Menu } from "lucide-react";
 import { useState } from "react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 const NotFound = () => {
   const location = useLocation();
 

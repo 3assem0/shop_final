@@ -24,9 +24,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen pt-20 bg-[#fbfbfb] dark:bg-black relative">
-      {/* <div className="absolute top-0 bottom-0 left-[5%] sm:left-[10%] md:left-[8%] w-px bg-purple-400 z-[41]"></div>
-      <div className="absolute top-0 bottom-0 right-[5%] sm:right-[10%] md:right-[8%] w-px  bg-purple-400 z-[41]"></div> */}
-      <section id="products">
+     <section id="products">
         <Header />
       </section>
       <Hero />

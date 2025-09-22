@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 export default function SeasonBackground() {
   const [screenWidth, setScreenWidth] = useState(1200);
 
-  // ✅ handle SSR safely
+  //  handle SSR safely
   useEffect(() => {
     if (typeof window !== "undefined") {
       setScreenWidth(window.innerWidth);

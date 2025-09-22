@@ -24,7 +24,6 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        // ✅ keep hsl-based primary + add full shades
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -81,11 +80,9 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        // ✅ your custom fonts
         handmade: ["Dancing Script", "cursive"],
         craft: ["Caveat", "cursive"],
         lexend: ['Lexend', 'sans-serif'],
-        // ✅ added from second config
         body: [
           "Inter",
           "ui-sans-serif",

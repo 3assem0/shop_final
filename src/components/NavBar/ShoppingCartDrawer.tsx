@@ -28,10 +28,8 @@ export const ShoppingCartDrawer = ({
   );
   const total = subtotal;
 
-  // 👇 Replace this with your WhatsApp number (no +, no spaces)
   const WA_NUMBER = "201092753813";
 
-  // Build WhatsApp message with cart data
   const handleProceedToWhatsApp = () => {
     if (!cartItems || cartItems.length === 0) {
       alert("Your cart is empty.");
@@ -51,7 +49,7 @@ export const ShoppingCartDrawer = ({
 
     const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 
-    window.open(url, "_blank"); // ✅ يفتح واتساب
+    window.open(url, "_blank"); 
   };
 
   return (
