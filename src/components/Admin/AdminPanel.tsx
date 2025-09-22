@@ -426,7 +426,7 @@ const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between min-h-16 max-h-fit">
             <div className="flex items-center space-x-4">
               <button
                 onClick={goToHome}
@@ -438,7 +438,7 @@ const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-right">
-                <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
+                <h1 className="text-sm sm:text-xl md:text-2xl font-bold text-gray-900">Admin Panel</h1>
                 <p className="text-sm text-gray-500">Manage your product inventory</p>
               </div>
               <div className="flex items-center space-x-2">
@@ -479,7 +479,7 @@ const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         </div>
       )}
 {/* Tab Navigation */}
-<div className="mb-8">
+<div className="mb-8 pt-16">
   <div className="border-b border-gray-200">
     <nav className="-mb-px flex space-x-8">
       <button
@@ -922,10 +922,10 @@ const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                           />
                         )}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between">
+                          <div className="flex flex-wrap items-start justify-between">
                             <div className="flex-1">
-                              <div className="flex items-center space-x-2">
-                                <h3 className="text-lg font-medium text-gray-900 truncate">
+                              <div className="flex flex-wrap items-center space-x-2">
+                                <h3 className="text-sm sm:text-sm md:text-lg font-medium text-gray-900 truncate">
                                   {product.name}
                                 </h3>
                                 {product.featured && (
