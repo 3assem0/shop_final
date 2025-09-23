@@ -190,10 +190,10 @@ export default function HeroCarousel(): JSX.Element {
   const current = products[currentSlide];
 
   return (
-    <section className="relative w-full px-[5%] sm:px-[8%] md:px-[10%] py-10">
+    <section className="relative w-full px-[5%] sm:px-[8%] md:px-[10%] py-10 ">
       <div
         ref={containerRef}
-        className="mx-auto max-w-6xl bg-white rounded-2xl shadow-lg overflow-hidden select-none"
+        className="mx-auto max-w-6xl bg-white rounded-2xl shadow-lg overflow-hidden select-none min-h-screen sm:h-auto"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={() => { handleMouseUp(); }}
