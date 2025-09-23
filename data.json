@@ -11,7 +11,8 @@
       "category": "Bags",
       "rating": 4,
       "reviewCount": 128,
-      "oldPrice": "99.99"
+      "oldPrice": "99.99",
+      "id": "gen_1923016067"
     },
     {
       "name": "Elegant Wool Hat",
@@ -24,27 +25,23 @@
       "category": "Hats",
       "rating": 4,
       "reviewCount": 136,
-      "oldPrice": "159.99"
+      "oldPrice": "159.99",
+      "id": "gen_173623544"
     },
     {
       "name": "Handcrafted Leather Shoes",
       "description": "Comfort-first leather shoes with handcrafted finishing and cushioned insole.",
       "price": 129.99,
-      "featured": false,
+      "featured": true,
       "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757763678/mohair-products/yettpzrnzsxc8pdcddk2.jpg",
       "color": "Brown",
       "colorHex": "#db8814",
       "category": "Footwear",
       "rating": 4,
       "reviewCount": 123,
-      "oldPrice": "159.99"
+      "oldPrice": "159.99",
+      "id": "gen_1229552406"
     }
   ],
-  "bannerSettings": {
-    "showBanner": false,
-    "bannerText": "Sale 50% OFF",
-    "bannerButtonText": "Shop Now",
-    "bannerButtonLink": "#"
-  },
-  "lastUpdated": "2025-09-13T16:35:16.422Z"
+  "lastUpdated": "2025-09-23T12:25:31.620Z"
 }
