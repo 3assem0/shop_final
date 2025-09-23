@@ -193,7 +193,7 @@ export default function HeroCarousel(): JSX.Element {
     <section className="relative w-full px-[5%] sm:px-[8%] md:px-[10%] py-10 ">
       <div
         ref={containerRef}
-        className="mx-auto max-w-6xl bg-white rounded-2xl shadow-lg overflow-hidden select-none min-h-screen sm:h-auto"
+        className="mx-auto max-w-6xl bg-white rounded-2xl shadow-lg overflow-hidden select-none min-h-screen sm:min-h-fit"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={() => { handleMouseUp(); }}
