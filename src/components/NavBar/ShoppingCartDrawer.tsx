@@ -36,6 +36,7 @@ export const ShoppingCartDrawer = ({
       return;
     }
 
+    // WhatsApp prefers \n for line breaks, but mobile sometimes needs %0A
     const lines = cartItems
       .map(
         (item, i) =>
@@ -46,10 +47,10 @@ export const ShoppingCartDrawer = ({
       .join("\n\n");
 
     const message = `🛒 New Order\n\n${lines}\n\nTotal: EGP${total.toFixed(2)}`;
-
     const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 
-    window.open(url, "_blank"); 
+    // Use location.href for both desktop and mobile to ensure message is pre-filled
+    window.location.href = url;
   };
 
   return (

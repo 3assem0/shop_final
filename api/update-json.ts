@@ -77,7 +77,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             repo: process.env.GITHUB_REPO,
             branch: process.env.GITHUB_BRANCH
         };
-        console.log('Environment check:', envDebug);
+        // console.log('Environment check:', envDebug);
 
         // Validate environment variables
         const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -111,7 +111,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             'User-Agent': 'Vercel-Function'
         };
 
-        console.log('Making request to:', `${apiBase}/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${filePath}`);
+        // console.log('Making request to:', `${apiBase}/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${filePath}`);
 
         // Step 1: Get current file (if it exists) to get the SHA
         let currentSha: string | null = null;
@@ -121,14 +121,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 { headers }
             );
             
-            console.log('Get current file response:', getCurrentFile.status, getCurrentFile.statusText);
+            // console.log('Get current file response:', getCurrentFile.status, getCurrentFile.statusText);
             
             if (getCurrentFile.ok) {
                 const currentFileData: GitHubFileResponse = await getCurrentFile.json();
                 currentSha = currentFileData.sha;
-                console.log('Found existing file with SHA:', currentSha);
+                // console.log('Found existing file with SHA:', currentSha);
             } else if (getCurrentFile.status === 404) {
-                console.log('File does not exist yet, will create new file');
+                // console.log('File does not exist yet, will create new file');
             } else {
                 // Log the error response for debugging
                 const errorText = await getCurrentFile.text();

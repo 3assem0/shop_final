@@ -20,25 +20,25 @@ export default function Banner() {
   useEffect(() => {
     const fetchBannerSettings = async () => {
       try {
-        console.log('Fetching banner settings...')
+        // console.log('Fetching banner settings...')
         const response = await fetch('/api/get-products')
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         const data = await response.json()
-        console.log('API Response:', data)
+        // console.log('API Response:', data)
         
         if (data.bannerSettings) {
-          console.log('Banner settings found:', data.bannerSettings)
+          // console.log('Banner settings found:', data.bannerSettings)
           setBannerSettings(data.bannerSettings)
           setShowBanner(data.bannerSettings.showBanner)
         } else {
-          console.log('No banner settings found, using defaults')
+          // console.log('No banner settings found, using defaults')
           // Use default settings if no banner settings found
           setShowBanner(true)
         }
       } catch (error) {
-        console.error('Failed to fetch banner settings:', error)
+        // console.error('Failed to fetch banner settings:', error)
         // Fallback to showing banner on error with defaults
         setShowBanner(true)
       }
@@ -47,10 +47,10 @@ export default function Banner() {
     fetchBannerSettings()
   }, [])
 
-  console.log('Current showBanner state:', showBanner)
+  // console.log('Current showBanner state:', showBanner)
 
   if (!showBanner) {
-    console.log('Banner not showing because showBanner is false')
+    // console.log('Banner not showing because showBanner is false')
     return null
   }
 

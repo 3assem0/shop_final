@@ -24,23 +24,23 @@ export function setCart(items: CartItem[]) {
 }
 
 export function addToCart(item: CartItem) {
-  console.log('🛒 Adding item to cart:', item);
+  // console.log('🛒 Adding item to cart:', item);
   
   const cart = getCart();
-  console.log('📦 Current cart:', cart);
+  // console.log('📦 Current cart:', cart);
   
   // Ensure we're comparing the right types and values
   const itemId = String(item.id); // Convert to string for consistent comparison
   const existingItem = cart.find(cartItem => String(cartItem.id) === itemId);
   
-  console.log('🔍 Looking for existing item with ID:', itemId);
-  console.log('✅ Found existing item:', existingItem);
+  // console.log('🔍 Looking for existing item with ID:', itemId);
+  // console.log('✅ Found existing item:', existingItem);
   
   if (existingItem) {
-    console.log('📈 Updating quantity for existing item');
+    // console.log('📈 Updating quantity for existing item');
     existingItem.quantity += item.quantity;
   } else {
-    console.log('🆕 Adding new item to cart');
+    // console.log('🆕 Adding new item to cart');
     // Ensure the item has a proper ID
     const newItem = {
       ...item,
@@ -49,7 +49,7 @@ export function addToCart(item: CartItem) {
     cart.push(newItem);
   }
   
-  console.log('💾 Final cart:', cart);
+  // console.log('💾 Final cart:', cart);
   setCart(cart);
 }
 

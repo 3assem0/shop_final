@@ -34,7 +34,7 @@ export const normalizeProduct = (apiProduct: any): Product => {
     console.warn('⚠️ Product missing ID, generated:', productId, 'for product:', apiProduct.name);
   }
 
-  console.log('🏷️ Normalizing product:', { originalId: apiProduct.id, newId: productId, name: apiProduct.name });
+  // console.log('🏷️ Normalizing product:', { originalId: apiProduct.id, newId: productId, name: apiProduct.name });
 
   return {
     id: String(productId), // Always ensure string ID for consistency
@@ -58,11 +58,11 @@ export const normalizeProduct = (apiProduct: any): Product => {
 
 // Convert Product to CartItem
 export const productToCartItem = (product: Product, quantity: number = 1): CartItem => {
-  console.log('🔄 Converting product to cart item:', {
-    productId: product.id,
-    name: product.name || product.title,
-    quantity
-  });
+  // console.log('🔄 Converting product to cart item:', {
+  //   productId: product.id,
+  //   name: product.name || product.title,
+  //   quantity
+  // });
 
   return {
     ...product,
