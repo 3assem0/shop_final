@@ -103,6 +103,25 @@ export default async function handler(
             throw new Error('Invalid data structure: products array is required');
         }
 
+        // Ensure every product has a unique, stable ID
+        data.products = data.products.map((product, idx) => {
+            if (product.id && typeof product.id === 'string' && product.id.trim().length > 0) {
+                return product;
+            }
+            // Generate a stable hash ID from name+category+price
+            const base = `${product.name || ''}_${product.category || ''}_${product.price || ''}`;
+            // Simple hash function for stability
+            let hash = 0;
+            for (let i = 0; i < base.length; i++) {
+                hash = ((hash << 5) - hash) + base.charCodeAt(i);
+                hash |= 0;
+            }
+            return {
+                ...product,
+                id: `gen_${Math.abs(hash)}`
+            };
+        });
+
         // Ensure banner settings exist with defaults if not present
         if (!data.bannerSettings) {
             data.bannerSettings = {

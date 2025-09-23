@@ -21,10 +21,16 @@ export const formatPrice = (price: number | string | undefined): string => {
 
 // Convert API product to standardized format
 export const normalizeProduct = (apiProduct: any): Product => {
-  // Generate a unique ID if none exists - this was the main issue!
+  // Use stable hash logic for missing IDs (matches API)
   let productId = apiProduct.id;
-  if (!productId) {
-    productId = `generated_${Date.now()}_${++idCounter}`;
+  if (!productId || typeof productId !== 'string' || productId.trim().length === 0) {
+    const base = `${apiProduct.name || ''}_${apiProduct.category || ''}_${apiProduct.price || ''}`;
+    let hash = 0;
+    for (let i = 0; i < base.length; i++) {
+      hash = ((hash << 5) - hash) + base.charCodeAt(i);
+      hash |= 0;
+    }
+    productId = `gen_${Math.abs(hash)}`;
     console.warn('⚠️ Product missing ID, generated:', productId, 'for product:', apiProduct.name);
   }
 
