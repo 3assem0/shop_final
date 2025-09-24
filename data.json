@@ -1,20 +1,6 @@
 {
   "products": [
     {
-      "name": "Classic Handmade Bag",
-      "description": "Premium hand-stitched leather bag — roomy, durable, and stylish for everyday use.",
-      "price": 79.99,
-      "featured": true,
-      "image": "https://res.cloudinary.com/dejeaec3b/image/upload/v1757706524/mohair-products/rt2cjr7yhlyxfrf1st3i.jpg",
-      "color": "red",
-      "colorHex": "#fa0000",
-      "category": "Bags",
-      "rating": 4,
-      "reviewCount": 128,
-      "oldPrice": "99.99",
-      "id": "gen_1923016067"
-    },
-    {
       "name": "Elegant Wool Hat",
       "description": "Slim-fit wool hat with a modern cut — lightweight and warm.",
       "price": 200,
@@ -39,8 +25,9 @@
       "category": "Footwear",
       "rating": 4,
       "reviewCount": 123,
-      "oldPrice": "159.99"
+      "oldPrice": "159.99",
+      "id": "gen_1229552406"
     }
   ],
-  "lastUpdated": "2025-09-23T12:25:41.056Z"
+  "lastUpdated": "2025-09-24T14:59:15.800Z"
 }
