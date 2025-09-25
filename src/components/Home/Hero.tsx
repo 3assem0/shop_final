@@ -229,13 +229,13 @@ export default function HeroCarousel(): JSX.Element {
             <p className="mt-4 text-gray-600 max-w-xl">{current.description}</p>
 
             <div className="mt-6 flex items-center gap-4">
-              <div className="text-3xl font-bold text-gray-900">{formatPrice(current.price)}</div>
+              <div className="text-xl sm:text-3xl font-bold text-gray-900">{formatPrice(current.price)}</div>
 
               <button
                 onClick={() => handleOpenModal(current)}
-                className="inline-flex items-center gap-2 bg-pink-700 text-white px-5 py-3 rounded-lg font-medium shadow-sm hover:bg-pink-600 transition"
+                className="inline-flex items-center gap-2 bg-pink-700 text-white px-5 py-3 rounded-lg text-sm sm:text-2xl  hover:bg-pink-600 transition"
               >
-                <ShoppingCart className="w-4 h-4" />
+                <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4" />
                 {current.buttonText || "Shop Now"}
               </button>
             </div>
